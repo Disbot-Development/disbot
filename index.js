@@ -37,10 +37,14 @@ async function main() {
 	prompts.outro(` ${'─'.grey} ${'D'.blue} ${'─'.grey} ${'I'.blue} ${'─'.grey} ${'S'.blue} ${'─'.grey} ${'B'.blue} ${'─'.grey} ${'O'.blue} ${'─'.grey} ${'T'.blue} ${'─'.grey}`);
 
     const client = new Disbot({
-        intents: Object.keys(GatewayIntentBits).map((a) => {
-            return GatewayIntentBits[a]
-        }),
-        restTimeOffset: 0,
+        intents: [
+			GatewayIntentBits.Guilds,
+			GatewayIntentBits.GuildMembers,
+			GatewayIntentBits.GuildModeration,
+			GatewayIntentBits.GuildWebhooks,
+			GatewayIntentBits.GuildMessages,
+			GatewayIntentBits.MessageContent
+		],
         allowedMentions: {
             repliedUser: false
         }
