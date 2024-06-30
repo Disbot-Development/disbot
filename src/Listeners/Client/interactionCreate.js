@@ -1,0 +1,103 @@
+const Event = require('../../Managers/Structures/Event');
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const { Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } = require('discord.js');
+
+module.exports = class InteractionCreateEvent extends Event {
+    constructor(client) {
+        super(client, {
+            name: 'interactionCreate'
+        });
+    };
+
+    /**
+     * 
+     * @param {Interaction} interaction
+     */
+
+    run (interaction) {
+        if (!interaction.guild) return;
+
+        let int;
+        
+        if (interaction.isButton()) int = this.client.buttons.get(interaction.customId);
+        if (interaction.isCommand()) int = this.client.commands.get(interaction.commandName);
+        if (interaction.isContextMenuCommand()) int = this.client.contextmenus.get(interaction.commandName);
+        if (interaction.isModalSubmit()) int = this.client.modals.get(interaction.customId);
+        if (interaction.isStringSelectMenu()) int = this.client.selectmenus.get(interaction.customId);
+
+        if (!int) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                .setStyle('ERROR')
+                .setDescription('Désolé, une erreur est survenue.')
+            ],
+            ephemeral: true
+        });
+
+        if (int.config.perms && !interaction.member.permissions.has(int.config.perms)) {
+            const permissions = Object.keys(this.client.config.permissions)
+            .filter((perm) => (int.config.perms || []).includes(PermissionFlagsBits[perm]))
+            .map((perm) => this.client.config.permissions[perm]);
+        
+            return interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                    .setStyle('ERROR')
+                    .setDescription(
+                        `Désolé, vous n'avez pas la permission de réaliser ceci.\n` +
+                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.map((perm) => `\`${perm}\``).join(', ')}`
+                    )
+                ],
+                ephemeral: true
+            });
+        };
+
+        if (!interaction.guild.members.me.permissions.has(int.config.meperms)) {
+            const permissions = Object.keys(this.client.config.permissions)
+            .filter((perm) => (int.config.meperms || []).includes(PermissionFlagsBits[perm]))
+            .map((perm) => this.client.config.permissions[perm]);
+
+            interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                    .setStyle('ERROR')
+                    .setDescription(
+                        `Désolé, je n'ai pas la permission de réaliser ceci.\n` +
+                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.map((perm) => `\`${perm}\``).join(', ')}`
+                    )
+                ],
+                ephemeral: true
+            });
+        };
+
+        if (interaction.isButton()) this.client.emit('buttonCreate', interaction, int);
+
+        if (interaction.isCommand() && !interaction.isContextMenuCommand()) {
+            this.client.emit('commandCreate', interaction, int);
+
+            if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.member.id === interaction.guild.ownerId && !interaction.guild.getData('ignored')?.includes('role') && interaction.guild.members.me.permissions.has('SEND_MESSAGES')) interaction.channel.send({
+                embeds: [
+                    new MessageEmbed()
+                    .setTitle('Rôle')
+                    .setDescription('Mon rôle n\'est pas le plus haut, souhaitez-vous remédier ceci ?')
+                ],
+                components: [
+                    new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                        .setEmoji('✖️')
+                        .setStyle(ButtonStyle.Danger)
+                        .setCustomId('role-ignore')
+                    )
+                ]
+            })
+            .catch(() => 0);
+        };
+    
+        if (interaction.isContextMenuCommand()) this.client.emit('contextMenuCreate', interaction, int);
+    
+        if (interaction.isModalSubmit()) this.client.emit('modalCreate', interaction, int);
+
+        if (interaction.isStringSelectMenu()) this.client.emit('selectMenuCreate', interaction, int);
+    };
+};
