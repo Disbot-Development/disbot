@@ -25,6 +25,7 @@ module.exports = class LogsConfigureButton extends Button {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système de logs est de répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
                         `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
+                        
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
                         `> **Salon de logs:** ${interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Information supplémentaire:** Veillez à ce que je garde l'accès au salon. Faites attention à qui vous donnez l'accès aux logs.`
@@ -50,7 +51,7 @@ module.exports = class LogsConfigureButton extends Button {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
-                        .setDisabled(true),
+                        .setDisabled(true)
                     )
                 ]
             });
@@ -70,7 +71,7 @@ module.exports = class LogsConfigureButton extends Button {
                         .setCustomId('logs-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer'),
+                        .setLabel('Configurer')
                     )
                 ]
             });

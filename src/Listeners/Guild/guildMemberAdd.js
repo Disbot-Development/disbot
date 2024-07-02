@@ -20,6 +20,33 @@ module.exports = class GuildMemberAddEvent extends Event {
         if (member.user.bot) return;
         
         const modules = member.guild.getModules();
+
+        if (modules.includes('antiraid') && interaction.guild.features.includes('COMMUNITY')) {
+            const limit = member.guild.getData('antiraid.limit') || this.client.config.antiraid.limit;
+
+            const members = member.guild.getData('antiraid.members') || [];
+            const newMembers = members.filter((mem) => Date.now() - mem.date < this.client.config.antiraid.timeout * 1000);
+
+            member.guild.setData('antiraid.members', newMembers);
+            if (newMembers.length >= limit) {
+                member.guild.removeData('antiraid.members');
+
+                member.guild.disableInvites(true)
+                .then((guild) => this.client.emit('antiraidDetected', guild, limit));
+
+                newMembers.forEach((mem) => {
+                    const kickedMember = member.guild.members.resolve(mem.id);
+
+                    if (kickedMember) kickedMember.kick('A été détecté par le système d\'anti-raid.');
+                });
+            } else {
+                member.guild.pushData('antiraid.members', {
+                    date: Date.now(),
+                    id: member.user.id
+                });
+            };
+        };
+
         const captchaRole = member.guild.roles.resolve(member.guild.getData('captcha.roles.before'));
         const captchaChannel = member.guild.channels.resolve(member.guild.getData('captcha.channel'));
 

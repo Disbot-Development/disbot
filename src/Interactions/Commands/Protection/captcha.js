@@ -29,6 +29,7 @@ module.exports = class CaptchaCommand extends Command {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
+
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
                         `> **Salon de vérification:** ${interaction.guild.channels.resolve(interaction.guild.getData('captcha.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Rôle de vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.before')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
@@ -49,7 +50,7 @@ module.exports = class CaptchaCommand extends Command {
                         .setCustomId('captcha-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer'),
+                        .setLabel('Configurer')
                     )
                 ]
             });
@@ -61,6 +62,7 @@ module.exports = class CaptchaCommand extends Command {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
+                        
                         `> **Status:** Désactivé ${this.client.config.emojis.no}\n` +
                         `> **Information supplémentaire:** Il est vivement conseillé d'activer le système de captcha.`
                     )
@@ -79,7 +81,7 @@ module.exports = class CaptchaCommand extends Command {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
-                        .setDisabled(true),
+                        .setDisabled(true)
                     )
                 ]
             });

@@ -2,14 +2,14 @@ const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
-module.exports = class AntiSpamCommand extends Command {
+module.exports = class AntiRaidCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'antispam',
-            description: 'Configurer le système d\'anti-spam.',
+            name: 'antiraid',
+            description: 'Configurer le système d\'anti-raid.',
             category: 'protection',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ModerateMembers, PermissionFlagsBits.ManageMessages]
+            meperms: [PermissionFlagsBits.ManageGuild]
         });
     };
 
@@ -18,22 +18,21 @@ module.exports = class AntiSpamCommand extends Command {
      * @param {CommandInteraction} interaction 
      */
 
-    run (interaction) {
+    async run (interaction) {
         const modules = interaction.guild.getModules();
 
-        if (modules.includes('antispam')) {
+        if (modules.includes('antiraid')) {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-spam')
+                    .setTitle('Anti-raid')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système d'anti-spam est de bloquer les utilisateurs qui tentent d'envoyer des messages trop rapidement.\n` +
-                        `Cela permet de sécuriser votre serveur en évitant l'attaque d'utilisateurs Discord malveillants.\n\n` +
+                        `${this.client.config.emojis.help} Le but du système d'anti-raid est de bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.\n` +
+                        `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
 
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Limite de messages en ${this.client.config.antispam.timeout} seconde${this.client.config.antispam.timeout > 1 ? 's' : ''}:** ${interaction.guild.getData('antispam.limit') ? `${interaction.guild.getData('antispam.limit')} message${interaction.guild.getData('antispam.limit') > 1 ? 's' : ''}` : `${this.client.config.antispam.limit} message${this.client.config.antispam.limit > 1 ? 's' : ''} (par défaut)`}\n` +
-                        `> **Durée de l'exclusion:** ${interaction.guild.getData('antispam.duration') ? `${interaction.guild.getData('antispam.duration')} minute${interaction.guild.getData('antispam.duration') > 1 ? 's' : ''}` : `60 minutes (par défaut)`}\n` +
-                        `> **Information supplémentaire:** Tous les utilisateurs n'étant pas intégrés dans la liste blanche se verront affectés par l'anti-spam.`
+                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${interaction.guild.getData('antiraid.limit') ? `${interaction.guild.getData('antiraid.limit')} compte${interaction.guild.getData('antiraid.limit') > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} message${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> **Information supplémentaire:** Il est important que le mode communauté soit activé sur le serveur. Si le mode raid venait à s'activez, désactivez le depuis \`Paramètres du serveur\` ➜ \`Invitations\` ➜ \`Activer les invitations\`.`
                     )
                     .setColor(Colors.Green)
                 ],
@@ -41,12 +40,12 @@ module.exports = class AntiSpamCommand extends Command {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('antispam-toggle')
+                        .setCustomId('antiraid-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Désactiver'),
                         new ButtonBuilder()
-                        .setCustomId('antispam-configure')
+                        .setCustomId('antiraid-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
@@ -57,13 +56,13 @@ module.exports = class AntiSpamCommand extends Command {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-spam')
+                    .setTitle('Anti-raid')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système d'anti-spam est de bloquer les utilisateurs qui tentent d'envoyer des messages trop rapidement.\n` +
-                        `Cela permet de sécuriser votre serveur en évitant l'attaque d'utilisateurs Discord malveillants.\n\n` +
-                        
+                        `${this.client.config.emojis.help} Le but du système d'anti-raid est de bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.\n` +
+                        `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
+
                         `> **Status:** Désactivé ${this.client.config.emojis.no}\n` +
-                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-spam.`
+                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-raid.`
                     )
                     .setColor(Colors.Red)
                 ],
@@ -71,12 +70,12 @@ module.exports = class AntiSpamCommand extends Command {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('antispam-toggle')
+                        .setCustomId('antiraid-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Activer'),
                         new ButtonBuilder()
-                        .setCustomId('antispam-configure')
+                        .setCustomId('antiraid-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')

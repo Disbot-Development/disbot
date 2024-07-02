@@ -70,31 +70,6 @@ module.exports = class MessageCreateEvent extends Event {
             };
         };
 
-        // if (this.client.config.banwords.filter((word) => message.content.includes(word)).length) {
-        //     message.delete();
-
-        //     message.member.addData('warns', 1);
-
-        //     this.client.emit('warnCreate', message);
-
-        //     const warnMessage = await message.channel.send({
-        //         content: `${message.author}`,
-        //         embeds: [
-        //             new MessageEmbed()
-        //             .setTitle('Mauvais langage')
-        //             .setDescription(
-        //                 `Faites attention aux mots que vous utilisez !\n` +
-        //                 `> - Votre comportement a été signalé.\n` +
-        //                 `> - **Avertissement${(message.member.getData('warns') || 0) > 1 ? 's' : ''}:** ${(message.member.getData('warns') || 0).toLocaleString('en-US')}`
-        //             )
-        //         ]
-        //     });
-
-        //     setTimeout(() => {
-        //         warnMessage.delete();
-        //     }, 5000);
-        // };
-
         message.guild.addData('messages', 1);
         message.member.addData('messages', 1);
     };

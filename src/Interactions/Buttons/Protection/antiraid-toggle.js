@@ -2,12 +2,12 @@ const Button = require('../../../Managers/Structures/Button');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, Colors } = require('discord.js');
 
-module.exports = class CaptchaToggleButton extends Button {
+module.exports = class AntiRaidToggleButton extends Button {
     constructor(client) {
         super(client, {
-            name: 'captcha-toggle',
+            name: 'antiraid-toggle',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
+            meperms: [PermissionFlagsBits.ManageGuild]
         });
     };
 
@@ -16,24 +16,24 @@ module.exports = class CaptchaToggleButton extends Button {
      * @param {ButtonInteraction} interaction
      */
 
-    run (interaction) {
+    async run (interaction) {
         const modules = interaction.guild.getModules();
 
-        this.client.emit('captchaToggle', interaction, modules);
+        this.client.emit('antiraidToggle', interaction, modules);
 
-        if (modules.includes('captcha')) {
-            interaction.guild.removeModule('captcha');
+        if (modules.includes('antiraid')) {
+            interaction.guild.removeModule('antiraid');
 
             interaction.update({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Captcha')
+                    .setTitle('Anti-raid')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
+                        `${this.client.config.emojis.help} Le but du système d'anti-raid est de bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.\n` +
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
 
                         `> **Status:** Désactivé ${this.client.config.emojis.no}\n` +
-                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système de captcha.`
+                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-raid.`
                     )
                     .setColor(Colors.Red)
                 ],
@@ -41,12 +41,12 @@ module.exports = class CaptchaToggleButton extends Button {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('captcha-toggle')
+                        .setCustomId('antiraid-toggle')
                         .setStyle(ButtonStyle.Primary)
-                        .setEmoji(this.client.config.emojis.yes)
+                        .setEmoji(this.client.config.emojis.no)
                         .setLabel('Activer'),
                         new ButtonBuilder()
-                        .setCustomId('captcha-configure')
+                        .setCustomId('antiraid-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
@@ -55,21 +55,28 @@ module.exports = class CaptchaToggleButton extends Button {
                 ]
             });
         } else {
-            interaction.guild.addModule('captcha');
+            if (!interaction.guild.features.includes('COMMUNITY')) return interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                    .setStyle('ERROR')
+                    .setDescription('Le serveur n\'a pas le mode communauté activé.')
+                ],
+                ephemeral: true
+            });
+            
+            interaction.guild.addModule('antiraid');
 
             interaction.update({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Captcha')
+                    .setTitle('Anti-raid')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
+                        `${this.client.config.emojis.help} Le but du système d'anti-raid est de bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.\n` +
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
-                        
+
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(interaction.guild.getData('captcha.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.before')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.after')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
+                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${interaction.guild.getData('antiraid.limit') ? `${interaction.guild.getData('antiraid.limit')} compte${interaction.guild.getData('antiraid.limit') > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} message${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> **Information supplémentaire:** Il est important que le mode communauté soit activé sur le serveur. Si le mode raid venait à s'activez, désactivez le depuis \`Paramètres du serveur\` ➜ \`Invitations\` ➜ \`Activer les invitations\`.`
                     )
                     .setColor(Colors.Green)
                 ],
@@ -77,12 +84,12 @@ module.exports = class CaptchaToggleButton extends Button {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('captcha-toggle')
+                        .setCustomId('antiraid-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Désactiver'),
                         new ButtonBuilder()
-                        .setCustomId('captcha-configure')
+                        .setCustomId('antiraid-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
