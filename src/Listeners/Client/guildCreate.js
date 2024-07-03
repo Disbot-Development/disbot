@@ -12,7 +12,7 @@ module.exports = class GuildCreateEvent extends Event {
     /**
      * 
      * @param {Guild} guild
-      */
+     */
 
 
     async run (guild) {

@@ -16,19 +16,13 @@ module.exports = class PingCommand extends Command {
      * @param {CommandInteraction} interaction 
      */
 
-    async run (interaction) {
-        await interaction.deferReply();
-
-        const reply = await interaction.fetchReply();
-        const ping = reply.createdTimestamp - interaction.createdTimestamp;
-
-        interaction.editReply({
+    run (interaction) {
+        interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setTitle('Latence')
                 .setDescription(
-                    `> **Ping:** ${ping}ms\n` +
-                    `> **WebSocket:** ${this.client.ws.ping === -1 ? 'Calcul en cours...' : `${this.client.ws.ping}ms`}`
+                    `> **Ping:** ${this.client.ws.ping === -1 ? 'Latence indisponible...' : `${this.client.ws.ping}ms`}`
                 )
             ]
         });

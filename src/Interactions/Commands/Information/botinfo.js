@@ -17,13 +17,8 @@ module.exports = class BotInfoCommand extends Command {
      * @param {CommandInteraction} interaction 
      */
 
-    async run (interaction) {
-        await interaction.deferReply();
-
-        const reply = await interaction.fetchReply();
-        let ping = reply.createdTimestamp - interaction.createdTimestamp;
-
-        interaction.editReply({
+    run (interaction) {
+        interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setTitle('Disbot')
@@ -38,7 +33,7 @@ module.exports = class BotInfoCommand extends Command {
                     `> **Utilisateur${this.client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) > 1 ? 's' : ''}:** ${this.client.guilds.cache.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}\n` +
                     `> **Commande${this.client.commands.size > 1 ? 's' : ''}:** ${this.client.commands.size.toLocaleString()}\n` +
                     `> **Date de création:** <t:${parseInt(this.client.user.createdTimestamp / 1000)}:f>\n` +
-                    `> **Ping:** ${ping}ms\n` +
+                    `> **Ping:** ${this.client.ws.ping === -1 ? 'Latence indisponible...' : `${this.client.ws.ping}ms`}\n` +
                     `> **Temps en ligne:** <t:${parseInt((Date.now() - this.client.uptime) / 1000)}:R>\n\n` +
 
                     `> **Processeur:** \`${os.cpus()[0].model} x${os.cpus().length}\`\n` +

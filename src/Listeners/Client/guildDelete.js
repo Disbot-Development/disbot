@@ -11,7 +11,7 @@ module.exports = class GuildDeleteEvent extends Event {
     /**
      * 
      * @param {Guild} guild
-      */
+     */
 
 
     run (guild) {

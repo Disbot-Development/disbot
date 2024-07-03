@@ -1,7 +1,4 @@
-const { CommandInteraction } = require('discord.js');
 const { readdirSync, statSync } = require('fs');
-const MessageEmbed = require('./MessageEmbed');
-const { generate } = require('randomstring');
 const client = require('../../index');
 
 module.exports = class Utils {
@@ -46,47 +43,6 @@ module.exports = class Utils {
         };
 
         return result;
-    };
-
-    /**
-     * 
-     * @param {number} length
-     */
-
-    generateRandomChars(length) {
-        const password = generate({
-            length: length,
-            charset: 'alphanumeric',
-            capitalization: undefined
-        });
-
-        return password
-    };
-    
-    /**
-     * 
-     * @param {CommandInteraction} interaction
-     * @param {number} length
-     * @param {'lowercase'|'uppercase'|undefined} capitalization
-     * @param {String|String[]|'alphanumeric'|'alphabetic'|'numeric'|'hex'|'binary'|'octal'|undefined} type
-     * @returns {string}
-     */
-
-    generatePassword(interaction, length, capitalization, type) {
-        const password = generate({
-            length: length,
-            charset: type,
-            capitalization: capitalization
-        });
-
-        interaction.update({
-            embeds: [
-                new MessageEmbed()
-                .setTitle('Mot-de-passe')
-                .setDescription(`Voici votre mot-de-passe: ||${password}||.`)
-            ],
-            ephemeral: true
-        });
     };
     
     /**

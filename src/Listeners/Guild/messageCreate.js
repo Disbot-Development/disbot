@@ -12,7 +12,7 @@ module.exports = class MessageCreateEvent extends Event {
     /**
      * 
      * @param {Message} message
-      */
+     */
 
 
     async run (message) {

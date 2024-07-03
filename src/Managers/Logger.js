@@ -12,7 +12,6 @@ module.exports = class Logger {
         this.client = client;
     };
     
-    ascii = ' ____  _     _           _   \r\n|  _ \\(_)___| |__   ___ | |_ \r\n| | | | \/ __| \'_ \\ \/ _ \\| __|\r\n| |_| | \\__ \\ |_) | (_) | |_ \r\n|____\/|_|___\/_.__\/ \\___\/ \\__|\r\n                              \r\n';
     name = 'Disbot';
 
     /**
@@ -22,18 +21,6 @@ module.exports = class Logger {
 
     get date() {
         return new Date(Date.now()).toLocaleTimeString('fr-FR');
-    };
-
-    /**
-     * 
-     * @param {string} message
-     * @returns {true}
-     */
-
-    default(message) {
-        console.log(message);
-
-        return true;
     };
 
     /**
