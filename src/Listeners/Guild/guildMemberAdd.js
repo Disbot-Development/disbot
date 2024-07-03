@@ -17,9 +17,15 @@ module.exports = class GuildMemberAddEvent extends Event {
 
 
     async run (member) {
-        if (member.user.bot) return;
-        
         const modules = member.guild.getModules();
+        
+        if (modules.includes('antibot') && member.user.bot) {
+            member.kick('A été détecté par le système d\'anti-bot.')
+            .then(() => this.client.emit('antibotDetected', member.guild, member, true))
+            .catch(() => this.client.emit('antibotDetected', member.guild, member, false));
+        };
+
+        if (member.user.bot) return;
 
         if (modules.includes('antiraid') && member.guild.features.includes('COMMUNITY')) {
             const limit = member.guild.getData('antiraid.limit') || this.client.config.antiraid.limit;

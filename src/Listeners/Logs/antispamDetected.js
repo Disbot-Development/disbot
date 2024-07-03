@@ -15,7 +15,6 @@ module.exports = class AntiSpamDetectedEvent extends Event {
      * @param {GuildMember} member
      * @param {Number} limit
      * @param {Number} duration
-     * @param {Array[String]}
      */
     
     run (guild, member, limit, duration) {
