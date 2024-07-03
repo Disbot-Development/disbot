@@ -54,7 +54,7 @@ module.exports = class GuildMemberAddEvent extends Event {
             member.roles.add(captchaBeforeRole)
             .catch(() => 0);
 
-            const code = this.client.utils.generateRandomChars(4).toUpperCase();
+            const code = this.client.utils.generateRandomChars({length: 4, uppercase: true, numbers: true });
 
             member.setData('captcha.code', code);
             member.setData('captcha.date', new Date().addMinutes(5).getTime());

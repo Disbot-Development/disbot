@@ -70,4 +70,20 @@ module.exports = class Utils {
     capitalizeFirstLetter(str) {
         return str[0].toUpperCase() + str.slice(1);
     };
+    
+    generateRandomChars({ length = 16, lowercase = false, uppercase = false, numbers = false, symbols = false }) {
+        const options = [
+            { enabled: lowercase, chars: 'abcdefghijklmnopqrstuvwxyz' },
+            { enabled: uppercase, chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' },
+            { enabled: numbers, chars: '0123456789' },
+            { enabled: symbols, chars: '!@#$%^&*()+_-=}{[]|:;"/?.><,`~' }
+        ];
+
+        let characters = '';
+        options.forEach((option) => {
+            if (option.enabled) characters += option.chars;
+        });
+    
+        return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+    };
 };
