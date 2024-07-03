@@ -13,7 +13,7 @@ module.exports = class GuildMemberAddEvent extends Event {
     /**
      * 
      * @param {GuildMember} member
-      */
+     */
 
 
     async run (member) {

@@ -75,7 +75,7 @@ module.exports = class AntiRaidToggleButton extends Button {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
 
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${interaction.guild.getData('antiraid.limit') ? `${interaction.guild.getData('antiraid.limit')} compte${interaction.guild.getData('antiraid.limit') > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} message${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${interaction.guild.getData('antiraid.limit') ? `${interaction.guild.getData('antiraid.limit')} compte${interaction.guild.getData('antiraid.limit') > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} compte${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> **Information supplémentaire:** Il est important que le mode communauté soit activé sur le serveur. Si le mode raid venait à s'activez, désactivez le depuis \`Paramètres du serveur\` ➜ \`Invitations\` ➜ \`Activer les invitations\`.`
                     )
                     .setColor(Colors.Green)
