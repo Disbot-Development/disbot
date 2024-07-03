@@ -21,7 +21,7 @@ module.exports = class GuildMemberAddEvent extends Event {
         
         const modules = member.guild.getModules();
 
-        if (modules.includes('antiraid') && interaction.guild.features.includes('COMMUNITY')) {
+        if (modules.includes('antiraid') && member.guild.features.includes('COMMUNITY')) {
             const limit = member.guild.getData('antiraid.limit') || this.client.config.antiraid.limit;
 
             const members = member.guild.getData('antiraid.members') || [];
