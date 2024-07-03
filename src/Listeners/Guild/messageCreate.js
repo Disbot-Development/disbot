@@ -46,7 +46,7 @@ module.exports = class MessageCreateEvent extends Event {
         
         const modules = message.guild.getModules();
 
-        if (modules.includes('antispam') && !message.member.isAdmin()) {
+        if (modules.includes('antispam') && !message.member.isAdmin() && !(message.guild.getData('whitelist') || []).includes(message.author.id)) {
             const limit = message.guild.getData('antispam.limit') || this.client.config.antispam.limit;
             const duration = message.guild.getData('antispam.duration') || this.client.config.antispam.duration;
             

@@ -17,24 +17,6 @@ module.exports = class LogsConfigureButton extends Button {
      */
 
     async run (interaction) {
-        const edit = () => {
-            interaction.message.edit({
-                embeds: [
-                    new MessageEmbed()
-                    .setTitle('Logs')
-                    .setDescription(
-                        `${this.client.config.emojis.help} Le but du système de logs est de répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
-                        `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
-                        
-                        `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de logs:** ${interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Information supplémentaire:** Veillez à ce que je garde l'accès au salon. Faites attention à qui vous donnez l'accès aux logs.`
-                    )
-                    .setColor(Colors.Green)
-                ]
-            });    
-        };
-
         const disable = () => {
             interaction.message.edit({
                 components: [
@@ -59,6 +41,19 @@ module.exports = class LogsConfigureButton extends Button {
 
         const enable = () => {
             interaction.message.edit({
+                embeds: [
+                    new MessageEmbed()
+                    .setTitle('Logs')
+                    .setDescription(
+                        `${this.client.config.emojis.help} Le but du système de logs est de répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
+                        `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
+                        
+                        `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> **Salon de logs:** ${interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Information supplémentaire:** Veillez à ce que je garde l'accès au salon. Faites attention à qui vous donnez l'accès aux logs.`
+                    )
+                    .setColor(Colors.Green)
+                ],
                 components: [
                     new ActionRowBuilder()
                     .addComponents(
@@ -87,7 +82,7 @@ module.exports = class LogsConfigureButton extends Button {
                     `**Veuillez mentionner le salon de logs.**\n` +
                     `> \`create\`: Créer le salon.\n` +
                     `> \`reset\`: Réinitialiser le système de logs.\n` +
-                    `> \`cancel\`: Annuler la configuration.\n`
+                    `> \`cancel\`: Annuler la configuration.`
                 ) 
             ],
             fetchReply: true
@@ -114,7 +109,6 @@ module.exports = class LogsConfigureButton extends Button {
             if (channelAnswer.toLowerCase() === 'reset') {
                 interaction.guild.removeData('logs');
 
-                edit();
                 return enable();
             };
 
@@ -168,7 +162,6 @@ module.exports = class LogsConfigureButton extends Button {
                 .catch(() => 0);
             };
 
-            edit();
             return enable();
         });
 

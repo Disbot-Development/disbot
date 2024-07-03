@@ -48,7 +48,7 @@ module.exports = class LogsCommand extends Command {
                         .setCustomId('logs-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer'),
+                        .setLabel('Configurer')
                     )
                 ]
             });
@@ -79,7 +79,7 @@ module.exports = class LogsCommand extends Command {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
-                        .setDisabled(true),
+                        .setDisabled(true)
                     )
                 ]
             });

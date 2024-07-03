@@ -47,11 +47,11 @@ module.exports = class GuildMemberAddEvent extends Event {
             };
         };
 
-        const captchaRole = member.guild.roles.resolve(member.guild.getData('captcha.roles.before'));
+        const captchaBeforeRole = member.guild.roles.resolve(member.guild.getData('captcha.roles.before'));
         const captchaChannel = member.guild.channels.resolve(member.guild.getData('captcha.channel'));
 
-        if (modules.includes('captcha') && captchaRole && captchaChannel) {
-            member.roles.add(captchaRole)
+        if (modules.includes('captcha') && captchaBeforeRole && captchaChannel) {
+            member.roles.add(captchaBeforeRole)
             .catch(() => 0);
 
             const code = this.client.utils.generateRandomChars(4).toUpperCase();
