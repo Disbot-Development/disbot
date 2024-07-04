@@ -24,7 +24,7 @@ module.exports = class MessageCreateEvent extends Event {
                 .setTitle('Disbot')
                 .setDescription(
                     `${this.client.config.emojis.at} Vous m\'avez mentionné ?\n` +
-                    `${this.client.config.emojis.dev} Je fonctionne en commandes slash, écrivez </help:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de les voir.`
+                    `${this.client.config.emojis.dev} Je fonctionne en commandes slash, écrivez </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de les voir.`
                 )
             ],
             components: [
@@ -69,8 +69,5 @@ module.exports = class MessageCreateEvent extends Event {
                 message.member.pushData('antispam.messages', Date.now());
             };
         };
-
-        message.guild.addData('messages', 1);
-        message.member.addData('messages', 1);
     };
 };

@@ -27,7 +27,7 @@ module.exports = class GuildCreateEvent extends Event {
                 new MessageEmbed()
                 .setTitle(`${this.client.config.emojis.heart} Merci de m\'avoir ajouté à votre serveur !`)
                 .setDescription(
-                    `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande </help:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !\n\n` +
+                    `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !\n\n` +
 
                     `${this.client.config.emojis.mod} Voici la liste des commandes utiles à la protection de votre serveur:\n` +
                     `> - </logs:1256320446832316448>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +

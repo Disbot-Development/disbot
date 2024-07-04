@@ -32,8 +32,7 @@ module.exports = class ServerInfoCommand extends Command {
                     `> **Robot${interaction.guild.members.cache.filter((member) => member.user.bot).size > 1 ? 's' : ''}:** ${interaction.guild.members.cache.filter((member) => member.user.bot).size}\n` +
                     `> **Boosts:** ${interaction.guild.premiumSubscriptionCount || this.client.config.emojis.no}\n` +
                     `> **Partenaire:** ${interaction.guild.partnered ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
-                    `> **Date de création:** <t:${parseInt(interaction.guild.createdTimestamp / 1000)}:f>\n` +
-                    `> **Message${(interaction.guild.getData('messages') || 0) || 1 ? 's' : ''}:** ${interaction.guild.getData('messages') || 0}\n\n` +
+                    `> **Date de création:** <t:${parseInt(interaction.guild.createdTimestamp / 1000)}:f>\n\n` +
 
                     `> **Salon${interaction.guild.channels.cache.filter((channel) => channel.type !== ChannelType.GuildCategory).size > 1 ? 's' : ''} (${interaction.guild.channels.cache.filter((channel) => channel.type !== ChannelType.GuildCategory).size}):** ${interaction.guild.channels.cache.filter((channel) => channel.type !== ChannelType.GuildCategory).map((channel) => channel).slice(0, 10).join(', ') || this.client.config.emojis.no} ${interaction.guild.channels.cache.filter((channel) => channel.type !== 'GUILD_CATEGORY').size > 10 ? 'and more...' : ''}\n\n` +
 

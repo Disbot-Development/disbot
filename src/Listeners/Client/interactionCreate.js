@@ -45,7 +45,7 @@ module.exports = class InteractionCreateEvent extends Event {
                     .setStyle('ERROR')
                     .setDescription(
                         `Désolé, vous n'avez pas la permission de réaliser ceci.\n` +
-                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.map((perm) => `\`${perm}\``).join(', ')}`
+                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``))}`
                     )
                 ],
                 ephemeral: true
@@ -63,7 +63,7 @@ module.exports = class InteractionCreateEvent extends Event {
                     .setStyle('ERROR')
                     .setDescription(
                         `Désolé, je n'ai pas la permission de réaliser ceci.\n` +
-                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.map((perm) => `\`${perm}\``).join(', ')}`
+                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``))}`
                     )
                 ],
                 ephemeral: true

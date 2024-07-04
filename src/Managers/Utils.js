@@ -15,7 +15,7 @@ module.exports = class Utils {
 
     /**
      * 
-     * @param {number} timeout
+     * @param {Number} timeout
      * @returns {Promise<setTimeout>}
      */
 
@@ -25,8 +25,8 @@ module.exports = class Utils {
 
     /**
      * 
-     * @param {string} path
-     * @returns {string[]}
+     * @param {String} path
+     * @returns {String[]}
      */
 
     getFiles(path) {
@@ -47,8 +47,8 @@ module.exports = class Utils {
     
     /**
      * 
-     * @param {number} bytes
-     * @returns {string}
+     * @param {Number} bytes
+     * @returns {String}
      */
      
     formatBytes(bytes) {
@@ -62,14 +62,24 @@ module.exports = class Utils {
     
     /**
      * 
-     * @param {string} str
-     * @returns {string}
-     * 
+     * @param {String} str
+     * @returns {String}
      */
      
     capitalizeFirstLetter(str) {
         return str[0].toUpperCase() + str.slice(1);
     };
+
+    /**
+     * 
+     * @param {Object} options
+     * @param {Number} [options.length=16] 
+     * @param {Boolean} [options.lowercase=false]
+     * @param {Boolean} [options.uppercase=false]
+     * @param {Boolean} [options.numbers=false]
+     * @param {Boolean} [options.symbols=false]
+     * @returns {String}
+     */
     
     generateRandomChars({ length = 16, lowercase = false, uppercase = false, numbers = false, symbols = false }) {
         const options = [
@@ -85,5 +95,23 @@ module.exports = class Utils {
         });
     
         return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
+    };
+
+    /**
+     * 
+     * @param {String[]} arr 
+     * @param {String} conjunction 
+     * @param {String} lastConjunction 
+     * @returns {String}
+     */
+
+    joinCustomLastWord(arr, conjunction = ', ', lastConjunction = ' et ') {
+        if (arr.length === 0) return '';
+        if (arr.length === 1) return arr[0];
+        if (arr.length === 2) return arr.join(lastConjunction);
+      
+        const allButLast = arr.slice(0, -1).join(conjunction);
+        const last = arr[arr.length - 1];
+        return `${allButLast}${lastConjunction}${last}`;
     };
 };

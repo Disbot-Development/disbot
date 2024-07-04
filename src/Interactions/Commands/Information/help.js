@@ -24,7 +24,7 @@ module.exports = class HelpCommand extends Command {
      * @param {CommandInteraction} interaction
      */
 
-    run (interaction) {
+    async run (interaction) {
         const command = this.client.commands.get(interaction.options.getString('command'));
 
         if (command) {
@@ -41,11 +41,11 @@ module.exports = class HelpCommand extends Command {
                     new MessageEmbed()
                     .setTitle('Disbot')
                     .setDescription(
-                        `> **Nom:** \`/${command.config.name}\`\n` +
+                        `> **Nom:** </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === command.config.name).first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === command.config.name).first().id}>\n` +
                         `> **Description:** ${command.config.description}\n` +
                         `> **Catégorie:** ${this.client.config.categories.emojis[command.config.category]} ${this.client.config.categories.labels[command.config.category]}\n` +
-                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.length ? permissions.map((perm) => `\`${perm}\``).join(', ') : `Aucune ${this.client.config.emojis.no}`}\n` +
-                        `> **Permission${mepermissions.length > 1 ? 's' : ''} requise${mepermissions.length > 1 ? 's' : ''} pour Disbot:** ${mepermissions.length ? mepermissions.map((meperm) => `\`${meperm}\``).join(', ') : `Aucune ${this.client.config.emojis.no}`}`
+                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.length ? this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``)) : `Aucune ${this.client.config.emojis.no}`}\n` +
+                        `> **Permission${mepermissions.length > 1 ? 's' : ''} requise${mepermissions.length > 1 ? 's' : ''} pour Disbot:** ${mepermissions.length ? this.client.utils.joinCustomLastWord(mepermissions.map((meperm) => `\`${meperm}\``)) : `Aucune ${this.client.config.emojis.no}`}`
                     )
                 ]
             });
