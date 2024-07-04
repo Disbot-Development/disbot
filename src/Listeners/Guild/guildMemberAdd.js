@@ -61,7 +61,7 @@ module.exports = class GuildMemberAddEvent extends Event {
             .catch(() => 0);
 
             const code = this.client.utils.generateRandomChars({length: 4, uppercase: true, numbers: true });
-            const date = (await new Date().addMinutes(5)).getTime();
+            const date = new Date().addMinutes(5).getTime();
 
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.code`, code);
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.date`, date);

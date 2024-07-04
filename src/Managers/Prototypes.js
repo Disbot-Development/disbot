@@ -16,7 +16,7 @@ module.exports = class Prototypes {
          * @returns {Boolean}
          */
         
-        Discord.GuildMember.prototype.isAdmin = async function isAdmin() {
+        Discord.GuildMember.prototype.isAdmin = function isAdmin() {
             return this.permissions.has(Discord.PermissionFlagsBits.Administrator);
         };
 
@@ -25,7 +25,7 @@ module.exports = class Prototypes {
          * @returns {Boolean}
          */
         
-        Discord.Role.prototype.isAdmin = async function isAdmin() {
+        Discord.Role.prototype.isAdmin = function isAdmin() {
             return this.permissions.has(Discord.PermissionFlagsBits.Administrator);
         };
 
@@ -35,7 +35,7 @@ module.exports = class Prototypes {
          * @returns {Date}
          */
 
-        Date.prototype.addSeconds = async function addSeconds(seconds) {
+        Date.prototype.addSeconds = function addSeconds(seconds) {
             this.setTime(this.getTime() + (seconds * 1000));
 
             return this;
@@ -47,7 +47,7 @@ module.exports = class Prototypes {
          * @returns {Date}
          */
 
-        Date.prototype.addMinutes = async function addMinutes(minutes) {
+        Date.prototype.addMinutes = function addMinutes(minutes) {
             this.setTime(this.getTime() + (minutes * 60 * 1000));
 
             return this;
