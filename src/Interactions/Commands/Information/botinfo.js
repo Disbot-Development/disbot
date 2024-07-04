@@ -38,7 +38,7 @@ module.exports = class BotInfoCommand extends Command {
 
                     `> **Processeur:** \`${os.cpus()[0].model} x${os.cpus().length}\`\n` +
                     `> **RAM:** ${this.client.utils.formatBytes(os.totalmem() - os.freemem())} / ${this.client.utils.formatBytes(os.totalmem())}\n` +
-                    `> **OS:** ${this.client.utils.capitalizeFirstLetter(process.platform)}\n` +
+                    `> **OS:** ${os.type()} ${os.release()}\n` +
                     `> **Node.JS:** ${process.version.replace('v', '')}\n` +
                     `> **Discord.JS:** ${version}`
                 )

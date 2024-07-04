@@ -136,32 +136,6 @@ module.exports = class Disbot extends Client {
     get interactions() {
         return [].concat(this.commands.map((command) => command.config), this.contextmenus.map((contextmenu) => contextmenu.config));
     };
-    
-    /**
-     * 
-     * @param {boolean} logging
-     * @returns {true}
-     */
-
-    verifications(logging) {
-        if (version !== require('../../package.json').dependencies['discord.js'].replace(/\^/g, '')) this.logger.throw(`Discord.JS -> Needed version: ${require('../../package.json').dependencies['discord.js']}`);
-        if (this.database.version !== require('../../package.json').dependencies['quick.db'].replace(/\^/g, '')) this.logger.throw(`Quick.DB -> Needed version: ${require('../../package.json').dependencies['discord.js']}`);
-
-        if (!this.commands) this.logger.throw('Commands -> Property not found.');
-        if (!this.buttons) this.logger.throw('Buttons -> Property not found.');
-        if (!this.selectmenus) this.logger.throw('SelectMenus -> Property not found.');
-        if (!this.modals) this.logger.throw('Modals -> Property not found.');
-        if (!this.contextmenus) this.logger.throw('ContextMenus -> Property not found.');
-        if (!this.config) this.logger.throw('Config -> Property not found.');
-        if (!this.utils) this.logger.throw('Utils -> Property not found.');
-        if (!this.database) this.logger.throw('Database -> Property not found.');
-        
-        if (!logging) {
-            this.logger.success(`All the necessary checks have been carried out.`);
-        };
-
-        return true;
-    };
 
     /**
      * 
@@ -309,6 +283,8 @@ module.exports = class Disbot extends Client {
 
             if (!event.run || !event.config || !event.config.name) this.logger.throw(`The file "${path.split(/\//g)[path.split(/\//g).length - 1]}" doesn't have required data.`);
 
+            if (event.config.name === 'rateLimited') return this.rest.on(event.config.name, (...args) => event.run(...args));
+
             switch (path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0]) {
                 case 'Process':
                     process.on(event.config.name, (...args) => event.run(...args));
@@ -321,101 +297,6 @@ module.exports = class Disbot extends Client {
 
         this.logger.success(`${this._eventsCount} Events has been loaded.\n`);
     
-        return true;
-    };
-
-    /**
-     * 
-     * @returns {true}
-     */
-
-    reloadCommands() {
-        this.commands.clear();
-        
-        const filesPath = this.utils.getFiles('./src/Interactions/Commands');
-
-        for (const path of filesPath) {
-            delete require.cache[require.resolve(`../../${path}`)];
-        };
-
-        this.loadCommands(true);
-
-        return true;
-    };
-
-    /**
-     * 
-     * @returns {true}
-     */
-
-    reloadButtons() {
-        this.buttons.clear();
-
-        const filesPath = this.utils.getFiles('./src/Interactions/Buttons');
-
-        for (const path of filesPath) {
-            delete require.cache[require.resolve(`../../${path}`)];
-        };
-
-        this.loadButtons(true);
-
-        return true;
-    };
-
-    /**
-     * 
-     * @returns {true}
-     */
-
-    reloadSelectMenus() {
-        this.selectmenus.clear();
-        
-        const filesPath = this.utils.getFiles('./src/Interactions/SelectMenus');
-
-        for (const path of filesPath) {
-            delete require.cache[require.resolve(`../../${path}`)];
-        };
-        
-        this.loadSelectMenus(true);
-
-        return true;
-    };
-
-    /**
-     * 
-     * @returns {true}
-     */
-
-    reloadModals() {
-        this.modals.clear();
-        
-        const filesPath = this.utils.getFiles('./src/Interactions/Modals');
-
-        for (const path of filesPath) {
-            delete require.cache[require.resolve(`../../${path}`)];
-        };
-
-        this.loadModals(true);
-
-        return true;
-    };
-
-    /**
-     * 
-     * @returns {true}
-     */
-
-    reloadContextMenus() {
-        this.contextmenus.clear();
-        
-        const filesPath = this.utils.getFiles('./src/Interactions/ContextMenus');
-
-        for (const path of filesPath) {
-            delete require.cache[require.resolve(`../../${path}`)];
-        };
-
-        this.loadContextMenus(true);
-
         return true;
     };
 
@@ -444,26 +325,6 @@ module.exports = class Disbot extends Client {
 
     /**
      * 
-     * @returns {true}
-     */
-
-    reloadAll() {
-        const spinner = createSpinner('Reloading Disbot...').start();
-
-        this.verifications(true);
-        this.reloadButtons();
-        this.reloadCommands();
-        this.reloadContextMenus();
-        this.reloadModals();
-        this.reloadSelectMenus();
-
-        spinner.success({ text: 'Disbot has been reloaded.\n' });
-
-        return true;
-    };
-
-    /**
-     * 
      * @param {boolean} logging
      * @returns {Promise<true>}
      */
@@ -485,8 +346,6 @@ module.exports = class Disbot extends Client {
 
     async init() {
         this.loadDatabase();
-        
-        this.verifications();
 
         this.loadButtons();
         this.loadCommands();
