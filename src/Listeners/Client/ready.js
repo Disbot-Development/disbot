@@ -28,19 +28,17 @@ module.exports = class ReadyEvent extends Event {
                 const modules = await this.client.database.get(`${guild.id}.modules`);
 
                 if (modules.includes('captcha') && guild.channels.resolve(await this.client.database.get(`${guild.id}.captcha.channel`)) && guild.roles.resolve(await this.client.database.get(`${guild.id}.captcha.roles.before`))) {
-                    guild.members.cache.forEach(async (member) => {
-                        const date = await this.client.database.get(`${member.user.id}.captcha.date`);
+                    (await guild.members.fetch()).forEach(async (member) => {
+                        const date = await this.client.database.get(`${guild.id}.users.${member.user.id}.captcha.date`);
                         
-                        if (date && date < Date.now()) {
+                        if (date < Date.now()) {
                             member.kick('Cet utilisateur n\'a pas résolu le captcha dans les temps.')
                             .then(() => this.client.emit('captchaFailed', guild, member))
                             .catch(() => 0);
                         };
                     });
-
-                    await this.client.utils.wait(500);
                 };
             });
-        }, 60000);
+        }, 10000);
     };
 };
