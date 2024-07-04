@@ -25,11 +25,11 @@ module.exports = class ReadyEvent extends Event {
 
         setInterval(() => {
             this.client.guilds.cache.forEach(async (guild) => {
-                const modules = guild.getModules();
+                const modules = await this.client.database.get(`${guild.id}.modules`);
 
-                if (modules.includes('captcha') && guild.channels.resolve(guild.getData('captcha.channel')) && guild.roles.resolve(guild.getData('captcha.roles.before'))) {
-                    guild.members.cache.forEach((member) => {
-                        const date = member.getData('captcha.date');
+                if (modules.includes('captcha') && guild.channels.resolve(await this.client.database.get(`${guild.id}.captcha.channel`)) && guild.roles.resolve(await this.client.database.get(`${guild.id}.captcha.roles.before`))) {
+                    guild.members.cache.forEach(async (member) => {
+                        const date = await this.client.database.get(`${member.user.id}.captcha.date`);
                         
                         if (date && date < Date.now()) {
                             member.kick('Cet utilisateur n\'a pas résolu le captcha dans les temps.')

@@ -17,11 +17,11 @@ module.exports = class AntiSpamDetectedEvent extends Event {
      * @param {Number} duration
      */
     
-    run (guild, member, limit, duration) {
-        const modules = guild.getModules();
+    async run (guild, member, limit, duration) {
+        const modules = await this.client.database.get(`${guild.id}.modules`);
 
-        if (modules.includes('logs') && guild.channels.resolve(guild.getData('logs.channel'))) {
-            guild.channels.resolve(guild.getData('logs.channel')).send({
+        if (modules.includes('logs') && guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
+            guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Anti-spam')

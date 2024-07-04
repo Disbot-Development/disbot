@@ -39,7 +39,7 @@ module.exports = class AntiRaidConfigureButton extends Button {
             });
         };
 
-        const enable = () => {
+        const enable = async () => {
             interaction.message.edit({
                 embeds: [
                     new MessageEmbed()
@@ -49,7 +49,7 @@ module.exports = class AntiRaidConfigureButton extends Button {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
 
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${interaction.guild.getData('antiraid.limit') ? `${interaction.guild.getData('antiraid.limit')} compte${interaction.guild.getData('antiraid.limit') > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} message${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`) ? `${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`)} compte${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`) > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} message${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> **Information supplémentaire:** Il est important que le mode communauté soit activé sur le serveur. Si le mode raid venait à s'activez, désactivez le depuis \`Paramètres du serveur\` ➜ \`Invitations\` ➜ \`Activer les invitations\`.`
                     )
                     .setColor(Colors.Green)
@@ -104,7 +104,7 @@ module.exports = class AntiRaidConfigureButton extends Button {
             .catch(() => 0);
 
             if (limitAnswer.toLowerCase() === 'reset') {
-                interaction.guild.removeData('antiraid');
+                await this.client.database.delete(`${interaction.guild.id}.antiraid`);
 
                 return enable();
             };
@@ -129,7 +129,7 @@ module.exports = class AntiRaidConfigureButton extends Button {
                 return enable;
             };
 
-            interaction.guild.setData('antiraid.limit', limitAnswer);
+            await this.client.database.set(`${interaction.guild.id}.antiraid.limit`, limitAnswer);
 
             return enable();
         });

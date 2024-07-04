@@ -19,7 +19,7 @@ module.exports = class AntiBotCommand extends Command {
      */
 
     async run (interaction) {
-        const modules = interaction.guild.getModules();
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
 
         if (modules.includes('antibot')) {
             interaction.reply({

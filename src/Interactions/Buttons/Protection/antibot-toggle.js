@@ -17,12 +17,12 @@ module.exports = class AntiBotToggleButton extends Button {
      */
 
     async run (interaction) {
-        const modules = interaction.guild.getModules();
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
 
-        this.client.emit('antibotToggle', interaction, modules);
+        this.client.emit('antibotToggle', interaction);
 
         if (modules.includes('antibot')) {
-            interaction.guild.removeModule('antibot');
+            await this.client.database.pull(`${interaction.guild.id}.modules`, 'antibot');
 
             interaction.update({
                 embeds: [
@@ -49,7 +49,7 @@ module.exports = class AntiBotToggleButton extends Button {
                 ]
             });
         } else {
-            interaction.guild.addModule('antibot');
+            await this.client.database.push(`${interaction.guild.id}.modules`, 'antibot');
 
             interaction.update({
                 embeds: [

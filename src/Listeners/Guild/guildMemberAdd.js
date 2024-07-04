@@ -17,7 +17,7 @@ module.exports = class GuildMemberAddEvent extends Event {
 
 
     async run (member) {
-        const modules = member.guild.getModules();
+        const modules = await this.client.database.get(`${member.guild.id}.modules`);
         
         if (modules.includes('antibot') && member.user.bot) {
             member.kick('A été détecté par le système d\'anti-bot.')
@@ -28,14 +28,14 @@ module.exports = class GuildMemberAddEvent extends Event {
         if (member.user.bot) return;
 
         if (modules.includes('antiraid') && member.guild.features.includes('COMMUNITY')) {
-            const limit = member.guild.getData('antiraid.limit') || this.client.config.antiraid.limit;
+            const limit = await this.client.database.get(`${member.guild.id}.antiraid.limit`) || this.client.config.antiraid.limit;
 
-            const members = member.guild.getData('antiraid.members') || [];
+            const members = await this.client.database.get(`${member.guild.id}.antiraid.members`) || [];
             const newMembers = members.filter((mem) => Date.now() - mem.date < this.client.config.antiraid.timeout * 1000);
 
-            member.guild.setData('antiraid.members', newMembers);
+            await this.client.database.set(`${member.guild.id}.antiraid.members`, newMembers);
             if (newMembers.length >= limit) {
-                member.guild.removeData('antiraid.members');
+                await this.client.database.delete(`${member.guild.id}.antiraid.members`);
 
                 member.guild.disableInvites(true)
                 .then((guild) => this.client.emit('antiraidDetected', guild, limit));
@@ -46,24 +46,25 @@ module.exports = class GuildMemberAddEvent extends Event {
                     if (kickedMember) kickedMember.kick('A été détecté par le système d\'anti-raid.');
                 });
             } else {
-                member.guild.pushData('antiraid.members', {
+                await this.client.database.push(`${member.guild.id}.antiraid.members`, {
                     date: Date.now(),
                     id: member.user.id
                 });
             };
         };
 
-        const captchaBeforeRole = member.guild.roles.resolve(member.guild.getData('captcha.roles.before'));
-        const captchaChannel = member.guild.channels.resolve(member.guild.getData('captcha.channel'));
+        const captchaBeforeRole = member.guild.roles.resolve(await this.client.database.get(`${member.guild.id}.captcha.roles.before`));
+        const captchaChannel = member.guild.channels.resolve(await this.client.database.get(`${member.guild.id}.captcha.channel`));
 
         if (modules.includes('captcha') && captchaBeforeRole && captchaChannel) {
             member.roles.add(captchaBeforeRole)
             .catch(() => 0);
 
             const code = this.client.utils.generateRandomChars({length: 4, uppercase: true, numbers: true });
+            const date = (await new Date().addMinutes(5)).getTime();
 
-            member.setData('captcha.code', code);
-            member.setData('captcha.date', new Date().addMinutes(5).getTime());
+            await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.code`, code);
+            await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.date`, date);
 
             const captcha = new CaptchaGenerator()
             .setDimension(150, 450)
@@ -105,7 +106,7 @@ module.exports = class GuildMemberAddEvent extends Event {
                 ]
             });
 
-            member.setData('captcha.message', message.id);
+            await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id);
         };
     };
 };

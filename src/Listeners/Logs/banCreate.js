@@ -16,11 +16,11 @@ module.exports = class BanCreateEvent extends Event {
      * @param {String} reason
      */
     
-    run (author, member, reason) {
-        const modules = member.guild.getModules();
+    async run (author, member, reason) {
+        const modules = await this.client.database.get(`${guild.id}.modules`);
 
-        if (modules.includes('logs') && member.guild.channels.resolve(member.guild.getData('logs.channel'))) {
-            member.guild.channels.resolve(member.guild.getData('logs.channel')).send({
+        if (modules.includes('logs') && member.guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
+            member.guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Bannissement')

@@ -16,13 +16,13 @@ module.exports = class CaptchaToggleButton extends Button {
      * @param {ButtonInteraction} interaction
      */
 
-    run (interaction) {
-        const modules = interaction.guild.getModules();
+    async run (interaction) {
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
 
-        this.client.emit('captchaToggle', interaction, modules);
+        this.client.emit('captchaToggle', interaction);
 
         if (modules.includes('captcha')) {
-            interaction.guild.removeModule('captcha');
+            await this.client.database.pull(`${interaction.guild.id}.modules`, 'captcha');
 
             interaction.update({
                 embeds: [
@@ -55,7 +55,7 @@ module.exports = class CaptchaToggleButton extends Button {
                 ]
             });
         } else {
-            interaction.guild.addModule('captcha');
+            await this.client.database.push(`${interaction.guild.id}.modules`, 'captcha');
 
             interaction.update({
                 embeds: [
@@ -66,9 +66,9 @@ module.exports = class CaptchaToggleButton extends Button {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(interaction.guild.getData('captcha.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.before')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.after')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
                     )
                     .setColor(Colors.Green)

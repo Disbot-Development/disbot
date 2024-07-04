@@ -17,7 +17,7 @@ module.exports = class CaptchaConfigureButton extends Button {
      */
 
     async run (interaction) {
-        const edit = () => {
+        const edit = async () => {
             interaction.message.edit({
                 embeds: [
                     new MessageEmbed()
@@ -27,9 +27,9 @@ module.exports = class CaptchaConfigureButton extends Button {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(interaction.guild.getData('captcha.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.before')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.after')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
                     )
                     .setColor(Colors.Green)
@@ -59,7 +59,7 @@ module.exports = class CaptchaConfigureButton extends Button {
             });
         };
 
-        const enable = () => {
+        const enable = async () => {
             interaction.message.edit({
                 embeds: [
                     new MessageEmbed()
@@ -69,9 +69,9 @@ module.exports = class CaptchaConfigureButton extends Button {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(interaction.guild.getData('captcha.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.before')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.after')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
                     )
                     .setColor(Colors.Green)
@@ -129,7 +129,7 @@ module.exports = class CaptchaConfigureButton extends Button {
             .catch(() => 0);
 
             if (channelAnswer.toLowerCase() === 'reset') {
-                interaction.guild.removeData('captcha');
+                await this.client.database.delete(`${interaction.guild.id}.captcha`);
 
                 return enable();
             };
@@ -141,8 +141,8 @@ module.exports = class CaptchaConfigureButton extends Button {
                     name: 'vérification',
                     type: ChannelType.GuildText
                 })
-                .then((ch) => {
-                    interaction.guild.setData('captcha.channel', ch.id);
+                .then(async (ch) => {
+                    await this.client.database.set(`${interaction.guild.id}.captcha.channel`, ch.id);
                 });
             } else {
                 if (!channel || (channel && channel.type !== ChannelType.GuildText)) {
@@ -163,7 +163,7 @@ module.exports = class CaptchaConfigureButton extends Button {
                     return enable;
                 };
 
-                interaction.guild.setData('captcha.channel', channel.id);
+                await this.client.database.set(`${interaction.guild.id}.captcha.channel`, channel.id);
             };
 
             edit();
@@ -198,7 +198,7 @@ module.exports = class CaptchaConfigureButton extends Button {
                 .catch(() => 0);
 
                 if (beforeRoleAnswer.toLowerCase() === 'reset') {
-                    interaction.guild.removeData('captcha');
+                    await this.client.database.delete(`${interaction.guild.id}.captcha`);
 
                     return enable();
                 };
@@ -210,8 +210,8 @@ module.exports = class CaptchaConfigureButton extends Button {
                         name: 'Vérification',
                         color: Colors.Grey
                     })
-                    .then((role) => {
-                        interaction.guild.setData('captcha.roles.before', role.id);
+                    .then(async (role) => {
+                        await this.client.database.set(`${interaction.guild.id}.captcha.roles.before`, role.id);
                     });
                 } else {
                     if (!beforeRole || beforeRole.id === interaction.guild.id) {
@@ -232,21 +232,21 @@ module.exports = class CaptchaConfigureButton extends Button {
                         return enable();
                     };
     
-                    interaction.guild.setData('captcha.roles.before', beforeRole.id);
+                    await this.client.database.set(`${interaction.guild.id}.captcha.roles.before`, beforeRole.id);
 
                     interaction.guild.channels.cache.forEach(async (channel) => {
                         if (!channel.permissionOverwrites) return;
                         
-                        if (channel.id === interaction.guild.getData('captcha.channel')) {
+                        if (channel.id === await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) {
                             await channel.permissionOverwrites.edit(interaction.guild.id, {
                                 ViewChannel: false
                             });
 
-                            await channel.permissionOverwrites.edit(interaction.guild.getData('captcha.roles.before'), {
+                            await channel.permissionOverwrites.edit(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`), {
                                 ViewChannel: true
                             })
                         } else {
-                            await channel.permissionOverwrites.edit(interaction.guild.getData('captcha.roles.before'), {
+                            await channel.permissionOverwrites.edit(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`), {
                                 ViewChannel: false
                             });
                         };
@@ -286,7 +286,7 @@ module.exports = class CaptchaConfigureButton extends Button {
                     .catch(() => 0);
     
                     if (afterRoleAnswer.toLowerCase() === 'reset') {
-                        interaction.guild.removeData('captcha');
+                        await this.client.database.delete(`${interaction.guild.id}.captcha`);
 
                         return enable();
                     };
@@ -311,7 +311,7 @@ module.exports = class CaptchaConfigureButton extends Button {
                         return enable();
                     };
     
-                    interaction.guild.setData('captcha.roles.after', afterRole.id);
+                    await this.client.database.set(`${interaction.guild.id}.captcha.roles.after`, afterRole.id);
 
                     return enable();
                 });

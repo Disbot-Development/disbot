@@ -16,7 +16,7 @@ module.exports = class CaptchaRegenerateButton extends Button {
      */
 
     async run (interaction) {
-        if (interaction.message.id !== interaction.member.getData('captcha.message')) return interaction.reply({
+        if (interaction.message.id !== await this.client.database.get(`${interaction.guild.id}.users.${interaction.user.id}.captcha.message`)) return interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')
@@ -25,9 +25,9 @@ module.exports = class CaptchaRegenerateButton extends Button {
             ephemeral: true
         });
 
-        const code = this.client.utils.generateRandomChars(4).toUpperCase();
+        const code = this.client.utils.generateRandomChars({length: 4, uppercase: true, numbers: true });
 
-        interaction.member.setData('captcha.code', code);
+        await this.client.database.set(`${interaction.guild.id}.users.${interaction.user.id}.captcha.code`, code);
 
         const captcha = new CaptchaGenerator()
         .setDimension(150, 450)

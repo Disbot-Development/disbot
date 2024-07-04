@@ -16,7 +16,7 @@ module.exports = class CaptchaModal extends Modal {
      */
 
     async run (interaction) {
-        const code = interaction.member.getData('captcha.code');
+        const code = await this.client.database.get(`${interaction.guild.id}.users.${interaction.user.id}.captcha.code`);
 
         if (interaction.fields.getTextInputValue('answer') !== code) return interaction.reply({
             embeds: [
@@ -27,10 +27,10 @@ module.exports = class CaptchaModal extends Modal {
             ephemeral: true
         });
 
-        interaction.member.removeData('captcha');
+        await this.client.database.delete(`${interaction.guild.id}.users.${interaction.user.id}.captcha`);
 
-        const captchaBeforeRole = interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.before'));
-        const captchaAfterRole = interaction.guild.roles.resolve(interaction.guild.getData('captcha.roles.after'));
+        const captchaBeforeRole = interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`));
+        const captchaAfterRole = interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`));
 
         await interaction.member.roles.remove(captchaBeforeRole)
         .catch(() => 0);

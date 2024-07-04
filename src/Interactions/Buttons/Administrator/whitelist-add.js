@@ -17,7 +17,7 @@ module.exports = class WhitelistAddButton extends Button {
      */
 
     async run (interaction) {
-        interaction.guild.setData('whitelist', (interaction.guild.getData('whitelist') || []).filter((id) => interaction.guild.members.resolve(id)));
+        await this.client.database.set(`${interaction.guild.id}.whitelist`, (await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).filter((id) => interaction.guild.members.resolve(id)));
         
         const disable = () => {
             interaction.message.edit({
@@ -41,7 +41,7 @@ module.exports = class WhitelistAddButton extends Button {
             });
         };
 
-        const enable = () => {
+        const enable = async () => {
             interaction.message.edit({
                 embeds: [
                     new MessageEmbed()
@@ -50,7 +50,7 @@ module.exports = class WhitelistAddButton extends Button {
                         `${this.client.config.emojis.help} Les utilisateurs inscrit dans la liste blanche ne seront pas affectés par la plupart des systèmes de protection. Faites attention aux utilisateurs inscrit.\n\n` +
     
                         `**Utilisateurs:**\n` +
-                        `> ${(interaction.guild.getData('whitelist') || []).length ? interaction.guild.getData('whitelist').map((id) => interaction.guild.members.resolve(id)).join(', ') : 'Aucun utilisateur n\'est inscrit dans la liste blanche.'}`
+                        `> ${(await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).length ? (await this.client.database.get(`${interaction.guild.id}.whitelist`)).map((id) => interaction.guild.members.resolve(id)).join(', ') : 'Aucun utilisateur n\'est inscrit dans la liste blanche.'}`
                     )
                 ],
                 components: [
@@ -123,7 +123,9 @@ module.exports = class WhitelistAddButton extends Button {
                 return enable();
             };
 
-            interaction.guild.pushData('whitelist', user.id);
+            if (!(await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).includes(user.id)) await this.client.database.push(`${interaction.guild.id}.whitelist`, user.id);
+
+            this.client.emit('whitelistAdd', interaction, user);
 
             return enable();
         });

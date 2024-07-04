@@ -14,7 +14,7 @@ module.exports = class InteractionCreateEvent extends Event {
      * @param {Interaction} interaction
      */
 
-    run (interaction) {
+    async run (interaction) {
         if (!interaction.guild) return;
 
         let int;
@@ -75,7 +75,7 @@ module.exports = class InteractionCreateEvent extends Event {
         if (interaction.isCommand() && !interaction.isContextMenuCommand()) {
             this.client.emit('commandCreate', interaction, int);
 
-            if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.member.id === interaction.guild.ownerId && !interaction.guild.getData('ignored')?.includes('role') && interaction.guild.members.me.permissions.has('SEND_MESSAGES')) interaction.channel.send({
+            if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.member.id === interaction.guild.ownerId && !(await this.client.database.get(`${interaction.guild.id}.ignored`))?.includes('role') && interaction.guild.members.me.permissions.has('SEND_MESSAGES')) interaction.channel.send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Rôle')

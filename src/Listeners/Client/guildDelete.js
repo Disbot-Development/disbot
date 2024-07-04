@@ -14,7 +14,7 @@ module.exports = class GuildDeleteEvent extends Event {
      */
 
 
-    run (guild) {
-        this.client.removeData(guild.id);
+    async run (guild) {
+        await this.client.database.delete(guild.id);
     };
 };

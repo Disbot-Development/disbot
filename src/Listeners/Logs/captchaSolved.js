@@ -15,11 +15,11 @@ module.exports = class CaptchaSolvedEvent extends Event {
      * @param {String} code 
      */
     
-    run (interaction, code) {
-        const modules = interaction.guild.getModules();
+    async run (interaction, code) {
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
 
-        if (modules.includes('logs') && interaction.guild.channels.resolve(interaction.guild.getData('logs.channel'))) {
-            interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')).send({
+        if (modules.includes('logs') && interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`))) {
+            interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Captcha')

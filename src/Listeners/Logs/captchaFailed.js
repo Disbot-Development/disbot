@@ -15,18 +15,18 @@ module.exports = class CaptchaFailedEvent extends Event {
      * @param {GuildMember} member 
      */
     
-    run (guild, member) {
-        const modules = guild.getModules();
+    async run (guild, member) {
+        const modules = await this.client.database.get(`${guild.id}.modules`);
 
-        if (modules.includes('logs') && guild.channels.resolve(guild.getData('logs.channel'))) {
-            guild.channels.resolve(guild.getData('logs.channel')).send({
+        if (modules.includes('logs') && guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
+            guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Captcha')
                     .setDescription(
                         `Un utilisateur vient d'être expulsé car il n'a pas résolu son captcha dans les temps.\n` +
                         `> **Utilisateur:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}\n` +
-                        `> **Code à résoudre:** \`${member.getData('captcha.code')}\``
+                        `> **Code à résoudre:** \`${await this.client.database.get(`${guild.id}.users.${member.user.id}.captcha.code`)}\``
                     )
                 ]
             })

@@ -16,11 +16,11 @@ module.exports = class LogsToggleButton extends Button {
      * @param {ButtonInteraction} interaction
      */
 
-    run (interaction) {
-        const modules = interaction.guild.getModules();
+    async run (interaction) {
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
 
         if (modules.includes('logs')) {
-            interaction.guild.removeModule('logs');
+            await this.client.database.pull(`${interaction.guild.id}.modules`, 'logs');
 
             interaction.update({
                 embeds: [
@@ -53,7 +53,7 @@ module.exports = class LogsToggleButton extends Button {
                 ]
             });
         } else {
-            interaction.guild.addModule('logs');
+            await this.client.database.push(`${interaction.guild.id}.modules`, 'logs');
 
             interaction.update({
                 embeds: [
@@ -64,7 +64,7 @@ module.exports = class LogsToggleButton extends Button {
                         `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
                         
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de logs:** ${interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Salon de logs:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Information supplémentaire:** Veillez à ce que je garde l'accès au salon. Faites attention à qui vous donnez l'accès aux logs.`
                     )
                     .setColor(Colors.Green)

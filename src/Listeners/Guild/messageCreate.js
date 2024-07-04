@@ -44,19 +44,19 @@ module.exports = class MessageCreateEvent extends Event {
             ]
         });
         
-        const modules = message.guild.getModules();
+        const modules = await this.client.database.get(`${message.guild.id}.modules`);
 
-        if (modules.includes('antispam') && !message.member.isAdmin() && !(message.guild.getData('whitelist') || []).includes(message.author.id)) {
-            const limit = message.guild.getData('antispam.limit') || this.client.config.antispam.limit;
-            const duration = message.guild.getData('antispam.duration') || this.client.config.antispam.duration;
+        if (modules.includes('antispam') && !message.member.isAdmin() && !(await this.client.database.get(`${message.guild.id}.whitelist`) || []).includes(message.author.id)) {
+            const limit = await this.client.database.get(`${message.guild.id}.antispam.limit`) || this.client.config.antispam.limit;
+            const duration = await this.client.database.get(`${message.guild.id}.antispam.duration`) || this.client.config.antispam.duration;
             
-            const messages = message.member.getData('antispam.messages') || [];
+            const messages = await this.client.database.get(`${message.guild.id}.users.${message.author.id}.antispam.messages`) || [];
             const newMessages = messages.filter((msg) => Date.now() - msg < this.client.config.antispam.timeout * 1000);
 
-            message.member.setData('antispam.messages', newMessages);
+            await this.client.database.set(`${message.guild.id}.users.${message.author.id}.antispam.messages`, newMessages);
 
             if (newMessages.length >= limit) {
-                message.member.removeData('antispam');
+                await this.client.database.remove(`${message.guild.id}.users.${message.author.id}.antispam`);
 
                 message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-spam.')
                 .then((member) => this.client.emit('antispamDetected', message.guild, member, limit, duration))
@@ -66,7 +66,7 @@ module.exports = class MessageCreateEvent extends Event {
 
                 message.channel.bulkDelete(messagesArray);
             } else {
-                message.member.pushData('antispam.messages', Date.now());
+                await this.client.database.push(`${message.guild.id}.users.${message.author.id}.antispam.messages`, Date.now());
             };
         };
     };

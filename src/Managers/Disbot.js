@@ -4,7 +4,7 @@ const Prototypes = require('./Prototypes');
 const Config = require('./Config');
 const Utils = require('./Utils');
 const Logger = require('./Logger');
-const Database = require('quick.db');
+const { QuickDB } = require('quick.db');
 
 module.exports = class Disbot extends Client {
 
@@ -17,7 +17,7 @@ module.exports = class Disbot extends Client {
     constructor(options) {
         super(options);
 
-        new Prototypes(this)
+        new Prototypes(this);
     };
 
     config = new Config(this);
@@ -143,7 +143,7 @@ module.exports = class Disbot extends Client {
      */
 
     loadDatabase() {
-        this.database = Database;
+        this.database = new QuickDB();
 
         this.logger.success('The database was linked.');
 

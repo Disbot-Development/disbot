@@ -1,32 +1,32 @@
+const { ButtonInteraction, GuildMember } = require('discord.js');
 const Event = require('../../Managers/Structures/Event');
-const { ButtonInteraction } = require('discord.js');
 const MessageEmbed = require('../../Managers/MessageEmbed');
 
-module.exports = class AntiSpamToggleEvent extends Event {
+module.exports = class WhiteListRemoveEvent extends Event {
     constructor(client) {
         super(client, {
-            name: 'antispamToggle'
+            name: 'whitelistRemove'
         });
     };
 
     /**
      * 
      * @param {ButtonInteraction} interaction
+     * @param {GuildMember} member 
      */
     
-    async run (interaction) {
+    async run (interaction, member) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
-        
-        const state = modules.includes('antispam');
 
         if (modules.includes('logs') && interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`))) {
             interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-spam')
+                    .setTitle('Liste blanche')
                     .setDescription(
-                        `Le système d'anti-spam vient d'être ${state ? 'désactivé' : 'activé'}.\n` +
-                        `> **Status:** ${state ? `Désactivé ${this.client.config.emojis.no}` : `Activé ${this.client.config.emojis.yes}`}`
+                        `Un membre a été retiré de la liste blanche.\n` +
+                        `> **Auteur:** ${interaction.user} - \`${interaction.user.tag}\` - ${interaction.user.id}\n` +
+                        `> **Membre:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}`
                     )
                 ]
             })

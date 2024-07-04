@@ -16,17 +16,17 @@ module.exports = class GuildMemberRemoveEvent extends Event {
     async run (member) {
         if (member.user.bot) return;
         
-        const modules = member.guild.getModules();
-        const captchaChannel = member.guild.channels.resolve(member.guild.getData('captcha.channel'));
+        const modules = await this.client.database.get(`${member.guild.id}.modules`);
+        const captchaChannel = member.guild.channels.resolve(await this.client.database.get(`${member.guild.id}.captcha.channel`));
 
         if (modules.includes('captcha') && captchaChannel) {
             const messages = await captchaChannel.messages.fetch();
-            const message = messages.find((message) => message.id === member.getData('captcha.message'));
+            const message = messages.find(async (message) => message.id === await this.client.database.get(`${member.guild.id}.users.${member.user.id}.captcha.message`));
 
             if (message) message.delete()
             .catch(() => 0);
 
-            member.removeData('captcha');
+            await this.client.database.delete(`${member.guild.id}.users.${member.user.id}.captcha`);
         };
     };
 };

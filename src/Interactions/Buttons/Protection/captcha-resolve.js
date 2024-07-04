@@ -14,8 +14,8 @@ module.exports = class CaptchaResolveButton extends Button {
      * @param {ButtonInteraction} interaction
      */
 
-    run (interaction) {
-        if (interaction.message.id !== interaction.member.getData('captcha.message')) return interaction.reply({
+    async run (interaction) {
+        if (interaction.message.id !== await this.client.database.get(`${interaction.guild.id}.users.${interaction.user.id}.captcha.message`)) return interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')

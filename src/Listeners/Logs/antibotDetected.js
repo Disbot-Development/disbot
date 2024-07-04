@@ -17,10 +17,10 @@ module.exports = class AntiRaidDetectedEvent extends Event {
      */
     
     async run (guild, member, kicked) {
-        const modules = guild.getModules();
+        const modules = await this.client.database.get(`${guild.id}.modules`);
 
-        if (modules.includes('logs') && guild.channels.resolve(guild.getData('logs.channel'))) {
-            guild.channels.resolve(guild.getData('logs.channel')).send({
+        if (modules.includes('logs') && guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
+            guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Anti-bot')

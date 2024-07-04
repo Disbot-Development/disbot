@@ -39,7 +39,7 @@ module.exports = class LogsConfigureButton extends Button {
             });
         };
 
-        const enable = () => {
+        const enable = async () => {
             interaction.message.edit({
                 embeds: [
                     new MessageEmbed()
@@ -49,7 +49,7 @@ module.exports = class LogsConfigureButton extends Button {
                         `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
                         
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de logs:** ${interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> **Salon de logs:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> **Information supplémentaire:** Veillez à ce que je garde l'accès au salon. Faites attention à qui vous donnez l'accès aux logs.`
                     )
                     .setColor(Colors.Green)
@@ -107,7 +107,7 @@ module.exports = class LogsConfigureButton extends Button {
             .catch(() => 0);
 
             if (channelAnswer.toLowerCase() === 'reset') {
-                interaction.guild.removeData('logs');
+                await this.client.database.delete(`${interaction.guild.id}.logs`);
 
                 return enable();
             };
@@ -119,8 +119,8 @@ module.exports = class LogsConfigureButton extends Button {
                     name: 'disbot-logs',
                     type: ChannelType.GuildText
                 })
-                .then((ch) => {
-                    interaction.guild.setData('logs.channel', ch.id);
+                .then(async (ch) => {
+                    await this.client.database.set(`${interaction.guild.id}.logs.channel`, ch.id);
 
                     ch.send({
                         embeds: [
@@ -150,7 +150,7 @@ module.exports = class LogsConfigureButton extends Button {
                     return enable();
                 };
 
-                interaction.guild.setData('logs.channel', channel.id);
+                await this.client.database.set(`${interaction.guild.id}.logs.channel`, channel.id);
 
                 channel.send({
                     embeds: [

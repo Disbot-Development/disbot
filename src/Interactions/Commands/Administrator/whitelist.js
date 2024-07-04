@@ -17,8 +17,8 @@ module.exports = class WhitelistCommand extends Command {
      * @param {CommandInteraction} interaction 
      */
 
-    run (interaction) {
-        interaction.guild.setData('whitelist', (interaction.guild.getData('whitelist') || []).filter((id) => interaction.guild.members.resolve(id)));
+    async run (interaction) {
+        await this.client.database.set(`${interaction.guild.id}.whitelist`, (await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).filter((id) => interaction.guild.members.resolve(id)));
         
         interaction.reply({
             embeds: [
@@ -28,7 +28,7 @@ module.exports = class WhitelistCommand extends Command {
                     `${this.client.config.emojis.help} Les utilisateurs inscrit dans la liste blanche ne seront pas affectés par la plupart des systèmes de protection. Faites attention aux utilisateurs inscrit.\n\n` +
 
                     `**Utilisateurs:**\n` +
-                    `> ${(interaction.guild.getData('whitelist') || []).length ? interaction.guild.getData('whitelist').map((id) => interaction.guild.members.resolve(id)).join(', ') : 'Aucun utilisateur n\'est inscrit dans la liste blanche.'}`
+                    `> ${(await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).length ? (await this.client.database.get(`${interaction.guild.id}.whitelist`)).map((id) => interaction.guild.members.resolve(id)).join(', ') : 'Aucun utilisateur n\'est inscrit dans la liste blanche.'}`
                 )
             ],
             components: [

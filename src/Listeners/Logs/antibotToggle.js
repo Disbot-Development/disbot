@@ -12,14 +12,15 @@ module.exports = class AntiBotToggleEvent extends Event {
     /**
      * 
      * @param {ButtonInteraction} interaction
-     * @param {Array[String]}
      */
     
-    run (interaction, modules) {
+    async run (interaction) {
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+
         const state = modules.includes('antibot');
 
-        if (modules.includes('logs') && interaction.guild.channels.resolve(interaction.guild.getData('logs.channel'))) {
-            interaction.guild.channels.resolve(interaction.guild.getData('logs.channel')).send({
+        if (modules.includes('logs') && interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`))) {
+            interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)).send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Anti-bot')
