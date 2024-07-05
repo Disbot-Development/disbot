@@ -41,7 +41,7 @@ module.exports = class KickCommand extends Command {
                 .setStyle('ERROR')
                 .setDescription('Vous ne pouvez pas expulser un membre ayant un rôle plus haut que le votre.')
             ],
-            ephemeral :true
+            ephemeral: true
         });
 
         member.kick({ reason })
@@ -51,7 +51,7 @@ module.exports = class KickCommand extends Command {
                     new MessageEmbed()
                     .setStyle('SUCCESS')
                     .setDescription(
-                        `\`${member.user.tag}\` vient d'être expulsé du server.\n` +
+                        `\`${member.user.tag}\` vient d'être expulsé du serveur.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ]

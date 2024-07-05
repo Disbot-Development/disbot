@@ -41,7 +41,7 @@ module.exports = class BanCommand extends Command {
                 .setStyle('ERROR')
                 .setDescription('Vous ne pouvez pas bannir un membre ayant un rôle plus haut que le votre.')
             ],
-            ephemeral :true
+            ephemeral: true
         });
 
         member.ban({ reason })
@@ -51,7 +51,7 @@ module.exports = class BanCommand extends Command {
                     new MessageEmbed()
                     .setStyle('SUCCESS')
                     .setDescription(
-                        `\`${member.user.tag}\` vient d'être banni du server.\n` +
+                        `\`${member.user.tag}\` vient d'être banni du serveur.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ]

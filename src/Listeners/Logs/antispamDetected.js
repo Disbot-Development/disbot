@@ -26,10 +26,10 @@ module.exports = class AntiSpamDetectedEvent extends Event {
                     new MessageEmbed()
                     .setTitle('Anti-spam')
                     .setDescription(
-                        `Un utilisateur vient d\'être exclu car il a été détecté par le système d'anti-spam.\n` +
+                        `Un utilisateur vient d\'être rendu muet car il a été détecté par le système d'anti-spam.\n` +
                         `> **Utilisateur:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}\n` +
                         `> **Limite de messages en ${this.client.config.antispam.timeout} seconde${this.client.config.antispam.timeout > 1 ? 's' : ''}:** ${limit} message${limit > 1 ? 's' : ''}\n` +
-                        `> **Durée de l'exclusion:** ${duration} minute${duration > 1 ? 's' : ''}`
+                        `> **Durée rendu muet:** ${duration} minute${duration > 1 ? 's' : ''}`
                     )
                 ]
             })

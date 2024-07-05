@@ -283,15 +283,17 @@ module.exports = class Disbot extends Client {
 
             if (!event.run || !event.config || !event.config.name) this.logger.throw(`The file "${path.split(/\//g)[path.split(/\//g).length - 1]}" doesn't have required data.`);
 
-            if (event.config.name === 'rateLimited') return this.rest.on(event.config.name, (...args) => event.run(...args));
-
-            switch (path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0]) {
-                case 'Process':
-                    process.on(event.config.name, (...args) => event.run(...args));
-                break;
-                default:
-                    this.on(event.config.name, (...args) => event.run(...args));
-                break;
+            if (event.config.name === 'rateLimited') {
+                this.rest.on(event.config.name, (...args) => event.run(...args));
+            } else {
+                switch (path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0]) {
+                    case 'Process':
+                        process.on(event.config.name, (...args) => event.run(...args));
+                    break;
+                    default:
+                        this.on(event.config.name, (...args) => event.run(...args));
+                    break;
+                };
             };
         };
 
