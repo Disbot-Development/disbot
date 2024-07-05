@@ -1,10 +1,10 @@
 const Event = require('../../Managers/Structures/Event');
 const { RateLimitData } = require('discord.js');
 
-module.exports = class RateLimitEvent extends Event {
+module.exports = class RateLimitedEvent extends Event {
     constructor(client) {
         super(client, {
-            name: 'rateLimit'
+            name: 'rateLimited'
         });
     };
 
