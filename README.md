@@ -54,7 +54,7 @@ Nous offrons un support disponible 24/7.
 ## Démarrer
 
 Ceci est une liste d'instruction si vous souhaitez exécuter le projet en local.
-Nous rappelons que l'utilisation commerciale de Disbot est soumise à des droits d'auteur.
+Nous rappelons que l'utilisation du code source de Disbot est soumise à des droits d'auteur.
 
 ### Prérequis
 
@@ -81,7 +81,7 @@ Voici la liste des étapes à suivre afin d'exécuter le projet.
 
 <p align="right"><a href="#readme-top">retour en haut</a></p>
 
-<p align="center"><a href="https://creativecommons.org/licenses/by-nc/4.0/">Disbot ©️ 2024</a></p>
+<p align="center">Disbot ©️ 2024</p>
 
 [contributors-shield]: https://img.shields.io/github/contributors/disbot-development/disbot.svg?style=for-the-badge
 [contributors-url]: https://github.com/disbot-development/disbot/graphs/contributors
@@ -90,4 +90,3 @@ Voici la liste des étapes à suivre afin d'exécuter le projet.
 [stars-shield]: https://img.shields.io/github/stars/disbot-development/disbot.svg?style=for-the-badge
 [stars-url]: https://github.com/disbot-development/disbot/stargazers
 [product-screenshot]: src/Images/Blurple_White_Banner.png
-[license]: https://creativecommons.org/licenses/by-nc/4.0/
