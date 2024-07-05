@@ -81,7 +81,7 @@ Voici la liste des étapes à suivre afin d'exécuter le projet.
 
 <p align="right"><a href="#readme-top">retour en haut</a></p>
 
-<p align="center"><a href="https://github.com/Disbot-Development/disbot/LICENSE">Disbot ©️ 2024</a></p>
+<p align="center"><a href="https://github.com/Disbot-Development/disbot/blob/main/LICENSE">Disbot ©️ 2024</a></p>
 
 [contributors-shield]: https://img.shields.io/github/contributors/disbot-development/disbot.svg?style=for-the-badge
 [contributors-url]: https://github.com/disbot-development/disbot/graphs/contributors
