@@ -19,7 +19,7 @@ module.exports = class AntiRaidCommand extends Command {
      */
 
     async run (interaction) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
         if (modules.includes('antiraid')) {
             interaction.reply({

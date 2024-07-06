@@ -20,7 +20,7 @@ module.exports = class MuteCreateEvent extends Event {
      */
     
     async run (author, member, duration, calculatedDuration, unit, reason) {
-        const modules = await this.client.database.get(`${member.guild.id}.modules`);
+        const modules = await this.client.database.get(`${member.guild.id}.modules`) || [];
 
         if (modules.includes('logs') && member.guild.channels.resolve(await this.client.database.get(`${member.guild.id}.logs.channel`))) {
             member.guild.channels.resolve(await this.client.database.get(`${member.guild.id}.logs.channel`)).send({

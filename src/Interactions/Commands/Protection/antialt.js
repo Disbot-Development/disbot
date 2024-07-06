@@ -2,14 +2,14 @@ const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
-module.exports = class AntiSpamCommand extends Command {
+module.exports = class AntiAltCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'antispam',
-            description: 'Configurer le système d\'anti-spam.',
+            name: 'antialt',
+            description: 'Configurer le système d\'anti-alt.',
             category: 'protection',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ModerateMembers, PermissionFlagsBits.ManageMessages]
+            meperms: [PermissionFlagsBits.KickMembers]
         });
     };
 
@@ -21,19 +21,18 @@ module.exports = class AntiSpamCommand extends Command {
     async run (interaction) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
-        if (modules.includes('antispam')) {
+        if (modules.includes('antialt')) {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-spam')
+                    .setTitle('Anti-alt')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système d'anti-spam est de bloquer les utilisateurs qui tentent d'envoyer des messages trop rapidement.\n` +
-                        `Cela permet de sécuriser votre serveur en évitant l'attaque d'utilisateurs Discord malveillants.\n\n` +
-                        
+                        `${this.client.config.emojis.help} Le but du système d'anti-alt est de bloquer la venue de nouveaux membres ayant un compte créé en dessous l'âge minimum.\n` +
+                        `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
+
                         `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Limite de messages en ${this.client.config.antispam.timeout} seconde${this.client.config.antispam.timeout > 1 ? 's' : ''}:** ${await this.client.database.get(`${interaction.guild.id}.antispam.limit`) ? `${await this.client.database.get(`${interaction.guild.id}.antispam.limit`)} message${await this.client.database.get(`${interaction.guild.id}.antispam.limit`) > 1 ? 's' : ''}` : `${this.client.config.antispam.limit} message${this.client.config.antispam.limit > 1 ? 's' : ''} (par défaut)`}\n` +
-                        `> **Durée rendu muet:** ${await this.client.database.get(`${interaction.guild.id}.antispam.duration`) ? `${await this.client.database.get(`${interaction.guild.id}.antispam.duration`)} minute${await this.client.database.get(`${interaction.guild.id}.antispam.duration`) > 1 ? 's' : ''}` : `60 minutes (par défaut)`}\n` +
-                        `> **Information supplémentaire:** Tous les utilisateurs n'étant pas intégrés dans la liste blanche se verront affectés par l'anti-spam.`
+                        `> **Âge minimum:** ${await this.client.database.get(`${interaction.guild.id}.antialt.age`) ? `${await this.client.database.get(`${interaction.guild.id}.antialt.age`)} heure${await this.client.database.get(`${interaction.guild.id}.antialt.age`) > 1 ? 's' : ''}` : `${this.client.config.antialt.age} heure${this.client.config.antialt.age > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> **Information supplémentaire:** Ce système n'affectera pas les bots Discord.`
                     )
                     .setColor(Colors.Green)
                 ],
@@ -41,12 +40,12 @@ module.exports = class AntiSpamCommand extends Command {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('antispam-toggle')
+                        .setCustomId('antialt-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Désactiver'),
                         new ButtonBuilder()
-                        .setCustomId('antispam-configure')
+                        .setCustomId('antialt-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
@@ -57,13 +56,13 @@ module.exports = class AntiSpamCommand extends Command {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-spam')
+                    .setTitle('Anti-alt')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système d'anti-spam est de bloquer les utilisateurs qui tentent d'envoyer des messages trop rapidement.\n` +
-                        `Cela permet de sécuriser votre serveur en évitant l'attaque d'utilisateurs Discord malveillants.\n\n` +
-                        
+                        `${this.client.config.emojis.help} Le but du système d'anti-alt est de bloquer la venue de nouveaux membres ayant un compte créé en dessous l'âge minimum.\n` +
+                        `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
+
                         `> **Status:** Désactivé ${this.client.config.emojis.no}\n` +
-                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-spam.`
+                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-alt.`
                     )
                     .setColor(Colors.Red)
                 ],
@@ -71,12 +70,12 @@ module.exports = class AntiSpamCommand extends Command {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('antispam-toggle')
+                        .setCustomId('antialt-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Activer'),
                         new ButtonBuilder()
-                        .setCustomId('antispam-configure')
+                        .setCustomId('antialt-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')

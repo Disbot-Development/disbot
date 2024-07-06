@@ -25,7 +25,7 @@ module.exports = class ReadyEvent extends Event {
 
         setInterval(() => {
             this.client.guilds.cache.forEach(async (guild) => {
-                const modules = await this.client.database.get(`${guild.id}.modules`);
+                const modules = await this.client.database.get(`${guild.id}.modules`) || [];
 
                 if (modules.includes('captcha') && guild.channels.resolve(await this.client.database.get(`${guild.id}.captcha.channel`)) && guild.roles.resolve(await this.client.database.get(`${guild.id}.captcha.roles.before`))) {
                     (await guild.members.fetch()).forEach(async (member) => {

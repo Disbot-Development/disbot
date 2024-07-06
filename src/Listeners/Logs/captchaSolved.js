@@ -16,7 +16,7 @@ module.exports = class CaptchaSolvedEvent extends Event {
      */
     
     async run (interaction, code) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
         if (modules.includes('logs') && interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`))) {
             interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)).send({

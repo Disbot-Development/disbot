@@ -16,7 +16,7 @@ module.exports = class CaptchaFailedEvent extends Event {
      */
     
     async run (guild, member) {
-        const modules = await this.client.database.get(`${guild.id}.modules`);
+        const modules = await this.client.database.get(`${guild.id}.modules`) || [];
 
         if (modules.includes('logs') && guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
             guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({

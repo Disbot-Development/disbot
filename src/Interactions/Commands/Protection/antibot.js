@@ -9,7 +9,7 @@ module.exports = class AntiBotCommand extends Command {
             description: 'Configurer le système d\'anti-bot.',
             category: 'protection',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageGuild]
+            meperms: [PermissionFlagsBits.KickMembers]
         });
     };
 
@@ -19,7 +19,7 @@ module.exports = class AntiBotCommand extends Command {
      */
 
     async run (interaction) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
         if (modules.includes('antibot')) {
             interaction.reply({

@@ -17,7 +17,7 @@ module.exports = class AntiSpamToggleButton extends Button {
      */
 
     async run (interaction) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
         this.client.emit('antispamToggle', interaction);
 

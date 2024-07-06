@@ -15,7 +15,7 @@ module.exports = class AntiBotToggleEvent extends Event {
      */
     
     async run (interaction) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
         const state = modules.includes('antibot');
 

@@ -7,7 +7,7 @@ module.exports = class AntiBotToggleButton extends Button {
         super(client, {
             name: 'antibot-toggle',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageGuild]
+            meperms: [PermissionFlagsBits.KickMembers]
         });
     };
 
@@ -17,7 +17,7 @@ module.exports = class AntiBotToggleButton extends Button {
      */
 
     async run (interaction) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`);
+        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
         this.client.emit('antibotToggle', interaction);
 

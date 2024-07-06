@@ -2,7 +2,7 @@ const Event = require('../../Managers/Structures/Event');
 const { Guild, GuildMember } = require('discord.js');
 const MessageEmbed = require('../../Managers/MessageEmbed');
 
-module.exports = class AntiRaidDetectedEvent extends Event {
+module.exports = class AntiBotDetectedEvent extends Event {
     constructor(client) {
         super(client, {
             name: 'antibotDetected'
@@ -17,7 +17,7 @@ module.exports = class AntiRaidDetectedEvent extends Event {
      */
     
     async run (guild, member, kicked) {
-        const modules = await this.client.database.get(`${guild.id}.modules`);
+        const modules = await this.client.database.get(`${guild.id}.modules`) || [];
 
         if (modules.includes('logs') && guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
             guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({

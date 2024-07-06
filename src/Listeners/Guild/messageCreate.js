@@ -44,7 +44,7 @@ module.exports = class MessageCreateEvent extends Event {
             ]
         });
         
-        const modules = await this.client.database.get(`${message.guild.id}.modules`);
+        const modules = await this.client.database.get(`${message.guild.id}.modules`) || [];
 
         if (modules.includes('antispam') && !message.member.isAdmin() && !(await this.client.database.get(`${message.guild.id}.whitelist`) || []).includes(message.author.id)) {
             const limit = await this.client.database.get(`${message.guild.id}.antispam.limit`) || this.client.config.antispam.limit;
