@@ -19,21 +19,17 @@ module.exports = class GuildMemberAddEvent extends Event {
     async run (member) {
         const modules = await this.client.database.get(`${member.guild.id}.modules`) || [];
         
-        if (modules.includes('antibot') && member.user.bot) {
-            member.kick('A été détecté par le système d\'anti-bot.')
-            .then(() => this.client.emit('antibotDetected', member.guild, member, true))
-            .catch(() => this.client.emit('antibotDetected', member.guild, member, false));
-        };
+        if (modules.includes('antibot') && member.user.bot) member.kick('A été détecté par le système d\'anti-bot.')
+        .then(() => this.client.emit('antibotDetected', member.guild, member, true))
+        .catch(() => this.client.emit('antibotDetected', member.guild, member, false));
 
         if (member.user.bot) return;
 
         const age = await this.client.database.get(`${member.guild.id}.antialt.age`) || this.client.config.antialt.age;
 
-        if (modules.includes('antialt') && member.user.createdTimestamp < Date.now() - (age) * 60 * 60 * 1000) {
-            member.kick('A été détecté par le système d\'anti-alt.')
-           .then(() => this.client.emit('antialtDetected', member.guild, member, true, age))
-           .catch(() => this.client.emit('antialtDetected', member.guild, member, false, age));
-        };
+        if (modules.includes('antialt') && member.user.createdTimestamp - age * 60 * 60 * 1000 <= 0) return member.kick('A été détecté par le système d\'anti-alt.')
+        .then(() => this.client.emit('antialtDetected', member.guild, member, true, age))
+        .catch(() => this.client.emit('antialtDetected', member.guild, member, false, age));
 
         if (modules.includes('antiraid') && member.guild.features.includes('COMMUNITY')) {
             const limit = await this.client.database.get(`${member.guild.id}.antiraid.limit`) || this.client.config.antiraid.limit;
