@@ -39,15 +39,20 @@ module.exports = class GuildCreateEvent extends Event {
                 new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                    .setEmoji(this.client.config.emojis.bot)
-                    .setLabel('Invite')
                     .setStyle(ButtonStyle.Link)
-                    .setURL(this.client.config.links.invite),
+                    .setURL(this.client.config.links.website)
+                    .setEmoji(this.client.config.emojis.search)
+                    .setLabel('Site'),
                     new ButtonBuilder()
-                    .setEmoji(this.client.config.emojis.support)
-                    .setLabel('Support')
+                    .setStyle(ButtonStyle.Link)
+                    .setURL(this.client.config.links.invite)
+                    .setEmoji(this.client.config.emojis.bot)
+                    .setLabel('Inviter'),
+                    new ButtonBuilder()
                     .setStyle(ButtonStyle.Link)
                     .setURL(this.client.config.links.support)
+                    .setEmoji(this.client.config.emojis.support)
+                    .setLabel('Support')
                 ),
                 new ActionRowBuilder()
                 .addComponents(

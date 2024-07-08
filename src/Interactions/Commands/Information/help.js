@@ -98,14 +98,19 @@ module.exports = class HelpCommand extends Command {
                     .addComponents(
                         new ButtonBuilder()
                         .setStyle(ButtonStyle.Link)
-                        .setURL(this.client.config.links.support)
-                        .setEmoji(this.client.config.emojis.support)
-                        .setLabel('Support'),
+                        .setURL(this.client.config.links.website)
+                        .setEmoji(this.client.config.emojis.search)
+                        .setLabel('Site'),
                         new ButtonBuilder()
                         .setStyle(ButtonStyle.Link)
                         .setURL(this.client.config.links.invite)
                         .setEmoji(this.client.config.emojis.bot)
-                        .setLabel('Inviter')
+                        .setLabel('Inviter'),
+                        new ButtonBuilder()
+                        .setStyle(ButtonStyle.Link)
+                        .setURL(this.client.config.links.support)
+                        .setEmoji(this.client.config.emojis.support)
+                        .setLabel('Support')
                     )
                 ]
             });
