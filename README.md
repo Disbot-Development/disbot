@@ -43,7 +43,7 @@
 
 ## À propos
 
-[![Disbot Support][product-screenshot]](https://dis-bot.xyz)
+[![Disbot][product-screenshot]](https://dis-bot.xyz)
 
 Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs.
 

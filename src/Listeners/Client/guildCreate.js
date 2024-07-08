@@ -30,9 +30,9 @@ module.exports = class GuildCreateEvent extends Event {
                     `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !\n\n` +
 
                     `${this.client.config.emojis.mod} Voici la liste des commandes utiles à la protection de votre serveur:\n` +
-                    `> - </logs:1256320446832316448>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
-                    `> - </captcha:1254975453136162884>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
-                    `> - </antispam:1256351694179143731>: Bloquer les utilisateurs qui tentent d'envoyer des messages trop rapidement.`
+                    `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().id}>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
+                    `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().id}>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
+                    `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().id}>: Bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.`
                 )
             ],
             components: [

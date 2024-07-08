@@ -1,5 +1,5 @@
 const Command = require('../../../Managers/Structures/Command');
-const { CommandInteraction, ApplicationCommandOptionType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } = require('discord.js');
+const { CommandInteraction, ApplicationCommandOptionType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction, PermissionFlagsBits } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { readdirSync } = require('fs');
 
@@ -13,7 +13,8 @@ module.exports = class HelpCommand extends Command {
                 {
                     name: 'command',
                     description: 'Obtenir les informations d\'une commande.',
-                    type: ApplicationCommandOptionType.String
+                    type: ApplicationCommandOptionType.String,
+                    autocomplete: true
                 }
             ]
         });
@@ -83,8 +84,12 @@ module.exports = class HelpCommand extends Command {
                     new MessageEmbed()
                     .setTitle('Disbot')
                     .setDescription(
-                        `${this.client.config.emojis.bot} J'ai été développé par ${this.client.config.utils.devs.map((dev) => this.client.users.resolve(dev)).join(', ')}.\n` +
-                        `${this.client.config.emojis.dev} Je possède ${this.client.commands.size} commandes slash.`
+                        `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je possède ${this.client.commands.size} commandes slash.\n\n` +
+
+                        `${this.client.config.emojis.mod} Voici la liste des commandes utiles à la protection de votre serveur:\n` +
+                        `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().id}>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
+                        `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().id}>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
+                        `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().id}>: Bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.`
                     )
                 ],
                 components: [
@@ -102,8 +107,24 @@ module.exports = class HelpCommand extends Command {
                         .setEmoji(this.client.config.emojis.bot)
                         .setLabel('Inviter')
                     )
-                    ]
+                ]
             });
         };
+    };
+
+    /**
+     * 
+     * @param {AutocompleteInteraction} interaction
+     */
+
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const filtered = this.client.commands.filter((cmd) => cmd.config.name.includes(focusedValue));
+        await interaction.respond(
+            filtered.map(command => ({
+                name: command.config.name,
+                value: command.config.name
+            }))
+        );
     };
 };
