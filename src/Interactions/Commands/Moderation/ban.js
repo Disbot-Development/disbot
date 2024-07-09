@@ -1,5 +1,5 @@
 const Command = require('../../../Managers/Structures/Command');
-const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType } = require('discord.js');
+const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class BanCommand extends Command {
@@ -56,6 +56,28 @@ module.exports = class BanCommand extends Command {
                     )
                 ]
             });
+
+            member.send({
+                embeds: [
+                    new MessageEmbed()
+                    .setTitle('Bannissement')
+                    .setDescription(
+                        `Vous avez été banni de \`${interaction.guild.name}\`.\n` +
+                        `> **Raison:** ${reason}`
+                    )
+                ],
+                components: [
+                    new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                        .setLabel(`Envoyé depuis: ${interaction.guild.name}`)
+                        .setCustomId('sent-from')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setDisabled(true)
+                    )
+                ]
+            })
+            .catch(() => 0);
 
             this.client.emit('banCreate', interaction.user, member, reason);
         })

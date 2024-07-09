@@ -1,5 +1,5 @@
 const Command = require('../../../Managers/Structures/Command');
-const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType } = require('discord.js');
+const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ButtonStyle, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class MuteCommand extends Command {
@@ -113,6 +113,30 @@ module.exports = class MuteCommand extends Command {
                     )
                 ]
             });
+
+            member.send({
+                embeds: [
+                    new MessageEmbed()
+                    .setTitle('Rendu muet')
+                    .setDescription(
+                        `Vous avez été rendu muet sur \`${interaction.guild.name}\`.\n` +
+                        `> **Durée:** ${duration} ${frenchUnit}\n` +
+                        `> **Fin:** <t:${Math.round((Date.now() + calculatedDuration) / 1000)}:D> à <t:${Math.round((Date.now() + calculatedDuration) / 1000)}:T> (<t:${Math.round((Date.now() + calculatedDuration) / 1000)}:R>)\n` +
+                        `> **Raison:** ${reason}`
+                    )
+                ],
+                components: [
+                    new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                        .setLabel(`Envoyé depuis: ${interaction.guild.name}`)
+                        .setCustomId('sent-from')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setDisabled(true)
+                    )
+                ]
+            })
+            .catch(() => 0);
 
             this.client.emit('muteCreate', interaction.user, member, duration, calculatedDuration, frenchUnit, reason);
         })
