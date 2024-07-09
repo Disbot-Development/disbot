@@ -27,6 +27,7 @@ module.exports = class HelpCommand extends Command {
 
     async run (interaction) {
         const command = this.client.commands.get(interaction.options.getString('command'));
+        const applicationCommands = await this.client.application.commands.fetch();
 
         if (command) {
             const permissions = Object.keys(this.client.config.permissions)
@@ -42,7 +43,7 @@ module.exports = class HelpCommand extends Command {
                     new MessageEmbed()
                     .setTitle('Disbot')
                     .setDescription(
-                        `> **Nom:** </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === command.config.name).first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === command.config.name).first().id}>\n` +
+                        `> **Nom:** </${applicationCommands.filter((cmd) => cmd.name === command.config.name).first().name}:${applicationCommands.filter((cmd) => cmd.name === command.config.name).first().id}>\n` +
                         `> **Description:** ${command.config.description}\n` +
                         `> **Catégorie:** ${this.client.config.categories.emojis[command.config.category]} ${this.client.config.categories.labels[command.config.category]}\n` +
                         `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.length ? this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``)) : `Aucune ${this.client.config.emojis.no}`}\n` +
@@ -87,9 +88,9 @@ module.exports = class HelpCommand extends Command {
                         `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je possède ${this.client.commands.size} commandes slash.\n\n` +
 
                         `${this.client.config.emojis.mod} Voici la liste des commandes utiles à la protection de votre serveur:\n` +
-                        `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().id}>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
-                        `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().id}>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
-                        `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().id}>: Bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.`
+                        `> - </${applicationCommands.filter((cmd) => cmd.name === 'logs').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'logs').first().id}>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
+                        `> - </${applicationCommands.filter((cmd) => cmd.name === 'captcha').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'captcha').first().id}>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
+                        `> - </${applicationCommands.filter((cmd) => cmd.name === 'antiraid').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'antiraid').first().id}>: Bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.`
                     )
                 ],
                 components: [

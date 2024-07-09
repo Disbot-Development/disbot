@@ -17,6 +17,9 @@ module.exports = class ServerInfoCommand extends Command {
      */
 
     async run (interaction) {
+        const guildEmojis = await interaction.guild.emojis.fetch();
+        const guildBans = await interaction.guild.bans.fetch();
+
         interaction.reply({
             embeds: [
                 new MessageEmbed()
@@ -38,9 +41,9 @@ module.exports = class ServerInfoCommand extends Command {
 
                     `> **Rôle${interaction.guild.roles.cache.filter((role) => role.id !== interaction.guild.id).size > 1 ? 's' : ''} (${interaction.guild.roles.cache.filter((role) => role.id !== interaction.guild.id).size}):** ${interaction.guild.roles.cache.filter((role) => role.id !== interaction.guild.id).map((role) => role).slice(0, 10).join(', ') || this.client.config.emojis.no} ${interaction.guild.roles.cache.filter((role) => role.id !== interaction.guild.id).size > 10 ? 'and more...' : ''}\n\n` +
                     
-                    `> **Émoji${(await interaction.guild.emojis.fetch()).size > 1 ? 's' : ''} (${(await interaction.guild.emojis.fetch()).size}):** ${(await interaction.guild.emojis.fetch()).map((emoji) => emoji).slice(0, 20).join(', ') || this.client.config.emojis.no} ${(await interaction.guild.emojis.fetch()).size > 10 ? 'and more...' : ''}\n\n` +
+                    `> **Émoji${guildEmojis.size > 1 ? 's' : ''} (${guildEmojis.size}):** ${guildEmojis.map((emoji) => emoji).slice(0, 20).join(', ') || this.client.config.emojis.no} ${guildEmojis.size > 10 ? 'and more...' : ''}\n\n` +
 
-                    `> **Bannissement${(await interaction.guild.bans.fetch()).size > 1 ? 's' : ''} (${(await interaction.guild.bans.fetch()).size}):** ${(await interaction.guild.bans.fetch()).map((ban) => `\`${ban.user.username}\``).slice(0, 10).join(', ') || this.client.config.emojis.no} ${(await interaction.guild.bans.fetch()).size > 10 ? 'and more...' : ''}`
+                    `> **Bannissement${guildBans.size > 1 ? 's' : ''} (${guildBans.size}):** ${guildBans.map((ban) => `\`${ban.user.username}\``).slice(0, 10).join(', ') || this.client.config.emojis.no} ${guildBans.size > 10 ? 'and more...' : ''}`
                 )
                 .setImage(interaction.guild.bannerURL() ? interaction.guild.bannerURL() : this.client.config.images.error)
                 .setThumbnail(interaction.guild.iconURL({ dynamic: true }))

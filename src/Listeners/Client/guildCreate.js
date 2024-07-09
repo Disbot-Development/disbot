@@ -21,18 +21,20 @@ module.exports = class GuildCreateEvent extends Event {
         }))?.entries?.first();
 
         const inviter = audit?.executor && audit?.target === this.client.user.id ? audit.executor : await guild.fetchOwner();
+
+        const applicationCommands = await this.client.application.commands.fetch();
         
         inviter.send({
             embeds: [
                 new MessageEmbed()
                 .setTitle(`${this.client.config.emojis.heart} Merci de m\'avoir ajouté à votre serveur !`)
                 .setDescription(
-                    `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !\n\n` +
+                    `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande </${applicationCommands.filter((cmd) => cmd.name === 'help').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !\n\n` +
 
                     `${this.client.config.emojis.mod} Voici la liste des commandes utiles à la protection de votre serveur:\n` +
-                    `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'logs').first().id}>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
-                    `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'captcha').first().id}>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
-                    `> - </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'antiraid').first().id}>: Bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.`
+                    `> - </${applicationCommands.filter((cmd) => cmd.name === 'logs').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'logs').first().id}>: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +
+                    `> - </${applicationCommands.filter((cmd) => cmd.name === 'captcha').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'captcha').first().id}>: Faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
+                    `> - </${applicationCommands.filter((cmd) => cmd.name === 'antiraid').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'antiraid').first().id}>: Bloquer la venue de nouveaux membres sur le serveur si trop d'utilisateurs rejoignent en peu de temps.`
                 )
             ],
             components: [

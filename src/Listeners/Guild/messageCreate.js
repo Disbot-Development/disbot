@@ -18,6 +18,8 @@ module.exports = class MessageCreateEvent extends Event {
     async run (message) {
         if (!message.guild || message.author.bot) return;
 
+        const applciationCommands = await this.client.application.commands.fetch();
+
         if (message.mentions.has(this.client.user, { ignoreEveryone: true, ignoreRepliedUser: true, ignoreRoles: true })) message.reply({
             embeds: [
                 new MessageEmbed()
@@ -25,7 +27,7 @@ module.exports = class MessageCreateEvent extends Event {
                 .setDescription(
                     `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash !\n\n` +
 
-                    `${this.client.config.emojis.bot} Utilise la commande </${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().name}:${(await this.client.application.commands.fetch()).filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !`
+                    `${this.client.config.emojis.bot} Utilise la commande </${applicationCommands.filter((cmd) => cmd.name === 'help').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !`
                 )
             ],
             components: [
