@@ -29,7 +29,8 @@ module.exports = class AntiSpamDetectedEvent extends Event {
                         `Un utilisateur vient d\'être rendu muet car il a été détecté par le système d'anti-spam.\n` +
                         `> **Utilisateur:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}\n` +
                         `> **Limite de messages en ${this.client.config.antispam.timeout} seconde${this.client.config.antispam.timeout > 1 ? 's' : ''}:** ${limit} message${limit > 1 ? 's' : ''}\n` +
-                        `> **Durée rendu muet:** ${duration} minute${duration > 1 ? 's' : ''}`
+                        `> **Durée rendu muet:** ${duration} minute${duration > 1 ? 's' : ''}\n` +
+                        `> **Fin:** <t:${Math.round((Date.now() + duration * 1000 * 60) / 1000)}:D> à <t:${Math.round((Date.now() + duration * 1000 * 60) / 1000)}:T> (<t:${Math.round((Date.now() + duration * 1000 * 60) / 1000)}:R>)`
                     )
                 ]
             })

@@ -64,7 +64,7 @@ module.exports = class MessageCreateEvent extends Event {
             await this.client.database.set(`${message.guild.id}.users.${message.author.id}.antispam.messages`, newMessages);
 
             if (newMessages.length >= limit) {
-                await this.client.database.remove(`${message.guild.id}.users.${message.author.id}.antispam`);
+                await this.client.database.delete(`${message.guild.id}.users.${message.author.id}.antispam`);
 
                 message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-spam.')
                 .then((member) => this.client.emit('antispamDetected', message.guild, member, limit, duration))
