@@ -35,7 +35,6 @@ module.exports = class UserInfoCommand extends Command {
                 .setDescription(
                     `> **Utilisateur:** ${member.user}\n` +
                     `> **Nom d'utilisateur:** ${member.user.tag}\n` +
-                    `> **Surnom:** ${member.nickname ? member.nickname : this.client.config.emojis.no}\n` +
                     `> **Identifiant:** ${member.user.id}\n\n` +
 
                     `> **Robot:** ${member.user.bot ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
