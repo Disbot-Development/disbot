@@ -43,7 +43,7 @@ module.exports = class RoleInfoCommand extends Command {
                     `> **Affiché séparément :** ${role.hoist ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
                     `> **Mentionnable:** ${role.mentionable ? this.client.config.emojis.yes : this.client.config.emojis.no}`
                 )
-                .setThumbnail(role.iconURL() ? role.iconURL() : this.client.config.images.error)
+                .setThumbnail(role.iconURL() ? role.iconURL({ size: 4096 }) : null)
             ]
         });
     };

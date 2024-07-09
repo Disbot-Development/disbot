@@ -27,7 +27,6 @@ module.exports = class UserInfoCommand extends Command {
         const member = interaction.options.getMember('user') || interaction.member;
 
         const fetchedUser = await this.client.users.fetch(member.user.id, { force: true });
-        const banner = fetchedUser ? fetchedUser.bannerURL() ? fetchedUser.bannerURL({ size: 4096 }) : null : null;
 
         interaction.reply({
             embeds: [
@@ -44,8 +43,8 @@ module.exports = class UserInfoCommand extends Command {
                     `> **Date de création:** <t:${Math.floor(member.user.createdTimestamp / 1000)}:f>\n` +
                     `> **A rejoint le serveur:** <t:${Math.floor(member.joinedTimestamp / 1000)}:f>`
                 )
-                .setThumbnail(member.user.displayAvatarURL({ size: 4096, dynamic: true }))
-                .setImage(banner)
+                .setThumbnail(member.user.displayAvatarURL({ size: 4096 }))
+                .setImage(fetchedUser ? fetchedUser.bannerURL() ? fetchedUser.bannerURL({ size: 4096 }) : null : null)
             ]
         });
     };

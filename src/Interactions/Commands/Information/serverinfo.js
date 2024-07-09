@@ -45,8 +45,8 @@ module.exports = class ServerInfoCommand extends Command {
 
                     `> **Bannissement${guildBans.size > 1 ? 's' : ''} (${guildBans.size}):** ${guildBans.map((ban) => `\`${ban.user.username}\``).slice(0, 10).join(', ') || this.client.config.emojis.no} ${guildBans.size > 10 ? 'and more...' : ''}`
                 )
-                .setImage(interaction.guild.bannerURL() ? interaction.guild.bannerURL() : this.client.config.images.error)
-                .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+                .setImage(interaction.guild.bannerURL() ? interaction.guild.bannerURL({ size: 4096 }) : null)
+                .setThumbnail(interaction.guild.iconURL({ size: 4096 }))
             ]
         });
     };
