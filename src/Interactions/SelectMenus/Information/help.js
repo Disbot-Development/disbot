@@ -21,7 +21,7 @@ module.exports = class HelpSelectMenu extends SelectMenu {
         switch (interaction.values[0]) {
             case 'all':
                 const embed = new MessageEmbed()
-                .setTitle(`Disbot Help (${this.client.commands.filter((command) => applicationCommands.filter((cmd) => command.config.name === cmd.name).first().options?.filter((opt) => opt.type === 1).length).size ? this.client.commands.filter((command) => applicationCommands.filter((cmd) => command.config.name === cmd.name).first().options?.filter((opt) => opt.type === 1).length).size + this.client.commands.size : this.client.commands.size})`)
+                .setTitle('Disbot')
                 .setDescription(`${this.client.config.emojis.help} Voici l'intégralité de mes commandes:`)
 
                 const commandsDir = readdirSync('./src/Interactions/Commands');
