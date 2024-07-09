@@ -5,8 +5,8 @@ module.exports = class Event extends Base {
 
     /**
      * The Event config
-     * @typedef {object} EventConfig
-     * @property {string} name The name
+     * @typedef {Object} EventConfig
+     * @property {String} name The name
      */
 
     /**

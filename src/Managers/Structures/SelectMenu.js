@@ -6,8 +6,8 @@ module.exports = class SelectMenu extends Base {
 
     /**
      * The SelectMenu config.
-     * @typedef {object} SelectMenuConfig
-     * @property {string} name The name
+     * @typedef {Object} SelectMenuConfig
+     * @property {String} name The name
      * @property {PermissionFlagsBits[]} perms The permissions
      * @property {PermissionFlagsBits[]} meperms The client permissions
      */

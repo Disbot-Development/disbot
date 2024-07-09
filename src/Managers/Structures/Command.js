@@ -6,10 +6,10 @@ module.exports = class Command extends Base {
 
     /**
      * The Command config.
-     * @typedef {object} CommandConfig
-     * @property {string} name The name
-     * @property {string} description The description
-     * @property {'administrator'|'developer'|'information'|'management'|'moderation'|'util'} category The category
+     * @typedef {Object} CommandConfig
+     * @property {String} name The name
+     * @property {String} description The description
+     * @property {'administrator'|'developer'|'information'|'moderation'} category The category
      * @property {PermissionFlagsBits[]} perms The permissions
      * @property {PermissionFlagsBits[]} meperms The client permissions
      * @property {ApplicationCommandOption[]} options The options

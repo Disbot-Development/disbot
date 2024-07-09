@@ -6,8 +6,8 @@ module.exports = class Modal extends Base {
 
     /**
      * The Modal config.
-     * @typedef {object} ModalConfig
-     * @property {string} name The name
+     * @typedef {Object} ModalConfig
+     * @property {String} name The name
      * @property {PermissionFlagsBits[]} perms The permissions
      * @property {PermissionFlagsBits[]} meperms The client permissions
      */

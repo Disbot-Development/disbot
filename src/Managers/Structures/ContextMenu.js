@@ -6,9 +6,9 @@ module.exports = class ContextMenu extends Base {
 
     /**
      * The ContextMenu config.
-     * @typedef {object} ContextMenuConfig
-     * @property {string} name The name
-     * @property {string} type The type
+     * @typedef {Object} ContextMenuConfig
+     * @property {String} name The name
+     * @property {Number} type The type
      * @property {PermissionFlagsBits[]} perms The permissions
      * @property {PermissionFlagsBits[]} meperms The client permissions
      */

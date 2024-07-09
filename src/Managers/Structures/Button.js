@@ -6,8 +6,8 @@ module.exports = class Button extends Base {
 
     /**
      * The button config.
-     * @typedef {object} ButtonConfig
-     * @property {string} name The name
+     * @typedef {Object} ButtonConfig
+     * @property {String} name The name
      * @property {PermissionFlagsBits[]} perms The permissions
      * @property {PermissionFlagsBits[]} meperms The client permissions
      */
