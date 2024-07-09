@@ -18,7 +18,7 @@ module.exports = class MessageCreateEvent extends Event {
     async run (message) {
         if (!message.guild || message.author.bot) return;
 
-        const applciationCommands = await this.client.application.commands.fetch();
+        const applicationCommands = await this.client.application.commands.fetch();
 
         if (message.mentions.has(this.client.user, { ignoreEveryone: true, ignoreRepliedUser: true, ignoreRoles: true })) message.reply({
             embeds: [
