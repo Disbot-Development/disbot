@@ -114,4 +114,8 @@ module.exports = class Utils {
         const last = arr[arr.length - 1];
         return `${allButLast}${lastConjunction}${last}`;
     };
+
+    getAllUsers() {
+        return this.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
+    };
 };
