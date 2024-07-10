@@ -9,7 +9,7 @@ module.exports = class CaptchaCommand extends Command {
             description: 'Configurer le système de captcha.',
             category: 'protection',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
+            meperms: [PermissionFlagsBits.ManageRoles]
         });
     };
 

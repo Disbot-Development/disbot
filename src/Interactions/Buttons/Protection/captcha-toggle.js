@@ -7,7 +7,7 @@ module.exports = class CaptchaToggleButton extends Button {
         super(client, {
             name: 'captcha-toggle',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
+            meperms: [PermissionFlagsBits.ManageRoles]
         });
     };
 
