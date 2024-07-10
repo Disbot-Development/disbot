@@ -18,7 +18,6 @@ module.exports = class InteractionCreateEvent extends Event {
         if (!interaction.guild) return;
 
         let int;
-        
         if (interaction.isButton()) int = this.client.buttons.get(interaction.customId);
         if (interaction.isCommand()) int = this.client.commands.get(interaction.commandName);
         if (interaction.isContextMenuCommand()) int = this.client.contextmenus.get(interaction.commandName);

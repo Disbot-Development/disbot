@@ -27,8 +27,8 @@ module.exports = class WhitelistCommand extends Command {
                 .setDescription(
                     `${this.client.config.emojis.help} Les utilisateurs inscrit dans la liste blanche ne seront pas affectés par la plupart des systèmes de protection. Faites attention aux utilisateurs inscrit.\n\n` +
 
-                    `**Utilisateurs:**\n` +
-                    `> ${(await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).length ? (await this.client.database.get(`${interaction.guild.id}.whitelist`)).map((id) => interaction.guild.members.resolve(id)).join(', ') : 'Aucun utilisateur n\'est inscrit dans la liste blanche.'}`
+                    `${this.client.config.emojis.user}・**Utilisateurs:**\n` +
+                    `> - ${(await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).length ? (await this.client.database.get(`${interaction.guild.id}.whitelist`)).map((id) => interaction.guild.members.resolve(id)).join(', ') : 'Aucun utilisateur n\'est inscrit dans la liste blanche.'}`
                 )
             ],
             components: [

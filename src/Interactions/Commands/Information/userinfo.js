@@ -25,8 +25,10 @@ module.exports = class UserInfoCommand extends Command {
 
     async run(interaction) {
         const member = interaction.options.getMember('user') || interaction.member;
-
         const fetchedUser = await this.client.users.fetch(member.user.id, { force: true });
+
+        const createdTimestamp = parseInt(member.user.createdTimestamp / 1000);
+        const joinedTimestamp = parseInt(member.joinedTimestamp / 1000);
 
         interaction.reply({
             embeds: [
@@ -39,11 +41,11 @@ module.exports = class UserInfoCommand extends Command {
 
                     `> **Robot:** ${member.user.bot ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
                     `> **Administrateur:** ${member.isAdmin() ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
-                    `> **Date de création:** <t:${Math.floor(member.user.createdTimestamp / 1000)}:f>\n` +
-                    `> **A rejoint le serveur:** <t:${Math.floor(member.joinedTimestamp / 1000)}:f>`
+                    `> **Date de création:** <t:${createdTimestamp}:D> à <t:${createdTimestamp}:T> (<t:${createdTimestamp}:R>)\n` +
+                    `> **A rejoint le serveur:** <t:${joinedTimestamp}:D> à <t:${joinedTimestamp}:T> (<t:${joinedTimestamp}:R>)`
                 )
                 .setThumbnail(member.user.displayAvatarURL({ size: 4096 }))
-                .setImage(fetchedUser ? fetchedUser.bannerURL() ? fetchedUser.bannerURL({ size: 4096 }) : null : null)
+                .setImage(fetchedUser ? fetchedUser.bannerURL({ size: 4096 }) : null)
             ]
         });
     };

@@ -26,11 +26,12 @@ module.exports = class CaptchaConfigureButton extends Button {
                         `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
-                        `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
+                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
+                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
                     )
                     .setColor(Colors.Green)
                 ]
@@ -68,11 +69,12 @@ module.exports = class CaptchaConfigureButton extends Button {
                         `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
-                        `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
+                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
+                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
                     )
                     .setColor(Colors.Green)
                 ],
@@ -102,9 +104,9 @@ module.exports = class CaptchaConfigureButton extends Button {
                 .setStyle('LOADING')
                 .setDescription(
                     `**Veuillez mentionner le salon de vérification.**\n` +
-                    `> \`create\`: Créer le salon.\n` +
-                    `> \`reset\`: Réinitialiser le système de captcha.\n` +
-                    `> \`cancel\`: Annuler la configuration.`
+                    `> - \`create\`: Créer le salon.\n` +
+                    `> - \`reset\`: Réinitialiser le système de captcha.\n` +
+                    `> - \`cancel\`: Annuler la configuration.`
                 ) 
             ],
             fetchReply: true
@@ -174,9 +176,9 @@ module.exports = class CaptchaConfigureButton extends Button {
                     .setStyle('LOADING')
                     .setDescription(
                         `**Veuillez mentionner le rôle de vérification.**\n` +
-                        `> \`create\`: Créer le rôle.\n` +
-                        `> \`reset\`: Réinitialiser le système de captcha.\n` +
-                        `> \`cancel\`: Annuler la configuration.`
+                        `> - \`create\`: Créer le rôle.\n` +
+                        `> - \`reset\`: Réinitialiser le système de captcha.\n` +
+                        `> - \`cancel\`: Annuler la configuration.`
                     ) 
                 ]
             });
@@ -263,8 +265,8 @@ module.exports = class CaptchaConfigureButton extends Button {
                         .setStyle('LOADING')
                         .setDescription(
                             `**Veuillez mentionner le rôle après la vérification.**\n` +
-                            `> \`reset\`: Réinitialiser le système de captcha.\n` +
-                            `> \`cancel\`: Annuler la configuration.`
+                            `> - \`reset\`: Réinitialiser le système de captcha.\n` +
+                            `> - \`cancel\`: Annuler la configuration.`
                         ) 
                     ]
                 });

@@ -17,7 +17,6 @@ module.exports = class UserInfoContextMenu extends ContextMenu {
     
     async run (interaction) {
         const member = interaction.guild.members.resolve(interaction.targetId);
-
         const fetchedUser = await this.client.users.fetch(member.user.id, { force: true });
 
         interaction.reply({

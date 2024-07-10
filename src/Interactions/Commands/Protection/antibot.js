@@ -29,9 +29,10 @@ module.exports = class AntiBotCommand extends Command {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système d'anti-bot est de bloquer la venue de nouveaux bots Discord sur le serveur.\n` +
                         `Cela permet d'éviter l'introduction de robots malveillants.\n\n` +
-
-                        `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Information supplémentaire:** Si vous souhaitez un bot Discord dont vous avez confiance, vous pouvez désactiver temporairement le système d'anti-bot.`
+                        
+                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
+                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Information supplémentaire:** Si vous souhaitez un bot Discord dont vous avez confiance, vous pouvez désactiver temporairement le système d'anti-bot.`
                     )
                     .setColor(Colors.Green)
                 ],
@@ -54,9 +55,10 @@ module.exports = class AntiBotCommand extends Command {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système d'anti-bot est de bloquer la venue de nouveaux bots Discord sur le serveur.\n` +
                         `Cela permet d'éviter l'introduction de robots malveillants.\n\n` +
-
-                        `> **Status:** Désactivé ${this.client.config.emojis.no}\n` +
-                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-bot.`
+                        
+                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
+                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-bot.`
                     )
                     .setColor(Colors.Red)
                 ],

@@ -31,9 +31,10 @@ module.exports = class AntiAltToggleButton extends Button {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système d'anti-alt est de bloquer la venue de nouveaux membres ayant un compte créé en dessous l'âge minimum.\n` +
                         `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
-
-                        `> **Status:** Désactivé ${this.client.config.emojis.no}\n` +
-                        `> **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-alt.`
+                        
+                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
+                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-alt.`
                     )
                     .setColor(Colors.Red)
                 ],
@@ -64,10 +65,11 @@ module.exports = class AntiAltToggleButton extends Button {
                     .setDescription(
                         `${this.client.config.emojis.help} Le but du système d'anti-alt est de bloquer la venue de nouveaux membres ayant un compte créé en dessous l'âge minimum.\n` +
                         `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
-
-                        `> **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> **Âge minimum:** ${await this.client.database.get(`${interaction.guild.id}.antialt.age`) ? `${await this.client.database.get(`${interaction.guild.id}.antialt.age`)} heure${await this.client.database.get(`${interaction.guild.id}.antialt.age`) > 1 ? 's' : ''}` : `${this.client.config.antialt.age} heure${this.client.config.antialt.age > 1 ? 's' : ''} (par défaut)`}\n` +
-                        `> **Information supplémentaire:** Ce système n'affectera pas les bots Discord.`
+                        
+                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
+                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Âge minimum:** ${await this.client.database.get(`${interaction.guild.id}.antialt.age`) ? `${await this.client.database.get(`${interaction.guild.id}.antialt.age`)} heure${await this.client.database.get(`${interaction.guild.id}.antialt.age`) > 1 ? 's' : ''}` : `${this.client.config.antialt.age} heure${this.client.config.antialt.age > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> - **Information supplémentaire:** Ce système n'affectera pas les bots Discord.`
                     )
                     .setColor(Colors.Green)
                 ],

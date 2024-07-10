@@ -18,6 +18,10 @@ module.exports = class BotInfoCommand extends Command {
      */
 
     run (interaction) {
+        const users = this.client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
+        const creationTimestamp = parseInt(this.client.user.createdTimestamp / 1000);
+        const uptimeTimestamp = parseInt((Date.now() - this.client.uptime) / 1000);
+
         interaction.reply({
             embeds: [
                 new MessageEmbed()
@@ -29,12 +33,12 @@ module.exports = class BotInfoCommand extends Command {
                     
                     `> **Développeur${this.client.config.utils.devs.length > 1 ? 's' : ''}:** ${this.client.config.utils.devs.map((dev) => this.client.users.resolve(dev) || 'Utilisateur introuvable').join(', ')}\n` +
                     `> **Version:** ${this.client.config.utils.version}\n` +
-                    `> **Serveur${this.client.guilds.cache.size > 1 ? 's' : ''}:** ${this.client.guilds.cache.size.toLocaleString()}\n` +
-                    `> **Utilisateur${this.client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) > 1 ? 's' : ''}:** ${this.client.guilds.cache.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}\n` +
-                    `> **Commande${this.client.commands.size > 1 ? 's' : ''}:** ${this.client.commands.size.toLocaleString()}\n` +
-                    `> **Date de création:** <t:${parseInt(this.client.user.createdTimestamp / 1000)}:f>\n` +
+                    `> **Serveur${this.client.guilds.cache.size > 1 ? 's' : ''}:** ${this.client.guilds.cache.size.toLocaleString()} serveur${this.client.guilds.cache.size > 1 ? 's' : ''}\n` +
+                    `> **Utilisateur${users > 1 ? 's' : ''}:** ${users.toLocaleString()} utilisateur${users > 1 ? 's' : ''}\n` +
+                    `> **Commande${this.client.commands.size > 1 ? 's' : ''}:** ${this.client.commands.size.toLocaleString()} commande${this.client.commands.size > 1 ? 's' : ''}\n` +
+                    `> **Date de création:** <t:${creationTimestamp}:D> à <t:${creationTimestamp}:T> (<t:${creationTimestamp}:R>)\n` +
                     `> **Ping:** ${this.client.ws.ping === -1 ? 'Latence indisponible...' : `${this.client.ws.ping}ms`}\n` +
-                    `> **Temps en ligne:** <t:${parseInt((Date.now() - this.client.uptime) / 1000)}:R>\n\n` +
+                    `> **Date de connexion:** <t:${uptimeTimestamp}:D> à <t:${uptimeTimestamp}:T> (<t:${uptimeTimestamp}:R>)\n\n` +
 
                     `> **Processeur:** \`${os.cpus()[0].model} x${os.cpus().length}\`\n` +
                     `> **RAM:** ${this.client.utils.formatBytes(os.totalmem() - os.freemem())}\n` +
@@ -43,7 +47,7 @@ module.exports = class BotInfoCommand extends Command {
                     `> **Discord.JS:** ${version}`
                 )
                 .setImage(this.client.config.images.banner)
-                .setThumbnail(this.client.user.displayAvatarURL({ size: 4096, dynamic: true }))
+                .setThumbnail(this.client.user.displayAvatarURL({ size: 4096 }))
             ],
             components: [
                 new ActionRowBuilder()

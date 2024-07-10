@@ -16,12 +16,8 @@ module.exports = class GuildCreateEvent extends Event {
 
 
     async run (guild) {
-        const audit = (await guild.fetchAuditLogs({
-            type: AuditLogEvent.BotAdd
-        }))?.entries?.first();
-
+        const audit = (await guild.fetchAuditLogs({ type: AuditLogEvent.BotAdd }))?.entries?.first();
         const inviter = audit?.executor && audit?.target === this.client.user.id ? audit.executor : await guild.fetchOwner();
-
         const applicationCommands = await this.client.application.commands.fetch();
         
         inviter.send({
