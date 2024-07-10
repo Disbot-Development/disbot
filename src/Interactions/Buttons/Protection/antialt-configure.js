@@ -126,7 +126,7 @@ module.exports = class AntiAltConfigureButton extends Button {
                     .catch(() => 0);
                 });
 
-                return enable;
+                return enable();
             };
 
             await this.client.database.set(`${interaction.guild.id}.antialt.age`, ageAnswer);

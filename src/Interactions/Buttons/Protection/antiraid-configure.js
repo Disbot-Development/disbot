@@ -126,7 +126,7 @@ module.exports = class AntiRaidConfigureButton extends Button {
                     .catch(() => 0);
                 });
 
-                return enable;
+                return enable();
             };
 
             await this.client.database.set(`${interaction.guild.id}.antiraid.limit`, limitAnswer);

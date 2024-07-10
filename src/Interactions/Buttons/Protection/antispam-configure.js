@@ -146,7 +146,7 @@ module.exports = class AntiSpamConfigureButton extends Button {
                     .catch(() => 0);
                 });
 
-                return enable;
+                return enable();
             };
 
             await this.client.database.set(`${interaction.guild.id}.antispam.limit`, limitAnswer);
