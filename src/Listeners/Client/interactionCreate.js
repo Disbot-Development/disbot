@@ -52,7 +52,7 @@ module.exports = class InteractionCreateEvent extends Event {
             });
         };
 
-        if (!interaction.guild.members.me.permissions.has(int.config.meperms)) {
+        if (int.config.meperms && !interaction.guild.members.me.permissions.has(int.config.meperms)) {
             const permissions = Object.keys(this.client.config.permissions)
             .filter((perm) => (int.config.meperms || []).includes(PermissionFlagsBits[perm]))
             .map((perm) => this.client.config.permissions[perm]);
