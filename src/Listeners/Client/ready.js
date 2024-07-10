@@ -25,18 +25,24 @@ module.exports = class ReadyEvent extends Event {
         };
 
         this.client.user.setPresence({
-            activity: {
-                name: `dis-bot.xyz・${this.client.utils.getAllUsers().toLocaleString('en-US')} utilisateur${this.client.utils.getAllUsers() > 1 ? 's' : ''}`,
-                type: ActivityType.Custom
-            }
+            activities: [
+                {
+                    name: `dis-bot.xyz・${this.client.utils.getAllUsers().toLocaleString('en-US')} utilisateur${this.client.utils.getAllUsers() > 1 ? 's' : ''}`,
+                    type: ActivityType.Custom
+                }
+            ],
+            status: 'online'
         });
 
         setInterval(() => {
             this.client.user.setPresence({
-                activity: {
-                    name: `dis-bot.xyz・${this.client.utils.getAllUsers().toLocaleString('en-US')} utilisateur${this.client.utils.getAllUsers() > 1 ? 's' : ''}`,
-                    type: ActivityType.Custom
-                }
+                activities: [
+                    {
+                        name: `dis-bot.xyz・${this.client.utils.getAllUsers().toLocaleString('en-US')} utilisateur${this.client.utils.getAllUsers() > 1 ? 's' : ''}`,
+                        type: ActivityType.Custom
+                    }
+                ],
+                status: 'online'
             });
         }, 60000);
 
