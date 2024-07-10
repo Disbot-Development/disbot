@@ -17,9 +17,10 @@ module.exports = class ServerInfoCommand extends Command {
      */
 
     async run (interaction) {
-        const inVocal = interaction.guild.members.cache.filter(m => m.voice.channel).size;
-        const admins = interaction.guild.members.cache.filter((member) => member.isAdmin()).size;
-        const bots = interaction.guild.members.cache.filter((member) => member.user.bot).size;
+        const members = await interaction.guild.members.fetch();
+        const inVocal = members.filter(m => m.voice.channel).size;
+        const admins = members.filter((member) => member.isAdmin()).size;
+        const bots = members.filter((member) => member.user.bot).size;
         const creationTimestamp = parseInt(interaction.guild.createdTimestamp / 1000);
         const channels = interaction.guild.channels.cache.filter((channel) => channel.type !== ChannelType.GuildCategory);
         const roles = interaction.guild.roles.cache.filter((role) => role.id !== interaction.guild.id);
