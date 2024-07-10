@@ -111,7 +111,7 @@ module.exports = class AntiAltConfigureButton extends Button {
 
             if (ageAnswer.toLowerCase() === 'cancel') return enable();
 
-            if (isNaN(ageAnswer) || ageAnswer < 1) {
+            if (isNaN(ageAnswer) || ageAnswer < 1 || ageAnswer % 1 !== 0) {
                 message.channel.send({
                     embeds: [
                         new MessageEmbed()

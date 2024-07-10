@@ -111,7 +111,7 @@ module.exports = class AntiRaidConfigureButton extends Button {
 
             if (limitAnswer.toLowerCase() === 'cancel') return enable();
 
-            if (isNaN(limitAnswer) || limitAnswer < 1) {
+            if (isNaN(limitAnswer) || limitAnswer < 1 || limitAnswer % 1 !== 0) {
                 message.channel.send({
                     embeds: [
                         new MessageEmbed()

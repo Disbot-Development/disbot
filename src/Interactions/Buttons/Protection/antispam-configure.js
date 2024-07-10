@@ -131,7 +131,7 @@ module.exports = class AntiSpamConfigureButton extends Button {
 
             if (limitAnswer.toLowerCase() === 'cancel') return enable();
 
-            if (isNaN(limitAnswer) || limitAnswer < 1) {
+            if (isNaN(limitAnswer) || limitAnswer < 1 || limitAnswer % 1 !== 0) {
                 message.channel.send({
                     embeds: [
                         new MessageEmbed()
@@ -187,7 +187,7 @@ module.exports = class AntiSpamConfigureButton extends Button {
 
                 if (durationAnswer.toLowerCase() === 'cancel') return enable();
 
-                if (isNaN(durationAnswer) || durationAnswer < 0) {
+                if (isNaN(durationAnswer) || durationAnswer < 0 || durationAnswer % 1 !== 0) {
                     message.channel.send({
                         embeds: [
                             new MessageEmbed()
