@@ -1,5 +1,6 @@
 const { readdirSync, statSync } = require('fs');
 const client = require('../../index');
+const { ClientPresence } = require('discord.js');
 
 module.exports = class Utils {
 
@@ -30,7 +31,6 @@ module.exports = class Utils {
      */
 
     getFiles(path) {
-
         const files = readdirSync(path);
 
         let result = [];
@@ -52,7 +52,7 @@ module.exports = class Utils {
      */
      
     formatBytes(bytes) {
-        if (bytes === 0) return '0 Bytes';
+        if (!bytes) return '0 Bytes';
 
         const size = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         const i = Math.floor(Math.log(bytes) / Math.log(1024));
@@ -90,9 +90,10 @@ module.exports = class Utils {
         ];
 
         let characters = '';
-        options.forEach((option) => {
+
+        for (const option of options) {
             if (option.enabled) characters += option.chars;
-        });
+        };
     
         return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
     };
@@ -106,12 +107,13 @@ module.exports = class Utils {
      */
 
     joinCustomLastWord(arr, conjunction = ', ', lastConjunction = ' et ') {
-        if (arr.length === 0) return '';
+        if (!arr.length) return '';
         if (arr.length === 1) return arr[0];
         if (arr.length === 2) return arr.join(lastConjunction);
       
         const allButLast = arr.slice(0, -1).join(conjunction);
         const last = arr[arr.length - 1];
+
         return `${allButLast}${lastConjunction}${last}`;
     };
 
@@ -122,5 +124,38 @@ module.exports = class Utils {
 
     getAllUsers() {
         return this.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
+    };
+
+    /**
+     * 
+     * @returns {ClientPresence}
+     */
+
+    setPresence() {
+        let plural = 0;
+
+        this.client.config.utils.presence.name = this.client.config.utils.presence.name
+        .replace(/{\w+}/g, (match) => {
+            switch (match) {
+                case '{users}':
+                    const users = this.getAllUsers().toLocaleString('en-US');
+
+                    if (users > 1) ++plural;
+
+                    return users;
+                case '{plural}':
+                    return plural ? 's' : '';
+            };
+        });
+
+        return this.client.user.setPresence({
+            activities: [
+                {
+                    name: this.client.config.utils.presence.name,
+                    type: this.client.config.utils.presence.type
+                }
+            ],
+            status: this.client.config.utils.presence.status
+        });
     };
 };

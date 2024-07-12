@@ -20,8 +20,7 @@ module.exports = class GuildMemberRemoveEvent extends Event {
         const captchaChannel = member.guild.channels.resolve(await this.client.database.get(`${member.guild.id}.captcha.channel`));
 
         if (modules.includes('captcha') && captchaChannel) {
-            const messages = await captchaChannel.messages.fetch();
-            const message = messages.find(async (message) => message.id === await this.client.database.get(`${member.guild.id}.users.${member.user.id}.captcha.message`));
+            const message = (await captchaChannel.messages.fetch(await this.client.database.get(`${member.guild.id}.users.${member.user.id}.captcha.message`))).first();
 
             if (message) message.delete()
             .catch(() => 0);

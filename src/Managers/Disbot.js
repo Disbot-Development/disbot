@@ -152,11 +152,10 @@ module.exports = class Disbot extends Client {
 
     /**
      * 
-     * @param {boolean} logging
      * @returns {true}
      */
 
-    loadCommands(logging) {
+    loadCommands() {
         const filesPath = this.utils.getFiles('./src/Interactions/Commands');
 
         for (const path of filesPath) {
@@ -167,20 +166,17 @@ module.exports = class Disbot extends Client {
             this.commands.set(command.config.name, command);
         };
 
-        if (!logging) {
-            this.logger.success(`${this.commands.size} Commands has been loaded.`);
-        };
+        this.logger.success(`${this.commands.size} Commands has been loaded.`);
     
         return true;
     };
 
     /**
      * 
-     * @param {boolean} logging
      * @returns {true}
      */
 
-    loadButtons(logging) {
+    loadButtons() {
         const filesPath = this.utils.getFiles('./src/Interactions/Buttons');
 
         for (const path of filesPath) {
@@ -191,20 +187,17 @@ module.exports = class Disbot extends Client {
             this.buttons.set(button.config.name, button);
         };
 
-        if (!logging) {
-            this.logger.success(`${this.buttons.size} Buttons has been loaded.`);
-        };
+        this.logger.success(`${this.buttons.size} Buttons has been loaded.`);
     
         return true;
     };
 
     /**
      * 
-     * @param {boolean} logging
      * @returns {true}
      */
 
-    loadSelectMenus(logging) {
+    loadSelectMenus() {
         const filesPath = this.utils.getFiles('./src/Interactions/SelectMenus');
 
         for (const path of filesPath) {
@@ -215,20 +208,17 @@ module.exports = class Disbot extends Client {
             this.selectmenus.set(selectmenu.config.name, selectmenu);
         };
 
-        if (!logging) {
-            this.logger.success(`${this.selectmenus.size} SelectMenus has been loaded.`);
-        };
+        this.logger.success(`${this.selectmenus.size} SelectMenus has been loaded.`);
 
         return true;
     };
 
     /**
      * 
-     * @param {boolean} logging
      * @returns {true}
      */
 
-    loadModals(logging) {
+    loadModals() {
         const filesPath = this.utils.getFiles('./src/Interactions/Modals');
 
         for (const path of filesPath) {
@@ -239,20 +229,17 @@ module.exports = class Disbot extends Client {
             this.modals.set(modal.config.name, modal);
         };
 
-        if (!logging) {
-            this.logger.success(`${this.modals.size} Modals has been loaded.`);
-        };
+        this.logger.success(`${this.modals.size} Modals has been loaded.`);
     
         return true;
     };
 
     /**
      * 
-     * @param {boolean} logging
      * @returns {true}
      */
 
-    loadContextMenus(logging) {
+    loadContextMenus() {
         const filesPath = this.utils.getFiles('./src/Interactions/ContextMenus');
 
         for (const path of filesPath) {
@@ -263,9 +250,7 @@ module.exports = class Disbot extends Client {
             this.contextmenus.set(contextmenu.config.name, contextmenu);
         };
 
-        if (!logging) {
-            this.logger.success(`${this.contextmenus.size} ContextMenus has been loaded.`);
-        };
+        this.logger.success(`${this.contextmenus.size} ContextMenus has been loaded.`);
     
         return true;
     };
@@ -283,17 +268,14 @@ module.exports = class Disbot extends Client {
 
             if (!event.run || !event.config || !event.config.name) this.logger.throw(`The file "${path.split(/\//g)[path.split(/\//g).length - 1]}" doesn't have required data.`);
 
+            const parentFolder = path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0];
+
             if (event.config.name === 'rateLimited') {
                 this.rest.on(event.config.name, (...args) => event.run(...args));
+            } else if (parentFolder === 'Process') {
+                process.on(event.config.name, (...args) => event.run(...args));
             } else {
-                switch (path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0]) {
-                    case 'Process':
-                        process.on(event.config.name, (...args) => event.run(...args));
-                    break;
-                    default:
-                        this.on(event.config.name, (...args) => event.run(...args));
-                    break;
-                };
+                this.on(event.config.name, (...args) => event.run(...args));
             };
         };
 
@@ -320,21 +302,17 @@ module.exports = class Disbot extends Client {
 
     removeAllCommands() {
         this.application.commands.set([]);
-        this.guilds.cache.map((g) => g.commands.set([]));
 
         return true;
     };
 
     /**
      * 
-     * @param {boolean} logging
      * @returns {Promise<true>}
      */
 
-    loadClient(logging) {
-        if (!logging) {
-            this.connection = createSpinner('Connecting Disbot to the Discord API...').start();
-        };
+    loadClient() {
+        this.connection = createSpinner('Connecting Disbot to the Discord API...').start();
 
         this.login(this.config.utils.token);
 
@@ -355,8 +333,6 @@ module.exports = class Disbot extends Client {
         this.loadModals();
         this.loadSelectMenus();
         this.loadEvents();
-
-        await this.utils.wait(100);
 
         this.loadClient();
 

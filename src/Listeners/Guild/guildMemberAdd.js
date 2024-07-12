@@ -1,5 +1,5 @@
 const Event = require('../../Managers/Structures/Event');
-const { GuildMember, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
+const { GuildMember, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle, GuildFeature, AllowedMentionsTypes } = require('discord.js');
 const MessageEmbed = require('../../Managers/MessageEmbed');
 const { CaptchaGenerator } = require('captcha-canvas');
 
@@ -25,13 +25,11 @@ module.exports = class GuildMemberAddEvent extends Event {
 
         if (member.user.bot) return;
 
-        const age = await this.client.database.get(`${member.guild.id}.antialt.age`) || this.client.config.antialt.age;
-
-        if (modules.includes('antialt') && member.user.createdTimestamp - age * 60 * 60 * 1000 <= 0) return member.kick('A été détecté par le système d\'anti-alt.')
+        if (modules.includes('antialt') && member.user.createdTimestamp - (await this.client.database.get(`${member.guild.id}.antialt.age`) || this.client.config.antialt.age) * 60 * 60 * 1000 <= 0) return member.kick('A été détecté par le système d\'anti-alt.')
         .then(() => this.client.emit('antialtDetected', member.guild, member, true, age))
         .catch(() => this.client.emit('antialtDetected', member.guild, member, false, age));
 
-        if (modules.includes('antiraid') && member.guild.features.includes('COMMUNITY')) {
+        if (modules.includes('antiraid') && member.guild.features.includes(GuildFeature.Community)) {
             const limit = await this.client.database.get(`${member.guild.id}.antiraid.limit`) || this.client.config.antiraid.limit;
 
             const members = await this.client.database.get(`${member.guild.id}.antiraid.members`) || [];
@@ -70,11 +68,13 @@ module.exports = class GuildMemberAddEvent extends Event {
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.code`, code);
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.date`, date);
 
+            const color = this.client.config.captcha.color;
+
             const captcha = new CaptchaGenerator()
             .setDimension(150, 450)
-            .setCaptcha({ text: code, size: 60, color: this.client.config.captcha.color })
+            .setCaptcha({ text: code, size: 60, color })
             .setDecoy({ opacity: 0.5 })
-            .setTrace({ color: this.client.config.captcha.color });
+            .setTrace({ color });
 
             const buffer = await captcha.generate();
 
@@ -107,7 +107,10 @@ module.exports = class GuildMemberAddEvent extends Event {
                 ],
                 files: [
                     image
-                ]
+                ],
+                allowedMentions: {
+                    parse: [AllowedMentionsTypes.User]
+                }
             })
             .then(async (message) => {
                 await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id);

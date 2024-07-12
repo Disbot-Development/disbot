@@ -1,4 +1,3 @@
-const { ActivityType } = require('discord.js');
 const Event = require('../../Managers/Structures/Event');
 
 module.exports = class ReadyEvent extends Event {
@@ -23,27 +22,11 @@ module.exports = class ReadyEvent extends Event {
                 this.client.deployClientCommands();
             break;
         };
-
-        this.client.user.setPresence({
-            activities: [
-                {
-                    name: `dis-bot.xyz・${this.client.utils.getAllUsers().toLocaleString('en-US')} utilisateur${this.client.utils.getAllUsers() > 1 ? 's' : ''}`,
-                    type: ActivityType.Custom
-                }
-            ],
-            status: 'online'
-        });
+        
+        this.client.utils.setPresence();
 
         setInterval(() => {
-            this.client.user.setPresence({
-                activities: [
-                    {
-                        name: `dis-bot.xyz・${this.client.utils.getAllUsers().toLocaleString('en-US')} utilisateur${this.client.utils.getAllUsers() > 1 ? 's' : ''}`,
-                        type: ActivityType.Custom
-                    }
-                ],
-                status: 'online'
-            });
+            this.client.utils.setPresence();
         }, 60000);
 
         setInterval(() => {

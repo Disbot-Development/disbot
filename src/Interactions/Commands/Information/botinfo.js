@@ -31,7 +31,7 @@ module.exports = class BotInfoCommand extends Command {
                     `> **Nom d'utilisateur:** ${this.client.user.tag}\n` +
                     `> **Identifiant:** ${this.client.user.id}\n\n` +
                     
-                    `> **Développeur${this.client.config.utils.devs.length > 1 ? 's' : ''}:** ${this.client.config.utils.devs.map((dev) => this.client.users.resolve(dev) || 'Utilisateur introuvable').join(', ')}\n` +
+                    `> **Développeur${this.client.config.utils.devs.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(this.client.config.utils.devs.map((dev) => this.client.users.resolve(dev) || 'Utilisateur introuvable'))}\n` +
                     `> **Version:** ${this.client.config.utils.version}\n` +
                     `> **Serveur${this.client.guilds.cache.size > 1 ? 's' : ''}:** ${this.client.guilds.cache.size.toLocaleString()} serveur${this.client.guilds.cache.size > 1 ? 's' : ''}\n` +
                     `> **Utilisateur${users > 1 ? 's' : ''}:** ${users.toLocaleString()} utilisateur${users > 1 ? 's' : ''}\n` +

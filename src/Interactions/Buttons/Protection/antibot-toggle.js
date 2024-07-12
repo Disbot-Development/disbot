@@ -19,7 +19,7 @@ module.exports = class AntiBotToggleButton extends Button {
     async run (interaction) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
-        this.client.emit('antibotToggle', interaction);
+        this.client.emit('systemToggle', interaction, 'Anti-bot');
 
         if (modules.includes('antibot')) {
             await this.client.database.pull(`${interaction.guild.id}.modules`, 'antibot');

@@ -19,7 +19,7 @@ module.exports = class AntiRaidToggleButton extends Button {
     async run (interaction) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
-        this.client.emit('antiraidToggle', interaction);
+        this.client.emit('systemToggle', interaction, 'Anti-raid');
 
         if (modules.includes('antiraid')) {
             await this.client.database.pull(`${interaction.guild.id}.modules`, 'antiraid');
@@ -77,7 +77,7 @@ module.exports = class AntiRaidToggleButton extends Button {
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
                         `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> - **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`) ? `${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`)} compte${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`) > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} message${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> - **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`) ? `${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`)} compte${await this.client.database.get(`${interaction.guild.id}.antiraid.limit`) > 1 ? 's' : ''}` : `${this.client.config.antiraid.limit} compte${this.client.config.antiraid.limit > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> - **Information supplémentaire:** Il est important que le mode communauté soit activé sur le serveur. Si le mode raid venait à s'activez, désactivez le depuis \`Paramètres du serveur\` ➜ \`Invitations\` ➜ \`Activer les invitations\`.`
                     )
                     .setColor(Colors.Green)

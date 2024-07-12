@@ -73,7 +73,7 @@ module.exports = class InteractionCreateEvent extends Event {
         if (interaction.isCommand() && !interaction.isContextMenuCommand()) {
             this.client.emit('commandCreate', interaction, int);
 
-            if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.member.id === interaction.guild.ownerId && !(await this.client.database.get(`${interaction.guild.id}.ignored`))?.includes('role') && interaction.guild.members.me.permissions.has('SEND_MESSAGES')) interaction.channel.send({
+            if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.user.id === interaction.guild.ownerId && !(await this.client.database.get(`${interaction.guild.id}.ignored`))?.includes('role')) interaction.channel.send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Rôle')
@@ -95,7 +95,7 @@ module.exports = class InteractionCreateEvent extends Event {
         if (interaction.isButton()) this.client.emit('buttonCreate', interaction, int);
         if (interaction.isContextMenuCommand()) this.client.emit('contextMenuCreate', interaction, int);
         if (interaction.isModalSubmit()) this.client.emit('modalCreate', interaction, int);
-        if (interaction.isStringSelectMenu()) this.client.emit('selectMenuCreate', interaction, int);
+        if (interaction.isAnySelectMenu()) this.client.emit('selectMenuCreate', interaction, int);
         if (interaction.isAutocomplete()) this.client.emit('autocompleteCreate', interaction, int);
     };
 };

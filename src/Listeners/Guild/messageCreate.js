@@ -54,6 +54,30 @@ module.exports = class MessageCreateEvent extends Event {
         
         const modules = await this.client.database.get(`${message.guild.id}.modules`) || [];
 
+        if (modules.includes('antilink') && !message.member.isAdmin() && !(await this.client.database.get(`${message.guild.id}.whitelist`) || []).includes(message.author.id)) {
+            const duration = await this.client.database.get(`${message.guild.id}.antilink.duration`) || this.client.config.antilink.duration;
+            let match;
+
+            switch (await this.client.database.get(`${message.guild.id}.antilink.type`)) {
+                case 'discord':
+                    match = [].concat(message.content.match(this.client.config.antilink.regex.discord));
+                break;
+                case 'all':
+                    match = [].concat(message.content.match(this.client.config.antilink.regex.discord), message.content.match(this.client.config.antilink.regex.all));
+                break;
+            };
+
+            const filteredMatch = [... new Set(match.filter((m) => m))];
+
+            if (filteredMatch.length) {
+                message.delete()
+                .catch(() => 0);
+
+                if (duration) message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-link.')
+                .then((member) => this.client.emit('antilinkDetected', message.guild, member, duration));
+            };
+        };
+
         if (modules.includes('antispam') && !message.member.isAdmin() && !(await this.client.database.get(`${message.guild.id}.whitelist`) || []).includes(message.author.id)) {
             const limit = await this.client.database.get(`${message.guild.id}.antispam.limit`) || this.client.config.antispam.limit;
             const duration = await this.client.database.get(`${message.guild.id}.antispam.duration`) || this.client.config.antispam.duration;
@@ -66,7 +90,7 @@ module.exports = class MessageCreateEvent extends Event {
             if (newMessages.length >= limit) {
                 await this.client.database.delete(`${message.guild.id}.users.${message.author.id}.antispam`);
 
-                message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-spam.')
+                if (duration) message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-spam.')
                 .then((member) => this.client.emit('antispamDetected', message.guild, member, limit, duration))
                 .catch(() => 0);
 

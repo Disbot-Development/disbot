@@ -19,7 +19,7 @@ module.exports = class CaptchaToggleButton extends Button {
     async run (interaction) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
 
-        this.client.emit('captchaToggle', interaction);
+        this.client.emit('systemToggle', interaction, 'Captcha');
 
         if (modules.includes('captcha')) {
             await this.client.database.pull(`${interaction.guild.id}.modules`, 'captcha');
