@@ -115,6 +115,11 @@ module.exports = class Utils {
         return `${allButLast}${lastConjunction}${last}`;
     };
 
+    /**
+     * 
+     * @returns {Number}
+     */
+
     getAllUsers() {
         return this.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
     };

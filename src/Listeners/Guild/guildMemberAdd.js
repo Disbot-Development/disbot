@@ -72,16 +72,16 @@ module.exports = class GuildMemberAddEvent extends Event {
 
             const captcha = new CaptchaGenerator()
             .setDimension(150, 450)
-            .setCaptcha({ text: code, size: 60, color: '#5865f2' })
+            .setCaptcha({ text: code, size: 60, color: this.client.config.captcha.color })
             .setDecoy({ opacity: 0.5 })
-            .setTrace({ color: '#5865f2' });
+            .setTrace({ color: this.client.config.captcha.color });
 
             const buffer = await captcha.generate();
 
             const image = new AttachmentBuilder(buffer)
             .setName('captcha.png');
 
-            const message = await captchaChannel.send({
+            captchaChannel.send({
                 content: `${member}`,
                 embeds: [
                     new MessageEmbed()
@@ -108,9 +108,10 @@ module.exports = class GuildMemberAddEvent extends Event {
                 files: [
                     image
                 ]
+            })
+            .then(async (message) => {
+                await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id);
             });
-
-            await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id);
         };
     };
 };

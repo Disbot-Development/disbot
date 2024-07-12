@@ -13,7 +13,6 @@ async function main() {
 				prompts.select({
 					message: 'Select a mode to launch Disbot.',
 					initialValue: 'none',
-					maxItems: 5,
 					options: [
 						{ value: 'none', label: 'Default' },
 						{ value: 'remove', label: 'Commands removal' },
