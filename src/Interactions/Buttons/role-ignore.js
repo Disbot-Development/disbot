@@ -14,7 +14,7 @@ module.exports = class RoleIgnoreButton extends Button {
      */
 
     run (interaction) {
-        interaction.guild.pushData('ignored', 'role');
+        this.client.database.push(`${interaction.guild.id}.ignored`, 'role');
 
         interaction.message.delete();
     };
