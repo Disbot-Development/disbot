@@ -77,6 +77,15 @@ module.exports = class MuteCommand extends Command {
             break;
         };
 
+        if (calculatedDuration > 28 * 1000 * 60 * 60 * 24) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                .setStyle('ERROR')
+                .setDescription('La durée est trop longue. Elle est de 28 jours maximum.')
+            ],
+            ephemeral: true
+        });
+
         let frenchUnit;
         switch(unit) {
             case 'hours':
@@ -90,11 +99,11 @@ module.exports = class MuteCommand extends Command {
             break;
         };
 
-        if (member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
+        if (!interaction.member.isAdmin() && member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')
-                .setDescription('Vous ne pouvez pas renre muet un membre ayant un rôle plus haut que le votre.')
+                .setDescription('Vous ne pouvez pas rendre muet un membre ayant un rôle plus haut que le votre.')
             ],
             ephemeral: true
         });

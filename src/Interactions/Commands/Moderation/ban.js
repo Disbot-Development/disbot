@@ -35,7 +35,7 @@ module.exports = class BanCommand extends Command {
         const member = interaction.options.getMember('member');
         const reason = interaction.options.getString('reason') || 'Aucun raison spécifiée.';
 
-        if (member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
+        if (!interaction.member.isAdmin() && member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')

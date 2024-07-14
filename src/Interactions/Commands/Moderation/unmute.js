@@ -1,25 +1,25 @@
 const Command = require('../../../Managers/Structures/Command');
-const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ButtonStyle, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
-module.exports = class KickCommand extends Command {
+module.exports = class UnmuteCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'kick',
-            description: 'Permet d\'expulser un membre du serveur.',
+            name: 'unmute',
+            description: 'Permet de redonner la parole à un membre du serveur.',
             category: 'moderation',
-            perms: [PermissionFlagsBits.KickMembers],
-            meperms: [PermissionFlagsBits.KickMembers],
+            perms: [PermissionFlagsBits.ModerateMembers],
+            meperms: [PermissionFlagsBits.ModerateMembers],
             options: [
                 {
                     name: 'member',
-                    description: 'Le membre que vous souhaitez expulser.',
+                    description: 'Le membre à qui vous souhaitez redonner la parole.',
                     type: ApplicationCommandOptionType.User,
                     required: true
                 },
                 {
                     name: 'reason',
-                    description: 'La raison de l\'expulsion.',
+                    description: 'La raison pour laquelle le membre regagnera la parole.',
                     type: ApplicationCommandOptionType.String
                 }
             ]
@@ -39,19 +39,28 @@ module.exports = class KickCommand extends Command {
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')
-                .setDescription('Vous ne pouvez pas expulser un membre ayant un rôle plus haut que le votre.')
+                .setDescription('Vous ne pouvez pas redonner la parole à un membre ayant un rôle plus haut que le votre.')
             ],
             ephemeral: true
         });
 
-        member.kick({ reason })
+        if (!member.isCommunicationDisabled()) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                .setStyle('ERROR')
+                .setDescription('Ce membre n\'a pas été rendu muet.')
+            ],
+            ephemeral: true
+        });
+
+        member.timeout(null, reason)
         .then(() => {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
                     .setStyle('SUCCESS')
                     .setDescription(
-                        `\`${member.user.tag}\` vient d'être expulsé du serveur.\n` +
+                        `\`${member.user.tag}\` vient de regagner la parole.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ]
@@ -60,9 +69,9 @@ module.exports = class KickCommand extends Command {
             member.send({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Expulsion')
+                    .setTitle('Parole regagnée')
                     .setDescription(
-                        `Vous venez d'être expulsé de \`${interaction.guild.name}\`.\n` +
+                        `Vous avez regagné la parole sur \`${interaction.guild.name}\`.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ],
@@ -79,14 +88,14 @@ module.exports = class KickCommand extends Command {
             })
             .catch(() => 0);
 
-            this.client.emit('kickCreate', interaction.user, member, reason);
+            this.client.emit('muteDelete', interaction.user, member, reason);
         })
         .catch(() => {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
                     .setStyle('ERROR')
-                    .setDescription('Je n\'ai pas pu expulser ce membre.')
+                    .setDescription('Je n\'ai pas pu redonner la parole à ce membre.')
                 ],
                 ephemeral: true
             });

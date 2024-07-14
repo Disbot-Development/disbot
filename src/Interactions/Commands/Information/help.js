@@ -123,14 +123,17 @@ module.exports = class HelpCommand extends Command {
      * @param {AutocompleteInteraction} interaction
      */
 
-    async autocomplete(interaction) {
+    async autocomplete (interaction) {
         const focusedValue = interaction.options.getFocused();
         const filtered = this.client.commands.filter((cmd) => cmd.config.name.includes(focusedValue));
+        
         await interaction.respond(
-            filtered.map(command => ({
-                name: command.config.name,
-                value: command.config.name
-            }))
+            filtered.map((command) => (
+                {
+                    name: command.config.name,
+                    value: command.config.name
+                }
+            ))
         );
     };
 };

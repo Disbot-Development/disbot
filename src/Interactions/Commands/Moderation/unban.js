@@ -2,24 +2,25 @@ const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
-module.exports = class KickCommand extends Command {
+module.exports = class UnbanCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'kick',
-            description: 'Permet d\'expulser un membre du serveur.',
+            name: 'unban',
+            description: 'Permet de débannir un utilisateur.',
             category: 'moderation',
-            perms: [PermissionFlagsBits.KickMembers],
-            meperms: [PermissionFlagsBits.KickMembers],
+            perms: [PermissionFlagsBits.BanMembers],
+            meperms: [PermissionFlagsBits.BanMembers],
             options: [
                 {
-                    name: 'member',
-                    description: 'Le membre que vous souhaitez expulser.',
-                    type: ApplicationCommandOptionType.User,
+                    name: 'tag',
+                    description: 'Le tag de l\'utilisateur que vous souhaitez débannir.',
+                    type: ApplicationCommandOptionType.String,
+                    autocomplete: true,
                     required: true
                 },
                 {
                     name: 'reason',
-                    description: 'La raison de l\'expulsion.',
+                    description: 'La raison du débannissement.',
                     type: ApplicationCommandOptionType.String
                 }
             ]
@@ -32,37 +33,37 @@ module.exports = class KickCommand extends Command {
      */
 
     run (interaction) {
-        const member = interaction.options.getMember('member');
+        const id = interaction.options.getString('user');
         const reason = interaction.options.getString('reason') || 'Aucun raison spécifiée.';
 
-        if (!interaction.member.isAdmin() && member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
+        if (!id) return interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')
-                .setDescription('Vous ne pouvez pas expulser un membre ayant un rôle plus haut que le votre.')
+                .setDescription('Je n\'ai pas trouvé cet utilisateur banni.')
             ],
             ephemeral: true
         });
 
-        member.kick({ reason })
-        .then(() => {
+        interaction.guild.bans.remove(id, reason)
+        .then((user) => {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
                     .setStyle('SUCCESS')
                     .setDescription(
-                        `\`${member.user.tag}\` vient d'être expulsé du serveur.\n` +
+                        `\`${user.tag}\` vient d'être débanni du serveur.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ]
             });
 
-            member.send({
+            user.send({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Expulsion')
+                    .setTitle('Débannissement')
                     .setDescription(
-                        `Vous venez d'être expulsé de \`${interaction.guild.name}\`.\n` +
+                        `Vous avez été débanni de \`${interaction.guild.name}\`.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ],
@@ -79,17 +80,36 @@ module.exports = class KickCommand extends Command {
             })
             .catch(() => 0);
 
-            this.client.emit('kickCreate', interaction.user, member, reason);
+            this.client.emit('banDelete', interaction.guild, interaction.user, user, reason);
         })
         .catch(() => {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
                     .setStyle('ERROR')
-                    .setDescription('Je n\'ai pas pu expulser ce membre.')
+                    .setDescription('Je n\'ai pas pu débannir ce membre.')
                 ],
                 ephemeral: true
             });
         });
+    };
+
+    /**
+     * 
+     * @param {AutocompleteInteraction} interaction
+     */
+
+    async autocomplete (interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const filtered = (await interaction.guild.bans.fetch()).filter((ban) => ban.user.tag.includes(focusedValue));
+        
+        await interaction.respond(
+            filtered.map((ban) => (
+                {
+                    name: ban.user.tag,
+                    value: ban.user.id
+                }
+            ))
+        );
     };
 };

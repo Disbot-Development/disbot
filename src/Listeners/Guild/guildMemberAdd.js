@@ -62,7 +62,7 @@ module.exports = class GuildMemberAddEvent extends Event {
             member.roles.add(captchaBeforeRole)
             .catch(() => 0);
 
-            const code = this.client.utils.generateRandomChars({length: 4, uppercase: true, numbers: true });
+            const code = this.client.utils.generateRandomChars({ length: 4, uppercase: true, numbers: true });
             const date = new Date().addMinutes(5).getTime();
 
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.code`, code);
@@ -82,7 +82,7 @@ module.exports = class GuildMemberAddEvent extends Event {
             .setName('captcha.png');
 
             captchaChannel.send({
-                content: `${member}`,
+                content: member.toString(),
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Captcha')
