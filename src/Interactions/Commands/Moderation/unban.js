@@ -109,7 +109,7 @@ module.exports = class UnbanCommand extends Command {
                     name: ban.user.tag,
                     value: ban.user.id
                 }
-            ))
+            )).slice(0, 25)
         );
     };
 };

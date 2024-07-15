@@ -133,7 +133,7 @@ module.exports = class HelpCommand extends Command {
                     name: command.config.name,
                     value: command.config.name
                 }
-            ))
+            )).slice(0, 25)
         );
     };
 };

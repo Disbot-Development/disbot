@@ -25,49 +25,51 @@ module.exports = class InteractionCreateEvent extends Event {
         if (interaction.isStringSelectMenu()) int = this.client.selectmenus.get(interaction.customId);
         if (interaction.isAutocomplete()) int = this.client.commands.get(interaction.commandName);
 
-        if (!int) return interaction.reply({
-            embeds: [
-                new MessageEmbed()
-                .setStyle('ERROR')
-                .setDescription('Désolé, une erreur est survenue.')
-            ],
-            ephemeral: true
-        });
-
-        if (int.config.perms && !interaction.member.permissions.has(int.config.perms)) {
-            const permissions = Object.keys(this.client.config.permissions)
-            .filter((perm) => (int.config.perms || []).includes(PermissionFlagsBits[perm]))
-            .map((perm) => this.client.config.permissions[perm]);
-        
-            return interaction.reply({
+        if (!interaction.isAutocomplete()) {
+            if (!int) return interaction.reply({
                 embeds: [
                     new MessageEmbed()
                     .setStyle('ERROR')
-                    .setDescription(
-                        `Désolé, vous n'avez pas la permission de réaliser ceci.\n` +
-                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``))}`
-                    )
+                    .setDescription('Désolé, une erreur est survenue.')
                 ],
                 ephemeral: true
             });
-        };
-
-        if (int.config.meperms && !interaction.guild.members.me.permissions.has(int.config.meperms)) {
-            const permissions = Object.keys(this.client.config.permissions)
-            .filter((perm) => (int.config.meperms || []).includes(PermissionFlagsBits[perm]))
-            .map((perm) => this.client.config.permissions[perm]);
-
-            interaction.reply({
-                embeds: [
-                    new MessageEmbed()
-                    .setStyle('ERROR')
-                    .setDescription(
-                        `Désolé, je n'ai pas la permission de réaliser ceci.\n` +
-                        `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``))}`
-                    )
-                ],
-                ephemeral: true
-            });
+    
+            if (int.config.perms && !interaction.member.permissions.has(int.config.perms)) {
+                const permissions = Object.keys(this.client.config.permissions)
+                .filter((perm) => (int.config.perms || []).includes(PermissionFlagsBits[perm]))
+                .map((perm) => this.client.config.permissions[perm]);
+            
+                return interaction.reply({
+                    embeds: [
+                        new MessageEmbed()
+                        .setStyle('ERROR')
+                        .setDescription(
+                            `Désolé, vous n'avez pas la permission de réaliser ceci.\n` +
+                            `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``))}`
+                        )
+                    ],
+                    ephemeral: true
+                });
+            };
+    
+            if (int.config.meperms && !interaction.guild.members.me.permissions.has(int.config.meperms)) {
+                const permissions = Object.keys(this.client.config.permissions)
+                .filter((perm) => (int.config.meperms || []).includes(PermissionFlagsBits[perm]))
+                .map((perm) => this.client.config.permissions[perm]);
+    
+                interaction.reply({
+                    embeds: [
+                        new MessageEmbed()
+                        .setStyle('ERROR')
+                        .setDescription(
+                            `Désolé, je n'ai pas la permission de réaliser ceci.\n` +
+                            `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``))}`
+                        )
+                    ],
+                    ephemeral: true
+                });
+            };
         };
 
         if (interaction.isCommand() && !interaction.isContextMenuCommand()) {
