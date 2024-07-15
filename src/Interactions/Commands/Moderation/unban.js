@@ -33,7 +33,7 @@ module.exports = class UnbanCommand extends Command {
      */
 
     run (interaction) {
-        const id = interaction.options.getString('user');
+        const id = interaction.options.getString('tag');
         const reason = interaction.options.getString('reason') || 'Aucun raison spécifiée.';
 
         if (!id) return interaction.reply({
