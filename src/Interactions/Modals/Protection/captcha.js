@@ -18,14 +18,18 @@ module.exports = class CaptchaModal extends Modal {
     async run (interaction) {
         const code = await this.client.database.get(`${interaction.guild.id}.users.${interaction.user.id}.captcha.code`);
 
-        if (interaction.fields.getTextInputValue('answer') !== code) return interaction.reply({
-            embeds: [
-                new MessageEmbed()
-                .setStyle('ERROR')
-                .setDescription('Vous n\'avez pas résolu le captcha, recommencez.')
-            ],
-            ephemeral: true
-        });
+        if (interaction.fields.getTextInputValue('answer') !== code) {
+            interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                    .setStyle('ERROR')
+                    .setDescription('Vous n\'avez pas résolu le captcha, recommencez.')
+                ],
+                ephemeral: true
+            });
+
+            return await this.client.database.add('count.captcha.failed', 1);
+        };
 
         await this.client.database.delete(`${interaction.guild.id}.users.${interaction.user.id}.captcha`);
 
@@ -44,5 +48,7 @@ module.exports = class CaptchaModal extends Modal {
         interaction.deferUpdate();
 
         this.client.emit('captchaSolved', interaction, code);
+
+        await this.client.database.add('count.captcha.resolved', 1);
     };
 };

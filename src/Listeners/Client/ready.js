@@ -23,11 +23,9 @@ module.exports = class ReadyEvent extends Event {
             break;
         };
         
-        this.client.utils.setPresence();
+        const status = () => this.client.utils.setPresence();
 
-        setInterval(() => {
-            this.client.utils.setPresence();
-        }, 60000);
+        setInterval(status, 60000);
 
         setInterval(() => {
             this.client.guilds.cache.forEach(async (guild) => {

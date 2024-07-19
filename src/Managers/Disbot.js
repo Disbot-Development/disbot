@@ -1,10 +1,12 @@
 const { Client, Collection, PermissionFlagsBits, ApplicationCommandOption, ApplicationCommandType, version } = require('discord.js');
 const { createSpinner } = require('nanospinner');
+const { QuickDB } = require('quick.db');
+
+const BackupScheduler = require('./BackupScheduler');
 const Prototypes = require('./Prototypes');
 const Config = require('./Config');
-const Utils = require('./Utils');
 const Logger = require('./Logger');
-const { QuickDB } = require('quick.db');
+const Utils = require('./Utils');
 
 module.exports = class Disbot extends Client {
 
@@ -155,8 +157,22 @@ module.exports = class Disbot extends Client {
      * @returns {true}
      */
 
+    loadBackupScheduler() {
+        this.scheduler = new BackupScheduler(this, 'json.sqlite', 'backups');
+        this.scheduler.scheduleBackup();
+
+        this.logger.success('The backup scheduler is running.');
+
+        return true;
+    };
+
+    /**
+     * 
+     * @returns {true}
+     */
+
     loadCommands() {
-        const filesPath = this.utils.getFiles('./src/Interactions/Commands');
+        const filesPath = this.utils.getFiles('./src/Interactions/Commands', ['.js']);
 
         for (const path of filesPath) {
             const command = new (require(`../../${path}`))(this);
@@ -177,7 +193,7 @@ module.exports = class Disbot extends Client {
      */
 
     loadButtons() {
-        const filesPath = this.utils.getFiles('./src/Interactions/Buttons');
+        const filesPath = this.utils.getFiles('./src/Interactions/Buttons', ['.js']);
 
         for (const path of filesPath) {
             const button = new (require(`../../${path}`))(this);
@@ -198,7 +214,7 @@ module.exports = class Disbot extends Client {
      */
 
     loadSelectMenus() {
-        const filesPath = this.utils.getFiles('./src/Interactions/SelectMenus');
+        const filesPath = this.utils.getFiles('./src/Interactions/SelectMenus', ['.js']);
 
         for (const path of filesPath) {
             const selectmenu = new (require(`../../${path}`))(this);
@@ -219,7 +235,7 @@ module.exports = class Disbot extends Client {
      */
 
     loadModals() {
-        const filesPath = this.utils.getFiles('./src/Interactions/Modals');
+        const filesPath = this.utils.getFiles('./src/Interactions/Modals', ['.js']);
 
         for (const path of filesPath) {
             const modal = new (require(`../../${path}`))(this);
@@ -240,7 +256,7 @@ module.exports = class Disbot extends Client {
      */
 
     loadContextMenus() {
-        const filesPath = this.utils.getFiles('./src/Interactions/ContextMenus');
+        const filesPath = this.utils.getFiles('./src/Interactions/ContextMenus', ['.js']);
 
         for (const path of filesPath) {
             const contextmenu = new (require(`../../${path}`))(this);
@@ -261,7 +277,7 @@ module.exports = class Disbot extends Client {
      */
 
     loadEvents() {
-        const filesPath = this.utils.getFiles('./src/Listeners');
+        const filesPath = this.utils.getFiles('./src/Listeners', ['.js']);
 
         for (const path of filesPath) {
             const event = new (require(`../../${path}`))(this);
@@ -270,13 +286,9 @@ module.exports = class Disbot extends Client {
 
             const parentFolder = path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0];
 
-            if (event.config.name === 'rateLimited') {
-                this.rest.on(event.config.name, (...args) => event.run(...args));
-            } else if (parentFolder === 'Process') {
-                process.on(event.config.name, (...args) => event.run(...args));
-            } else {
-                this.on(event.config.name, (...args) => event.run(...args));
-            };
+            if (event.config.name === 'rateLimited') this.rest.on(event.config.name, (...args) => event.run(...args));
+            else if (parentFolder === 'Process') process.on(event.config.name, (...args) => event.run(...args));
+            else this.on(event.config.name, (...args) => event.run(...args));
         };
 
         this.logger.success(`${this._eventsCount} Events has been loaded.\n`);
@@ -321,11 +333,12 @@ module.exports = class Disbot extends Client {
 
     /**
      * 
-     * @returns {true}
+     * @returns {Promise<true>}
      */
 
     async init() {
         this.loadDatabase();
+        this.loadBackupScheduler();
 
         this.loadButtons();
         this.loadCommands();
@@ -334,8 +347,8 @@ module.exports = class Disbot extends Client {
         this.loadSelectMenus();
         this.loadEvents();
 
-        this.loadClient();
+        await this.loadClient();
 
-        return true;
+        return new Promise(() => true);
     };
 };

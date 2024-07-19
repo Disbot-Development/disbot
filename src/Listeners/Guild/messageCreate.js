@@ -75,6 +75,8 @@ module.exports = class MessageCreateEvent extends Event {
 
                 if (duration) message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-link.')
                 .then((member) => this.client.emit('antilinkDetected', message.guild, member, duration));
+
+                await this.client.database.add('count.antilink', 1);
             };
         };
 
@@ -97,6 +99,8 @@ module.exports = class MessageCreateEvent extends Event {
                 const messagesArray = [...(await message.channel.messages.fetch()).filter((msg) => message.author.id === msg.author.id).values()].slice(0, 10);
 
                 message.channel.bulkDelete(messagesArray);
+
+                await this.client.database.add('count.antispam', 1);
             } else {
                 await this.client.database.push(`${message.guild.id}.users.${message.author.id}.antispam.messages`, Date.now());
             };

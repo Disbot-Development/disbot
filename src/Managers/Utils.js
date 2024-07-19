@@ -1,4 +1,5 @@
-const { readdirSync, statSync } = require('fs');
+const { readdirSync, statSync, readFileSync } = require('fs');
+const { join, relative, sep } = require('path');
 const client = require('../../index');
 const { ClientPresence } = require('discord.js');
 
@@ -27,22 +28,58 @@ module.exports = class Utils {
     /**
      * 
      * @param {String} path
+     * @param {String[]} extensions
      * @returns {String[]}
      */
 
-    getFiles(path) {
+    getFiles(path, extensions = []) {
         const files = readdirSync(path);
-
         let result = [];
 
         for (const file of files) {
             const filePath = `${path}/${file}`;
 
-            if (statSync(filePath).isDirectory()) result = result.concat(this.getFiles(filePath));
-            else result.push(filePath);
+            if (statSync(filePath).isDirectory()) result = result.concat(this.getFiles(filePath, extensions));
+            else if (extensions.some((ext) => filePath.endsWith(ext))) result.push(filePath);
         };
 
         return result;
+    };
+
+    /**
+     * 
+     * @param {String} filePath 
+     * @returns {Number}
+     */
+
+    countLines(filePath) {
+        const fileContent = readFileSync(filePath, 'utf8');
+
+        return fileContent.split('\n').length;
+    };
+
+    /**
+     * 
+     * @param {String} dirPath 
+     * @param {String[]} extensions
+     * @param {String[]} excludeDirs
+     * @returns {Number}
+     */
+
+    countLinesInDir(dirPath, extensions = [], excludeDirs = []) {
+        const allFiles = this.getFiles(dirPath, extensions);
+        let totalLines = 0;
+
+        for (const file of allFiles) {
+            const relativePath = relative(dirPath, file);
+            const parts = relativePath.split(sep);
+
+            const isExcluded = parts.some((part) => excludeDirs.includes(part));
+
+            if (!isExcluded) totalLines += this.countLines(file);
+        };
+
+        return totalLines;
     };
     
     /**
@@ -122,7 +159,7 @@ module.exports = class Utils {
      * @returns {Number}
      */
 
-    getAllUsers() {
+    get allUsers() {
         return this.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
     };
 
@@ -133,16 +170,14 @@ module.exports = class Utils {
 
     setPresence() {
         let plural = 0;
+        const users = this.allUsers;
 
-        this.client.config.utils.presence.name = this.client.config.utils.presence.name
-        .replace(/{\w+}/g, (match) => {
+        const presenceName = this.client.config.utils.presence.name.replace(/{\w+}/g, (match) => {
             switch (match) {
                 case '{users}':
-                    const users = this.getAllUsers().toLocaleString('en-US');
-
                     if (users > 1) ++plural;
 
-                    return users;
+                    return users.toLocaleString();
                 case '{plural}':
                     return plural ? 's' : '';
             };
@@ -151,7 +186,7 @@ module.exports = class Utils {
         return this.client.user.setPresence({
             activities: [
                 {
-                    name: this.client.config.utils.presence.name,
+                    name: presenceName,
                     type: this.client.config.utils.presence.type
                 }
             ],

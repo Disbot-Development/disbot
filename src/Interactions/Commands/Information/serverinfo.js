@@ -22,8 +22,8 @@ module.exports = class ServerInfoCommand extends Command {
         const admins = members.filter((member) => member.isAdmin()).size;
         const bots = members.filter((member) => member.user.bot).size;
         const creationTimestamp = parseInt(interaction.guild.createdTimestamp / 1000);
-        const channels = interaction.guild.channels.cache.filter((channel) => channel.type !== ChannelType.GuildCategory);
-        const roles = interaction.guild.roles.cache.filter((role) => role.id !== interaction.guild.id);
+        const channels = (await interaction.guild.channels.fetch()).filter((channel) => channel.type !== ChannelType.GuildCategory);
+        const roles = (await interaction.guild.roles.fetch()).filter((role) => role.id !== interaction.guild.id);
         const guildEmojis = await interaction.guild.emojis.fetch();
         const guildBans = await interaction.guild.bans.fetch();
 

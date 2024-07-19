@@ -1,6 +1,6 @@
 {
   "name": "disbot",
-  "version": "1.5.5",
+  "version": "1.5.7",
   "description": "Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs.",
   "main": "index.js",
   "dependencies": {
@@ -11,6 +11,8 @@
     "discord.js": "^14.15.3",
     "fs": "^0.0.1-security",
     "nanospinner": "^1.1.0",
+    "node-cron": "^3.0.3",
+    "path": "^0.12.7",
     "quick.db": "^9.1.7"
   },
   "scripts": {
@@ -24,7 +26,7 @@
     "protection"
   ],
   "author": "sey.ioo",
-  "license": "CC-BY-NC 4.0",
+  "license": "GPL 3.0",
   "bugs": {
     "url": "https://github.com/Disbot-Development/disbot/issues"
   },

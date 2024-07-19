@@ -18,14 +18,15 @@ module.exports = class BotInfoCommand extends Command {
      */
 
     run (interaction) {
-        const users = this.client.guilds.cache.reduce((a, g) => a + g.memberCount, 0);
+        const users = this.client.utils.allUsers;
         const creationTimestamp = parseInt(this.client.user.createdTimestamp / 1000);
         const uptimeTimestamp = parseInt((Date.now() - this.client.uptime) / 1000);
+        const linesOfCode = this.client.utils.countLinesInDir('./', ['.js'], ['node_modules']);
 
         interaction.reply({
             embeds: [
                 new MessageEmbed()
-                .setTitle('Disbot')
+                .setTitle(this.client.config.username)
                 .setDescription(
                     `> **Utilisateur:** ${this.client.user}\n` +
                     `> **Nom d'utilisateur:** ${this.client.user.tag}\n` +
@@ -44,7 +45,8 @@ module.exports = class BotInfoCommand extends Command {
                     `> **RAM:** ${this.client.utils.formatBytes(os.totalmem() - os.freemem())}\n` +
                     `> **OS:** ${os.type()} ${os.release()}\n` +
                     `> **Node.JS:** ${process.version.replace('v', '')}\n` +
-                    `> **Discord.JS:** ${version}`
+                    `> **Discord.JS:** ${version}\n` +
+                    `> **Lignes de code:** ${linesOfCode.toLocaleString()} ligne${linesOfCode > 1 ? 's' : ''}`
                 )
                 .setImage(this.client.config.images.banner)
                 .setThumbnail(this.client.user.displayAvatarURL({ size: 4096 }))

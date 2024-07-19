@@ -83,7 +83,7 @@ module.exports = class LogsConfigureButton extends Button {
                     `> \`create\`: Créer le salon.\n` +
                     `> \`reset\`: Réinitialiser le système de logs.\n` +
                     `> \`cancel\`: Annuler la configuration.`
-                ) 
+                )
             ],
             fetchReply: true
         });

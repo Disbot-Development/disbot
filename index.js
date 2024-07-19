@@ -52,9 +52,9 @@ async function main() {
     client.options.allowedMentions.roles = Object.values(client.config.roles).map((id) => id);
     client.options.allowedMentions.users = client.config.utils.devs;
 
-    client.init();
-
     client.mode = project.mode;
+
+    await client.init();
 
     module.exports = client;
 };

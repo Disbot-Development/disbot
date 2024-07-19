@@ -19,15 +19,23 @@ module.exports = class GuildMemberAddEvent extends Event {
     async run (member) {
         const modules = await this.client.database.get(`${member.guild.id}.modules`) || [];
         
-        if (modules.includes('antibot') && member.user.bot) member.kick('A été détecté par le système d\'anti-bot.')
-        .then(() => this.client.emit('antibotDetected', member.guild, member, true))
-        .catch(() => this.client.emit('antibotDetected', member.guild, member, false));
+        if (modules.includes('antibot') && member.user.bot) {
+            member.kick('A été détecté par le système d\'anti-bot.')
+            .then(() => this.client.emit('antibotDetected', member.guild, member, true))
+            .catch(() => this.client.emit('antibotDetected', member.guild, member, false));
+
+            await this.client.database.add('count.antibot', 1);
+        };
 
         if (member.user.bot) return;
 
-        if (modules.includes('antialt') && member.user.createdTimestamp - (await this.client.database.get(`${member.guild.id}.antialt.age`) || this.client.config.antialt.age) * 60 * 60 * 1000 <= 0) return member.kick('A été détecté par le système d\'anti-alt.')
-        .then(() => this.client.emit('antialtDetected', member.guild, member, true, age))
-        .catch(() => this.client.emit('antialtDetected', member.guild, member, false, age));
+        if (modules.includes('antialt') && member.user.createdTimestamp - (await this.client.database.get(`${member.guild.id}.antialt.age`) || this.client.config.antialt.age) * 60 * 60 * 1000 <= 0) {
+            member.kick('A été détecté par le système d\'anti-alt.')
+            .then(() => this.client.emit('antialtDetected', member.guild, member, true, age))
+            .catch(() => this.client.emit('antialtDetected', member.guild, member, false, age));
+
+            return await this.client.database.add('count.antialt', 1);
+        };
 
         if (modules.includes('antiraid') && member.guild.features.includes(GuildFeature.Community)) {
             const limit = await this.client.database.get(`${member.guild.id}.antiraid.limit`) || this.client.config.antiraid.limit;
@@ -47,6 +55,8 @@ module.exports = class GuildMemberAddEvent extends Event {
 
                     if (kickedMember) kickedMember.kick('A été détecté par le système d\'anti-raid.');
                 });
+
+                await this.client.database.add('count.antiraid', 1);
             } else {
                 await this.client.database.push(`${member.guild.id}.antiraid.members`, {
                     date: Date.now(),
@@ -68,13 +78,11 @@ module.exports = class GuildMemberAddEvent extends Event {
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.code`, code);
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.date`, date);
 
-            const color = this.client.config.captcha.color;
-
             const captcha = new CaptchaGenerator()
             .setDimension(150, 450)
-            .setCaptcha({ text: code, size: 60, color })
+            .setCaptcha({ text: code, size: 60, color: this.client.config.captcha.colors.text })
             .setDecoy({ opacity: 0.5 })
-            .setTrace({ color });
+            .setTrace({ color: this.client.config.captcha.colors.trace });
 
             const buffer = await captcha.generate();
 

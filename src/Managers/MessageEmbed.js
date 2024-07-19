@@ -1,8 +1,8 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, Colors } = require('discord.js');
 const client = require('../../index');
 const config = new (require('./Config'))(client);
 
-module.exports = class ExtendedEmbed extends EmbedBuilder {
+module.exports = class MessageEmbed extends EmbedBuilder {
 
     /**
      * 
@@ -15,14 +15,14 @@ module.exports = class ExtendedEmbed extends EmbedBuilder {
         super(data, skipValidation);
 
         this.data.style = 'DEFAULT';
-        this.data.color = parseInt(config.embeds.color);
+        this.data.color = config.embeds.color;
         this.data.footer = { text: config.embeds.footer, icon_url: config.images.logo };
     };
 
     /**
      * 
      * @param {'DEFAULT'|'SUCCESS'|'ERROR'|'LOADING'} style
-     * @returns {ExtendedEmbed}
+     * @returns {MessageEmbed}
      */
 
     setStyle(style) {
@@ -46,19 +46,22 @@ module.exports = class ExtendedEmbed extends EmbedBuilder {
     /**
      * 
      * @param {string} description
-     * @returns {ExtendedEmbed}
+     * @returns {MessageEmbed}
      */    
 
     setDescription(description) {
         switch(this.data.style) {
             case 'SUCCESS':
                 this.data.description = `${config.emojis.yes} ${description}`;
+                this.data.color = Colors.Green;
             break;
             case 'ERROR':
                 this.data.description = `${config.emojis.no} ${description}`;
+                this.data.color = Colors.Red;
             break;
             case 'LOADING':
                 this.data.description = `${config.emojis.loading} ${description}`;
+                this.data.color = Colors.DarkerGrey;
             break;
         };
     
