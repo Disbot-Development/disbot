@@ -27,7 +27,7 @@ module.exports = class BackupScheduler {
 
         return copyFile(this.dbPath, backupPath, (error) => {
             if (error) this.client.logger.error(`Error during database backup: ${error}\n`);
-            else console.log(`Database backup successful: ${backupPath}\n`);
+            else this.client.logger.success(`Database backup successful: ${backupPath}\n`);
         });
     };
 
