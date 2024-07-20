@@ -32,6 +32,6 @@ module.exports = class BackupScheduler {
     };
 
     scheduleBackup() {
-        cron.schedule('0 1 * * *', () => this.backupDatabase, { timezone: 'Europe/Paris' });
+        cron.schedule('0 1 * * *', () => { this.backupDatabase() }, { timezone: 'Europe/Paris' });
     };
 };
