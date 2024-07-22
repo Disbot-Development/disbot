@@ -22,7 +22,7 @@ module.exports = class InteractionCreateEvent extends Event {
         if (interaction.isCommand()) int = this.client.commands.get(interaction.commandName);
         if (interaction.isContextMenuCommand()) int = this.client.contextmenus.get(interaction.commandName);
         if (interaction.isModalSubmit()) int = this.client.modals.get(interaction.customId);
-        if (interaction.isStringSelectMenu()) int = this.client.selectmenus.get(interaction.customId);
+        if (interaction.isAnySelectMenu()) int = this.client.selectmenus.get(interaction.customId);
         if (interaction.isAutocomplete()) int = this.client.commands.get(interaction.commandName);
 
         if (!interaction.isAutocomplete()) {

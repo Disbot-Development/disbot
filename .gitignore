@@ -2,3 +2,4 @@ node_modules/
 *.sqlite
 Config.js
 package-lock.json
+backups

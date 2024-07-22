@@ -23,7 +23,9 @@
     "url": "git+https://github.com/Disbot-Development/disbot.git"
   },
   "keywords": [
-    "protection"
+    "protection",
+    "moderation",
+    "antiraid"
   ],
   "author": "sey.ioo",
   "license": "GPL 3.0",
