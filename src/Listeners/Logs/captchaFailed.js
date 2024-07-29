@@ -17,9 +17,11 @@ module.exports = class CaptchaFailedEvent extends Event {
     
     async run (guild, member) {
         const modules = await this.client.database.get(`${guild.id}.modules`) || [];
+        const logsId = await this.client.database.get(`${guild.id}.logs.channel`);
+        const logs = logsId ? await guild.channels.fetch(logsId).catch(() => undefined) : undefined;
 
-        if (modules.includes('logs') && guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`))) {
-            guild.channels.resolve(await this.client.database.get(`${guild.id}.logs.channel`)).send({
+        if (modules.includes('logs') && logs) {
+            logs.send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Captcha')

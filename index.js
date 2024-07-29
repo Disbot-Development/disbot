@@ -1,4 +1,5 @@
 require('colors');
+require('dotenv').config();
 
 const prompts = require('@clack/prompts');
 const Disbot = require('./src/Managers/Disbot');

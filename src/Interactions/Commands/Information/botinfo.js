@@ -1,6 +1,6 @@
 const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
-const { CommandInteraction, version, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { CommandInteraction, version, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const os = require('os');
 
 module.exports = class BotInfoCommand extends Command {
@@ -22,6 +22,9 @@ module.exports = class BotInfoCommand extends Command {
         const creationTimestamp = parseInt(this.client.user.createdTimestamp / 1000);
         const uptimeTimestamp = parseInt((Date.now() - this.client.uptime) / 1000);
         const linesOfCode = this.client.utils.countLinesInDir('./', ['.js'], ['node_modules']);
+
+        const banner = new AttachmentBuilder('./src/Images/Blurple White Banner.png')
+        .setName('banner.png');
 
         interaction.reply({
             embeds: [
@@ -48,7 +51,7 @@ module.exports = class BotInfoCommand extends Command {
                     `> **Discord.JS:** ${version}\n` +
                     `> **Lignes de code:** ${linesOfCode.toLocaleString()} ligne${linesOfCode > 1 ? 's' : ''}`
                 )
-                .setImage(this.client.config.images.banner)
+                .setImage('attachment://banner.png')
                 .setThumbnail(this.client.user.displayAvatarURL({ size: 4096 }))
             ],
             components: [
@@ -70,7 +73,8 @@ module.exports = class BotInfoCommand extends Command {
                     .setEmoji(this.client.config.emojis.support)
                     .setLabel('Support')
                 )
-            ]
+            ],
+            files: [ banner ]
         });
     };
 };

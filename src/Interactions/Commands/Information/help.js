@@ -1,5 +1,5 @@
 const Command = require('../../../Managers/Structures/Command');
-const { CommandInteraction, ApplicationCommandOptionType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction, PermissionFlagsBits } = require('discord.js');
+const { CommandInteraction, ApplicationCommandOptionType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction, PermissionFlagsBits, AttachmentBuilder } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { readdirSync } = require('fs');
 
@@ -41,7 +41,7 @@ module.exports = class HelpCommand extends Command {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Disbot')
+                    .setTitle(this.client.config.username)
                     .setDescription(
                         `> **Nom:** </${applicationCommands.filter((cmd) => cmd.name === command.config.name).first().name}:${applicationCommands.filter((cmd) => cmd.name === command.config.name).first().id}>\n` +
                         `> **Description:** ${command.config.description}\n` +
@@ -83,7 +83,7 @@ module.exports = class HelpCommand extends Command {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Disbot')
+                    .setTitle(this.client.config.username)
                     .setDescription(
                         `${this.client.config.emojis.help} Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je possède ${this.client.commands.size} commandes slash.\n\n` +
 

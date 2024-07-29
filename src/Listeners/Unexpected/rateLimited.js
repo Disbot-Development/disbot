@@ -14,6 +14,6 @@ module.exports = class RateLimitedEvent extends Event {
      */
 
     run (data) {
-        this.client.logger.error(`Rate limited for: ${`${Math.floor(data.timeout / 1000 / 60)} minute${Math.floor(data.timeout / 1000 / 60) > 1 ? 's' : ''}`.red}\n`);
+        this.client.logger.error(`Rate limited for: ${`${Math.floor(data.retryAfter / 1000 / 60)} minute${Math.floor(data.retryAfter / 1000 / 60) > 1 ? 's' : ''}`.red}\n`);
     };
 };

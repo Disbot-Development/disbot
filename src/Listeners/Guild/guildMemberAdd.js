@@ -58,10 +58,7 @@ module.exports = class GuildMemberAddEvent extends Event {
 
                 await this.client.database.add('count.antiraid', 1);
             } else {
-                await this.client.database.push(`${member.guild.id}.antiraid.members`, {
-                    date: Date.now(),
-                    id: member.user.id
-                });
+                await this.client.database.push(`${member.guild.id}.antiraid.members`, { date: Date.now(), id: member.user.id });
             };
         };
 
@@ -85,7 +82,6 @@ module.exports = class GuildMemberAddEvent extends Event {
             .setTrace({ color: this.client.config.captcha.colors.trace });
 
             const buffer = await captcha.generate();
-
             const image = new AttachmentBuilder(buffer)
             .setName('captcha.png');
 
@@ -113,16 +109,10 @@ module.exports = class GuildMemberAddEvent extends Event {
                         .setStyle(ButtonStyle.Secondary)
                     )
                 ],
-                files: [
-                    image
-                ],
-                allowedMentions: {
-                    parse: [AllowedMentionsTypes.User]
-                }
+                files: [ image ],
+                allowedMentions: { parse: [AllowedMentionsTypes.User] }
             })
-            .then(async (message) => {
-                await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id);
-            });
+            .then(async (message) => await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id));
         };
     };
 };

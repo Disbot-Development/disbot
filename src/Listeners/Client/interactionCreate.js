@@ -1,6 +1,6 @@
 const Event = require('../../Managers/Structures/Event');
 const MessageEmbed = require('../../Managers/MessageEmbed');
-const { Interaction, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } = require('discord.js');
+const { Interaction, PermissionFlagsBits } = require('discord.js');
 
 module.exports = class InteractionCreateEvent extends Event {
     constructor(client) {
@@ -15,7 +15,14 @@ module.exports = class InteractionCreateEvent extends Event {
      */
 
     async run (interaction) {
-        if (!interaction.guild) return;
+        if (!interaction.guild) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                .setStyle('ERROR')
+                .setDescription('Je ne fonctionne pas dans les messages privés, utilise moi sur un serveur !')
+            ],
+            ephemeral: true
+        });
 
         let int;
         if (interaction.isButton()) int = this.client.buttons.get(interaction.customId);
@@ -72,28 +79,7 @@ module.exports = class InteractionCreateEvent extends Event {
             };
         };
 
-        if (interaction.isCommand() && !interaction.isContextMenuCommand()) {
-            this.client.emit('commandCreate', interaction, int);
-
-            if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.user.id === interaction.guild.ownerId && !(await this.client.database.get(`${interaction.guild.id}.ignored`))?.includes('role')) interaction.channel.send({
-                embeds: [
-                    new MessageEmbed()
-                    .setTitle('Rôle')
-                    .setDescription('Mon rôle n\'est pas le plus haut, souhaitez-vous remédier ceci ?')
-                ],
-                components: [
-                    new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                        .setEmoji('✖️')
-                        .setStyle(ButtonStyle.Danger)
-                        .setCustomId('role-ignore')
-                    )
-                ]
-            })
-            .catch(() => 0);
-        };
-
+        if (interaction.isCommand() && !interaction.isContextMenuCommand()) this.client.emit('commandCreate', interaction, int);
         if (interaction.isButton()) this.client.emit('buttonCreate', interaction, int);
         if (interaction.isContextMenuCommand()) this.client.emit('contextMenuCreate', interaction, int);
         if (interaction.isModalSubmit()) this.client.emit('modalCreate', interaction, int);

@@ -1,5 +1,5 @@
 node_modules/
-*.sqlite
-Config.js
+backups/
 package-lock.json
-backups
+*.sqlite
+*.env

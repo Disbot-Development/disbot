@@ -1,11 +1,11 @@
 const Button = require('../../../Managers/Structures/Button');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
-const { ButtonInteraction, PermissionFlagsBits, MessageCollector, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, StringSelectMenuBuilder } = require('discord.js');
+const { ButtonInteraction, PermissionFlagsBits, MessageCollector, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
-module.exports = class AntiLinkConfigureButton extends Button {
+module.exports = class AntiTokenConfigureButton extends Button {
     constructor(client) {
         super(client, {
-            name: 'antilink-configure',
+            name: 'antitoken-configure',
             perms: [PermissionFlagsBits.Administrator],
             meperms: [PermissionFlagsBits.ManageMessages]
         });
@@ -22,28 +22,13 @@ module.exports = class AntiLinkConfigureButton extends Button {
                 components: [
                     new ActionRowBuilder()
                     .addComponents(
-                        new StringSelectMenuBuilder()
-                        .setCustomId('antilink-type')
-                        .setPlaceholder('S\'il-vous-plaît, sélectionnez un type.')
-                        .setOptions(
-                            Object.entries(this.client.config.antilink.type).map((type) => {
-                                return {
-                                    label: type[1],
-                                    value: type[0]
-                                }
-                            })
-                        )
-                        .setDisabled(true)
-                    ),
-                    new ActionRowBuilder()
-                    .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('antilink-toggle')
+                        .setCustomId('antitoken-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Activer'),
                         new ButtonBuilder()
-                        .setCustomId('antilink-configure')
+                        .setCustomId('antitoken-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
@@ -57,43 +42,28 @@ module.exports = class AntiLinkConfigureButton extends Button {
             interaction.message.edit({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-link')
+                    .setTitle('Anti-token')
                     .setDescription(
-                        `${this.client.config.emojis.help} Le but du système d'anti-link est de bloquer les messages qui contiennent des liens interdits.\n` +
-                        `Cela permet d'anticiper la promotion de liens suspects (ou non).\n\n` +
+                        `${this.client.config.emojis.help} Le but du système d'anti-token est de bloquer les messages qui contiennent des tokens d'utilisateurs ou robots Discord.\n` +
+                        `Cela permet d'anticiper la fuite d'informations personnelles.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
                         `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
-                        `> - **Liens interdits:** ${this.client.config.antilink.type[await this.client.database.get(`${interaction.guild.id}.antilink.type`)] || 'Aucun'}\n` +
-                        `> - **Durée rendu muet:** ${await this.client.database.get(`${interaction.guild.id}.antilink.duration`) ? `${await this.client.database.get(`${interaction.guild.id}.antilink.duration`)} minute${await this.client.database.get(`${interaction.guild.id}.antilink.duration`) > 1 ? 's' : ''}` : `${this.client.config.antilink.duration} minute${this.client.config.antilink.duration > 1 ? 's' : ''} (par défaut)`}\n` +
-                        `> - **Information supplémentaire:** Tous les utilisateurs et bots Discord n'étant pas inscris dans la liste blanche se verront affectés par l'anti-link.`
+                        `> - **Durée rendu muet:** ${await this.client.database.get(`${interaction.guild.id}.antitoken.duration`) ? `${await this.client.database.get(`${interaction.guild.id}.antitoken.duration`)} minute${await this.client.database.get(`${interaction.guild.id}.antitoken.duration`) > 1 ? 's' : ''}` : `${this.client.config.antitoken.duration} minute${this.client.config.antitoken.duration > 1 ? 's' : ''} (par défaut)`}\n` +
+                        `> - **Information supplémentaire:** Tous les utilisateurs et bots Discord n'étant pas inscris dans la liste blanche se verront affectés par l'anti-token.`
                     )
                     .setColor(Colors.Green)
                 ],
                 components: [
                     new ActionRowBuilder()
                     .addComponents(
-                        new StringSelectMenuBuilder()
-                        .setCustomId('antilink-type')
-                        .setPlaceholder('S\'il-vous-plaît, sélectionnez un type.')
-                        .setOptions(
-                            Object.entries(this.client.config.antilink.type).map((type) => {
-                                return {
-                                    label: type[1],
-                                    value: type[0]
-                                }
-                            })
-                        )
-                    ),
-                    new ActionRowBuilder()
-                    .addComponents(
                         new ButtonBuilder()
-                        .setCustomId('antilink-toggle')
+                        .setCustomId('antitoken-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
                         .setLabel('Désactiver'),
                         new ButtonBuilder()
-                        .setCustomId('antilink-configure')
+                        .setCustomId('antitoken-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
@@ -110,7 +80,7 @@ module.exports = class AntiLinkConfigureButton extends Button {
                 .setStyle('LOADING')
                 .setDescription(
                     `**Veuillez indiquer la durée rendu muet en minutes.**\n` +
-                    `> - \`reset\`: Réinitialiser le système d'anti-link.\n` +
+                    `> - \`reset\`: Réinitialiser le système d'anti-token.\n` +
                     `> - \`cancel\`: Annuler la configuration.`
                 ) 
             ],
@@ -134,7 +104,7 @@ module.exports = class AntiLinkConfigureButton extends Button {
             .catch(() => 0);
 
             if (durationAnswer.toLowerCase() === 'reset') {
-                await this.client.database.delete(`${interaction.guild.id}.antilink`);
+                await this.client.database.delete(`${interaction.guild.id}.antitoken`);
 
                 return enable();
             };
@@ -159,7 +129,7 @@ module.exports = class AntiLinkConfigureButton extends Button {
                 return enable();
             };
 
-            await this.client.database.set(`${interaction.guild.id}.antilink.duration`, durationAnswer);
+            await this.client.database.set(`${interaction.guild.id}.antitoken.duration`, durationAnswer);
 
             return enable();
         });

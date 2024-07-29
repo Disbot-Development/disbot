@@ -1,5 +1,5 @@
 const Event = require('../../Managers/Structures/Event');
-const { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const MessageEmbed = require('../../Managers/MessageEmbed');
 
 module.exports = class MessageCreateEvent extends Event {
@@ -20,6 +20,9 @@ module.exports = class MessageCreateEvent extends Event {
 
         const applicationCommands = await this.client.application.commands.fetch();
 
+        const strip = new AttachmentBuilder('./src/Images/Little Banner.png')
+        .setName('strip.png');
+
         if (message.mentions.has(this.client.user, { ignoreEveryone: true, ignoreRepliedUser: true, ignoreRoles: true })) message.reply({
             embeds: [
                 new MessageEmbed()
@@ -29,6 +32,7 @@ module.exports = class MessageCreateEvent extends Event {
 
                     `${this.client.config.emojis.bot} Utilise la commande </${applicationCommands.filter((cmd) => cmd.name === 'help').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !`
                 )
+                .setImage('attachment://strip.png')
             ],
             components: [
                 new ActionRowBuilder()
@@ -49,34 +53,57 @@ module.exports = class MessageCreateEvent extends Event {
                     .setEmoji(this.client.config.emojis.support)
                     .setLabel('Support')
                 )
-            ]
+            ],
+            files: [ strip ]
         });
         
         const modules = await this.client.database.get(`${message.guild.id}.modules`) || [];
 
         if (modules.includes('antilink') && !message.member.isAdmin() && !(await this.client.database.get(`${message.guild.id}.whitelist`) || []).includes(message.author.id)) {
             const duration = await this.client.database.get(`${message.guild.id}.antilink.duration`) || this.client.config.antilink.duration;
-            let match;
+
+            let linkMatch;
+            const tokenMatch = [].concat(message.content.match(this.client.config.antitoken.regex));
 
             switch (await this.client.database.get(`${message.guild.id}.antilink.type`)) {
                 case 'discord':
-                    match = [].concat(message.content.match(this.client.config.antilink.regex.discord));
+                    linkMatch = [].concat(message.content.match(this.client.config.antilink.regex.discord));
                 break;
                 case 'all':
-                    match = [].concat(message.content.match(this.client.config.antilink.regex.discord), message.content.match(this.client.config.antilink.regex.all));
+                    linkMatch = [].concat(message.content.match(this.client.config.antilink.regex.discord), message.content.match(this.client.config.antilink.regex.all));
                 break;
             };
 
-            const filteredMatch = [... new Set(match.filter((m) => m))];
+            const filteredLinkMatch = linkMatch.filter((match) => match);
+            const filteredTokenMatch = tokenMatch.filter((match) => match);
 
-            if (filteredMatch.length) {
+            if (filteredLinkMatch.length && !filteredTokenMatch.length) {
                 message.delete()
                 .catch(() => 0);
 
                 if (duration) message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-link.')
-                .then((member) => this.client.emit('antilinkDetected', message.guild, member, duration));
+                .then((member) => this.client.emit('antilinkDetected', message.guild, member, duration))
+                .catch(() => 0);
 
                 await this.client.database.add('count.antilink', 1);
+            };
+        };
+
+        if (modules.includes('antitoken') && !message.member.isAdmin() && !(await this.client.database.get(`${message.guild.id}.whitelist`) || []).includes(message.author.id)) {
+            const duration = await this.client.database.get(`${message.guild.id}.antitoken.duration`) || this.client.config.antitoken.duration;
+
+            const tokenMatch = [].concat(message.content.match(this.client.config.antitoken.regex));
+            const filteredTokenMatch = tokenMatch.filter((match) => match);
+
+            if (filteredTokenMatch.length) {
+                message.delete()
+                .catch(() => 0);
+
+                if (duration) message.member.timeout(duration * 60 * 1000, 'A été détecté par le système d\'anti-token.')
+                .then((member) => this.client.emit('antitokenDetected', message.guild, member, duration))
+                .catch(() => 0);
+
+                await this.client.database.add('count.antitoken', 1);
             };
         };
 

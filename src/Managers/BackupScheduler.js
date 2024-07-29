@@ -21,13 +21,25 @@ module.exports = class BackupScheduler {
         if (!existsSync(this.backupDir)) mkdirSync(this.backupDir);
     };
 
+    /**
+     * 
+     * @returns {Boolean}
+     */
+
     backupDatabase() {
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const backupPath = join(this.backupDir, `backup-${timestamp}.sqlite`);
 
-        return copyFile(this.dbPath, backupPath, (error) => {
-            if (error) this.client.logger.error(`Error during database backup: ${error}\n`);
-            else this.client.logger.success(`Database backup successful: ${backupPath}\n`);
+        copyFile(this.dbPath, backupPath, (error) => {
+            if (error) {
+                this.client.logger.error(`Error during database backup: ${error}\n`);
+
+                return true;
+            } else {
+                this.client.logger.success(`Database backup successful: ${backupPath}\n`);
+
+                return false;
+            };
         });
     };
 

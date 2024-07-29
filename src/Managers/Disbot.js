@@ -22,9 +22,9 @@ module.exports = class Disbot extends Client {
         new Prototypes(this);
     };
 
-    config = new Config(this);
     utils = new Utils(this);
-    logger = new Logger(this);
+    config = new Config();
+    logger = new Logger();
 
     /**
      * 

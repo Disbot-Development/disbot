@@ -2,10 +2,10 @@ const Event = require('../../Managers/Structures/Event');
 const { Guild, GuildMember } = require('discord.js');
 const MessageEmbed = require('../../Managers/MessageEmbed');
 
-module.exports = class AntiBotDetectedEvent extends Event {
+module.exports = class AntiTokenDetectedEvent extends Event {
     constructor(client) {
         super(client, {
-            name: 'antibotDetected'
+            name: 'antitokenDetected'
         });
     };
 
@@ -13,10 +13,10 @@ module.exports = class AntiBotDetectedEvent extends Event {
      * 
      * @param {Guild} guild
      * @param {GuildMember} member
-     * @param {Boolean} kicked
+     * @param {Number} duration
      */
     
-    async run (guild, member, kicked) {
+    async run (guild, member, duration) {
         const modules = await this.client.database.get(`${guild.id}.modules`) || [];
         const logsId = await this.client.database.get(`${guild.id}.logs.channel`);
         const logs = logsId ? await guild.channels.fetch(logsId).catch(() => undefined) : undefined;
@@ -25,11 +25,12 @@ module.exports = class AntiBotDetectedEvent extends Event {
             logs.send({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Anti-bot')
+                    .setTitle('Anti-token')
                     .setDescription(
-                        `Un bot Discord a été exclu car il a été détecté par l'anti-bot.\n` +
-                        `> **Robot:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}\n` +
-                        `> **Exclu:** ${kicked ? `A été exclu ${this.client.config.emojis.yes}` : `N'a pas pu être exclu ${this.client.config.emojis.no}`}`
+                        `Un utilisateur vient d\'être rendu muet car il a été détecté par le système d'anti-token.\n` +
+                        `> **Utilisateur:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}\n` +
+                        `> **Durée rendu muet:** ${duration} minute${duration > 1 ? 's' : ''}\n` +
+                        `> **Fin:** <t:${Math.round((Date.now() + duration * 1000 * 60) / 1000)}:D> à <t:${Math.round((Date.now() + duration * 1000 * 60) / 1000)}:T> (<t:${Math.round((Date.now() + duration * 1000 * 60) / 1000)}:R>)`
                     )
                 ]
             })

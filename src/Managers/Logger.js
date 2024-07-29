@@ -1,26 +1,38 @@
-const client = require('../../index');
+const Config = require('./Config');
 
 module.exports = class Logger {
-
-    /**
-     * 
-     * @param {client} client
-     * @constructor
-     */
-
-    constructor(client) {
-        this.client = client;
-    };
     
-    name = 'Disbot';
+    config = new Config();
+    name = this.config.username;
 
     /**
      * 
      * @private
+     * @returns {String}
      */
 
     get date() {
         return new Date(Date.now()).toLocaleTimeString('fr-FR');
+    };
+
+    /**
+     * 
+     * @private
+     * @returns {String}
+     */
+
+    get stringDate() {
+        return `[${this.date}]`;
+    };
+
+    /**
+     * 
+     * @private
+     * @returns {String}
+     */
+
+    get stringName() {
+        return `[${this.name}]`;
     };
 
     /**
@@ -30,7 +42,7 @@ module.exports = class Logger {
      */
 
     loading(message) {
-        console.log(`${`[${this.date}]`.grey} ${`[${this.name}]`.grey} ${message}`);
+        console.log(`${this.stringDate.grey} ${this.stringName.grey} ${message}`);
 
         return true;
     };
@@ -42,7 +54,7 @@ module.exports = class Logger {
      */
 
     success(message) {
-        console.log(`${`[${this.date}]`.grey} ${`[${this.name}]`.green} ${message}`);
+        console.log(`${this.stringDate.grey} ${this.stringName.green} ${message}`);
 
         return true;
     };
@@ -56,7 +68,7 @@ module.exports = class Logger {
     error(message) {
         if (typeof message !== 'string') message = require('util').inspect(message, { depth: 0 });
 
-        console.log(`${`[${this.date}]`.grey} ${`[${this.name}]`.red} ${message}`);
+        console.log(`${this.stringDate.grey} ${this.stringName.red} ${message}`);
 
         return true;
     };
@@ -70,6 +82,6 @@ module.exports = class Logger {
     throw(message) {
         if (typeof message !== 'string') message = require('util').inspect(message, { depth: 0 });
 
-        throw new Error(`${`[${this.date}]`.grey} ${`[${this.name}]`.red} ${message}`);
+        throw new Error(`${this.stringDate.grey} ${this.stringName.red} ${message}`);
     };
 };

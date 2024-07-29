@@ -40,7 +40,7 @@ module.exports = class Utils {
             const filePath = `${path}/${file}`;
 
             if (statSync(filePath).isDirectory()) result = result.concat(this.getFiles(filePath, extensions));
-            else if (extensions.some((ext) => filePath.endsWith(ext))) result.push(filePath);
+            else if (!extensions.length || extensions.some((ext) => filePath.endsWith(ext))) result.push(filePath);
         };
 
         return result;
@@ -110,11 +110,11 @@ module.exports = class Utils {
     /**
      * 
      * @param {Object} options
-     * @param {Number} [options.length=16] 
-     * @param {Boolean} [options.lowercase=false]
-     * @param {Boolean} [options.uppercase=false]
-     * @param {Boolean} [options.numbers=false]
-     * @param {Boolean} [options.symbols=false]
+     * @param {Number} [options.length]
+     * @param {Boolean} options.lowercase
+     * @param {Boolean} options.uppercase
+     * @param {Boolean} options.numbers
+     * @param {Boolean} options.symbols
      * @returns {String}
      */
     
@@ -184,12 +184,7 @@ module.exports = class Utils {
         });
 
         return this.client.user.setPresence({
-            activities: [
-                {
-                    name: presenceName,
-                    type: this.client.config.utils.presence.type
-                }
-            ],
+            activities: [{ name: presenceName, type: this.client.config.utils.presence.type }],
             status: this.client.config.utils.presence.status
         });
     };

@@ -17,9 +17,11 @@ module.exports = class WhiteListAddEvent extends Event {
     
     async run (interaction, member) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
+        const logsId = await this.client.database.get(`${interaction.guild.id}.logs.channel`);
+        const logs = logsId ? await interaction.guild.channels.fetch(logsId).catch(() => undefined) : undefined;
 
-        if (modules.includes('logs') && interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`))) {
-            interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)).send({
+        if (modules.includes('logs') && logs) {
+            logs.send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Liste blanche')

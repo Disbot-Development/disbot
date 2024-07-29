@@ -241,7 +241,8 @@ module.exports = class CaptchaConfigureButton extends Button {
                         
                         if (channel.id === await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) {
                             await channel.permissionOverwrites.edit(interaction.guild.id, {
-                                ViewChannel: false
+                                ViewChannel: false,
+                                SendMessages: false
                             });
 
                             await channel.permissionOverwrites.edit(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`), {
