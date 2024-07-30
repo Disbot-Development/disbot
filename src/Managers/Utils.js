@@ -193,13 +193,9 @@ module.exports = class Utils {
             switch (match) {
                 case '{users}':
                     if (users > 1) ++plural;
-                    users.toLocaleString();
-                    
-                    break;
+                    return users.toLocaleString();
                 case '{plural}':
-                    plural ? 's' : '';
-                    
-                    break;
+                    return plural ? 's' : '';
             };
         });
 
