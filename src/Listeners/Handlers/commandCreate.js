@@ -30,7 +30,7 @@ module.exports = class CommandCreateEvent extends Event {
                     new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                        .setEmoji('✖️')
+                        .setEmoji(this.client.config.emojis.no)
                         .setStyle(ButtonStyle.Danger)
                         .setCustomId('role-ignore')
                     )

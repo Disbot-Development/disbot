@@ -25,7 +25,10 @@ module.exports = class CaptchaRegenerateButton extends Button {
             ephemeral: true
         });
 
-        const code = this.client.utils.generateRandomChars({length: 4, uppercase: true, numbers: true });
+        const code = this.client.utils.generateRandomChars(
+            4,
+            this.client.utils.CharSet.UpperCase | this.client.utils.CharSet.Numerical
+        );
 
         await this.client.database.set(`${interaction.guild.id}.users.${interaction.user.id}.captcha.code`, code);
 

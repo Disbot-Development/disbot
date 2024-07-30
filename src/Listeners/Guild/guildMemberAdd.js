@@ -41,7 +41,7 @@ module.exports = class GuildMemberAddEvent extends Event {
             const limit = await this.client.database.get(`${member.guild.id}.antiraid.limit`) || this.client.config.antiraid.limit;
 
             const members = await this.client.database.get(`${member.guild.id}.antiraid.members`) || [];
-            const newMembers = members.filter((mem) => Date.now() - mem.date < this.client.config.antiraid.timeout * 1000);
+            const newMembers = members.filter((mem) => Date.now() - mem.date < this.client.config.antiraid.cooldown * 1000);
 
             await this.client.database.set(`${member.guild.id}.antiraid.members`, newMembers);
             if (newMembers.length >= limit) {
@@ -69,7 +69,10 @@ module.exports = class GuildMemberAddEvent extends Event {
             member.roles.add(captchaBeforeRole)
             .catch(() => 0);
 
-            const code = this.client.utils.generateRandomChars({ length: 4, uppercase: true, numbers: true });
+            const code = this.client.utils.generateRandomChars(
+                4,
+                this.client.utils.CharSet.UpperCase | this.client.utils.CharSet.Numerical
+            );
             const date = new Date().addMinutes(5).getTime();
 
             await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.code`, code);

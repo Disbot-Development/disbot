@@ -31,13 +31,16 @@ module.exports = class MessageEmbed extends EmbedBuilder {
         switch(this.data.style) {
             case 'SUCCESS':
                 this.data.title = 'Succès';
-            break;
+                
+                break;
             case 'ERROR':
                 this.data.title = 'Erreur';
-            break;
+                
+                break;
             case 'LOADING':
                 this.data.title = 'Chargement';
-            break;
+                
+                break;
         };
     
         return this;
@@ -54,15 +57,18 @@ module.exports = class MessageEmbed extends EmbedBuilder {
             case 'SUCCESS':
                 this.data.description = `${config.emojis.yes} ${description}`;
                 this.data.color = Colors.Green;
-            break;
+                
+                break;
             case 'ERROR':
                 this.data.description = `${config.emojis.no} ${description}`;
                 this.data.color = Colors.Red;
-            break;
+                
+                break;
             case 'LOADING':
                 this.data.description = `${config.emojis.loading} ${description}`;
                 this.data.color = Colors.DarkerGrey;
-            break;
+                
+                break;
         };
     
         if (!this.data.style || this.data.style === 'DEFAULT') this.data.description = description;

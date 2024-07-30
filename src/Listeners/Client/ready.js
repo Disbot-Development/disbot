@@ -9,19 +9,6 @@ module.exports = class ReadyEvent extends Event {
     
     async run () {
         this.client.connection.success({ text: `Disbot has been connected to the Discord API.` });
-
-        switch (this.client.mode) {
-            case 'remove':
-                this.client.logger.success('Start in commands removal mode.\n');
-
-                this.client.removeAllCommands();
-            break;
-            case 'deploy':
-                this.client.logger.success('Start in commands deployment mode.\n');
-
-                this.client.deployClientCommands();
-            break;
-        };
         
         const status = () => this.client.utils.setPresence();
 

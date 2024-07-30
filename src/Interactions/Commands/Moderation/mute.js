@@ -68,13 +68,16 @@ module.exports = class MuteCommand extends Command {
         switch(unit) {
             case 'hours':
                 calculatedDuration = duration * 1000 * 60 * 60;
-            break;
+                
+                break;
             case 'minutes':
                 calculatedDuration = duration * 1000 * 60;
-            break;
+
+                break;
             case 'seconds':
                 calculatedDuration = duration * 1000;
-            break;
+
+                break;
         };
 
         if (calculatedDuration > 28 * 1000 * 60 * 60 * 24) return interaction.reply({

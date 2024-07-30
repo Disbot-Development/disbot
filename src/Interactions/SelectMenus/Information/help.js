@@ -42,7 +42,8 @@ module.exports = class HelpSelectMenu extends SelectMenu {
                         embed
                     ]
                 });
-            break;
+                
+                break;
             default:
                 interaction.update({
                     embeds: [
@@ -54,7 +55,8 @@ module.exports = class HelpSelectMenu extends SelectMenu {
                         `)
                     ]
                 });
-            break;
+
+                break;
         };
     };
 };

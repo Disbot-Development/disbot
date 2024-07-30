@@ -19,6 +19,14 @@ module.exports = class Config {
             }
         };
 
+        this.restapi = {
+            port: 8000,
+            rateLimit: {
+                limit: 5,
+                cooldown: 10
+            }
+        };
+
         this.guild = '1238444132704194692';
         this.logs = '1238444203877597237';
 
@@ -146,12 +154,12 @@ module.exports = class Config {
         this.antispam = {
             limit: 10,
             duration: 60,
-            timeout: 10,
+            cooldown: 10,
         };
 
         this.antiraid = {
             limit: 10,
-            timeout: 10,
+            cooldown: 10,
         };
 
         this.antialt = {

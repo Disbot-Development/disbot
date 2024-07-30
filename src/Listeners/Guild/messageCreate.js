@@ -68,10 +68,12 @@ module.exports = class MessageCreateEvent extends Event {
             switch (await this.client.database.get(`${message.guild.id}.antilink.type`)) {
                 case 'discord':
                     linkMatch = [].concat(message.content.match(this.client.config.antilink.regex.discord));
-                break;
+                    
+                    break;
                 case 'all':
                     linkMatch = [].concat(message.content.match(this.client.config.antilink.regex.discord), message.content.match(this.client.config.antilink.regex.all));
-                break;
+                    
+                    break;
             };
 
             const filteredLinkMatch = linkMatch.filter((match) => match);
@@ -112,7 +114,7 @@ module.exports = class MessageCreateEvent extends Event {
             const duration = await this.client.database.get(`${message.guild.id}.antispam.duration`) || this.client.config.antispam.duration;
             
             const messages = await this.client.database.get(`${message.guild.id}.users.${message.author.id}.antispam.messages`) || [];
-            const newMessages = messages.filter((msg) => Date.now() - msg < this.client.config.antispam.timeout * 1000);
+            const newMessages = messages.filter((msg) => Date.now() - msg < this.client.config.antispam.cooldown * 1000);
 
             await this.client.database.set(`${message.guild.id}.users.${message.author.id}.antispam.messages`, newMessages);
 

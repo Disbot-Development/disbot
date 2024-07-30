@@ -1,41 +1,11 @@
 require('colors');
 require('dotenv').config();
 
-const prompts = require('@clack/prompts');
+const { createSpinner } = require('nanospinner');
 const Disbot = require('./src/Managers/Disbot');
 const { GatewayIntentBits } = require('discord.js');
 
 async function main() {
-	prompts.intro(` ${'─'.grey} ${'D'.blue} ${'─'.grey} ${'I'.blue} ${'─'.grey} ${'S'.blue} ${'─'.grey} ${'B'.blue} ${'─'.grey} ${'O'.blue} ${'─'.grey} ${'T'.blue} ${'─'.grey}`);
-
-	const project = await prompts.group(
-		{
-			mode: () =>
-				prompts.select({
-					message: 'Select a mode to launch Disbot.',
-					initialValue: 'none',
-					options: [
-						{ value: 'none', label: 'Default' },
-						{ value: 'remove', label: 'Commands removal' },
-						{ value: 'deploy', label: 'Commands deployment' }
-					],
-				}),
-		},
-		{
-			onCancel: () => {
-				prompts.cancel('Operation cancelled.');
-				process.exit(0);
-			},
-		}
-	);
-
-	prompts.note(
-        `Don't stop process during the launch of Disbot.\n` +
-        `The first launch may take few seconds.`
-    );
-
-	prompts.outro(` ${'─'.grey} ${'D'.blue} ${'─'.grey} ${'I'.blue} ${'─'.grey} ${'S'.blue} ${'─'.grey} ${'B'.blue} ${'─'.grey} ${'O'.blue} ${'─'.grey} ${'T'.blue} ${'─'.grey}`);
-
     const client = new Disbot({
         intents: [
 			GatewayIntentBits.Guilds,
@@ -52,10 +22,39 @@ async function main() {
 
     client.options.allowedMentions.roles = Object.values(client.config.roles).map((id) => id);
     client.options.allowedMentions.users = client.config.utils.devs;
+	
+	let spinner;
+	switch(process.argv[2]) {
+		case 'deploy':
+			spinner = createSpinner('Connecting Disbot to the Discord API...').start();
+			await client.loadClient(true);
+			spinner.success({ text: `Disbot has been connected to the Discord API.\n` });
 
-    client.mode = project.mode;
+			client.loadCommands();
+			client.loadContextMenus();
 
-    await client.init();
+			console.log();
+
+			spinner = createSpinner('Deploying Disbot commands...').start();
+			await client.deployClientCommands();
+			spinner.success({ text: `All commands has been deployed.` });
+
+			process.exit();
+		case 'remove':
+			spinner = createSpinner('Connecting Disbot to the Discord API...').start();
+			await client.loadClient(true);
+			spinner.success({ text: `Disbot has been connected to the Discord API.` });
+			
+			spinner = createSpinner('Removing Disbot commands...').start();
+			await client.removeClientCommands();
+			spinner.success({ text: `All commands has been removed.` });
+			
+			process.exit();
+		default:
+			await client.init();
+			
+			break;
+	};
 
     module.exports = client;
 };

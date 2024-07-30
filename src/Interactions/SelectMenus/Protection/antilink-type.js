@@ -20,10 +20,12 @@ module.exports = class AntiLinkTypeSelectMenu extends SelectMenu {
         switch (interaction.values[0]) {
             case 'none':
                 await this.client.database.delete(`${interaction.guild.id}.antilink.type`);
-            break;
+                
+                break;
             default:
                 await this.client.database.set(`${interaction.guild.id}.antilink.type`, interaction.values[0]);
-            break;
+                
+                break;
         };
 
         interaction.update({

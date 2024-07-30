@@ -106,7 +106,8 @@ module.exports = class AutoModTypeSelectMenu extends SelectMenu {
                         });
                     });
                 };
-            break;
+
+                break;
             case 'flood':
                 if (floodRule) {
                     if (floodRule.enabled) {
@@ -170,7 +171,8 @@ module.exports = class AutoModTypeSelectMenu extends SelectMenu {
                         });
                     });
                 };
-            break;
+                
+                break;
         };
     };
 };

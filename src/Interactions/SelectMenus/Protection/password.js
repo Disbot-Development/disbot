@@ -22,61 +22,85 @@ module.exports = class PasswordSelectMenu extends SelectMenu {
                     embeds: [
                         new MessageEmbed()
                         .setTitle('Mot-de-passe')
-                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars({ length: 16, uppercase: true })}||`)
+                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars(
+                            16,
+                            this.client.utils.CharSet.UpperCase
+                        )}||`)
                     ],
                     ephemeral: true
                 });
-            break;
+
+                break;
             case '🔡':
                 interaction.update({
                     embeds: [
                         new MessageEmbed()
                         .setTitle('Mot-de-passe')
-                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars({ length: 16, lowercase: true })}||`)
+                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars(
+                            16,
+                            this.client.utils.CharSet.LowerCase
+                        )}||`)
                     ],
                     ephemeral: true
                 });
-            break;
+
+                break;
             case '🔢':
                 interaction.update({
                     embeds: [
                         new MessageEmbed()
                         .setTitle('Mot-de-passe')
-                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars({ length: 16, numbers: true })}||`)
+                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars(
+                            16,
+                            this.client.utils.CharSet.Numerical
+                        )}||`)
                     ],
                     ephemeral: true
                 });
-            break;
+
+                break;
             case '1️⃣':
                 interaction.update({
                     embeds: [
                         new MessageEmbed()
                         .setTitle('Mot-de-passe')
-                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars({ length: 16, uppercase: true, lowercase: true })}||`)
+                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars(
+                            16,
+                            this.client.utils.CharSet.UpperCase | this.client.utils.CharSet.LowerCase
+                        )}||`)
                     ],
                     ephemeral: true
                 });
-            break;
+
+                break;
             case '2️⃣':
                 interaction.update({
                     embeds: [
                         new MessageEmbed()
                         .setTitle('Mot-de-passe')
-                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars({ length: 16, uppercase: true, lowercase: true, numbers: true })}||`)
+                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars(
+                            16,
+                            this.client.utils.CharSet.UpperCase | this.client.utils.CharSet.LowerCase | this.client.utils.CharSet.Numerical
+                        )}||`)
                     ],
                     ephemeral: true
                 });
-            break;
+                
+                break;
             case '3️⃣':
                 interaction.update({
                     embeds: [
                         new MessageEmbed()
                         .setTitle('Mot-de-passe')
-                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars({ length: 16, uppercase: true, lowercase: true, numbers: true, symbols: true })}||`)
+                        .setDescription(`Voici votre mot de passe: ||${this.client.utils.generateRandomChars(
+                            16,
+                            this.client.utils.CharSet.UpperCase | this.client.utils.CharSet.LowerCase | this.client.utils.CharSet.Numerical | this.client.utils.CharSet.Symbols
+                        )}||`)
                     ],
                     ephemeral: true
                 });
-            break;
+                
+                break;
         };
     };
 };

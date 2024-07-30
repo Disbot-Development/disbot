@@ -1,9 +1,10 @@
-const { Client, Collection, PermissionFlagsBits, ApplicationCommandOption, ApplicationCommandType, version } = require('discord.js');
+const { Client, Collection, PermissionFlagsBits, ApplicationCommandOption, ApplicationCommandType } = require('discord.js');
 const { createSpinner } = require('nanospinner');
 const { QuickDB } = require('quick.db');
 
 const BackupScheduler = require('./BackupScheduler');
 const Prototypes = require('./Prototypes');
+const RestAPI = require('./RestAPI');
 const Config = require('./Config');
 const Logger = require('./Logger');
 const Utils = require('./Utils');
@@ -21,7 +22,7 @@ module.exports = class Disbot extends Client {
 
         new Prototypes(this);
     };
-
+    
     utils = new Utils(this);
     config = new Config();
     logger = new Logger();
@@ -148,6 +149,21 @@ module.exports = class Disbot extends Client {
         this.database = new QuickDB();
 
         this.logger.success('The database was linked.');
+
+        return true;
+    };
+
+    /**
+     * 
+     * @returns {true}
+     */
+
+    loadRestAPI() {
+        this.restapi = new RestAPI(this);
+
+        this.restapi.start();
+
+        this.logger.success('The Rest API was loaded.');
 
         return true;
     };
@@ -298,37 +314,32 @@ module.exports = class Disbot extends Client {
 
     /**
      * 
-     * @returns {true}
+     * @returns {Promise<any>}
      */
 
     deployClientCommands() {
-        this.application.commands.set(this.interactions);
-
-        return true;
+        return this.application.commands.set(this.interactions);
     };
 
     /**
      * 
-     * @returns {true}
+     * @returns {Promise<any>}
      */
 
-    removeAllCommands() {
-        this.application.commands.set([]);
-
-        return true;
+    removeClientCommands() {
+        return this.application.commands.set([]);
     };
 
     /**
      * 
-     * @returns {Promise<true>}
+     * @param {Boolean} spinner 
+     * @returns {Promise<string>}
      */
 
-    loadClient() {
-        this.connection = createSpinner('Connecting Disbot to the Discord API...').start();
+    loadClient(spinner) {
+        this.connection = spinner ? undefined : createSpinner('Connecting Disbot to the Discord API...').start();
 
-        this.login(this.config.utils.token);
-
-        return new Promise(() => true);
+        return this.login(this.config.utils.token);
     };
 
     /**
@@ -338,6 +349,7 @@ module.exports = class Disbot extends Client {
 
     async init() {
         this.loadDatabase();
+        this.loadRestAPI();
         this.loadBackupScheduler();
 
         this.loadButtons();
@@ -347,8 +359,6 @@ module.exports = class Disbot extends Client {
         this.loadSelectMenus();
         this.loadEvents();
 
-        await this.loadClient();
-
-        return new Promise(() => true);
+        return await this.loadClient();
     };
 };

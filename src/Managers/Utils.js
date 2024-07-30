@@ -17,6 +17,18 @@ module.exports = class Utils {
 
     /**
      * 
+     * @namespace CharSet
+     */
+
+    CharSet = {
+        UpperCase: 1,
+        LowerCase: 2,
+        Numerical: 4,
+        Symbols: 8
+    };
+
+    /**
+     * 
      * @param {Number} timeout
      * @returns {Promise<setTimeout>}
      */
@@ -109,34 +121,6 @@ module.exports = class Utils {
 
     /**
      * 
-     * @param {Object} options
-     * @param {Number} [options.length]
-     * @param {Boolean} options.lowercase
-     * @param {Boolean} options.uppercase
-     * @param {Boolean} options.numbers
-     * @param {Boolean} options.symbols
-     * @returns {String}
-     */
-    
-    generateRandomChars({ length = 16, lowercase = false, uppercase = false, numbers = false, symbols = false }) {
-        const options = [
-            { enabled: lowercase, chars: 'abcdefghijklmnopqrstuvwxyz' },
-            { enabled: uppercase, chars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' },
-            { enabled: numbers, chars: '0123456789' },
-            { enabled: symbols, chars: '!@#$%^&*()+_-=}{[]|:;"/?.><,`~' }
-        ];
-
-        let characters = '';
-
-        for (const option of options) {
-            if (option.enabled) characters += option.chars;
-        };
-    
-        return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('');
-    };
-
-    /**
-     * 
      * @param {String[]} arr 
      * @param {String} conjunction 
      * @param {String} lastConjunction 
@@ -152,6 +136,39 @@ module.exports = class Utils {
         const last = arr[arr.length - 1];
 
         return `${allButLast}${lastConjunction}${last}`;
+    };
+
+    /**
+     * 
+     * @function generateRandomChars
+     * @param {Number} length
+     * @param {Number} charSetOptions
+     * @param {String} [additionalChars='']
+     * @returns {String}
+     */
+
+    generateRandomChars(length, charSetOptions, additionalChars = '') {
+        let charSet = '';
+
+        const charSetMapping = {
+            [this.CharSet.UpperCase]: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            [this.CharSet.LowerCase]: 'abcdefghijklmnopqrstuvwxyz',
+            [this.CharSet.Numerical]: '0123456789',
+            [this.CharSet.Symbols]: '!@#$%^&*()_+~`|}{[]:;?><,./-='
+        };
+        
+        for (const [key, value] of Object.entries(charSetMapping)) {
+            if (charSetOptions & key) charSet += value;
+        };
+
+        charSet += additionalChars;
+
+        let result = '';
+        for (let i = 0; i < length; i++) { 
+            result += charSet[Math.floor(Math.random() * charSet.length)];
+        };
+
+        return result;
     };
 
     /**
@@ -176,10 +193,13 @@ module.exports = class Utils {
             switch (match) {
                 case '{users}':
                     if (users > 1) ++plural;
-
-                    return users.toLocaleString();
+                    users.toLocaleString();
+                    
+                    break;
                 case '{plural}':
-                    return plural ? 's' : '';
+                    plural ? 's' : '';
+                    
+                    break;
             };
         });
 
