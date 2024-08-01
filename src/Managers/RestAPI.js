@@ -1,6 +1,9 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
+const apicache = require('apicache').middleware;
+const compression = require('compression');
 const client = require('../../index');
+const helmet = require('helmet');
 
 module.exports = class RestAPI {
 
@@ -17,6 +20,9 @@ module.exports = class RestAPI {
         this.routes = [];
 
         this.app.use(express.json());
+        this.app.use(apicache('5 minutes'));
+        this.app.use(helmet());
+        this.app.use(compression());
 
         this.defineRateLimit();
         this.defineRoutes();
@@ -104,6 +110,7 @@ module.exports = class RestAPI {
 
     getGuild(req, res) {
         const guild = this.client.guilds.resolve(req.params.id);
+        if (!guild) return res.status(404).json({ error: 'Guild not found' });
         
         return res.json({ 
             id: guild.id,
@@ -176,7 +183,7 @@ module.exports = class RestAPI {
      */
 
     async getUser(req, res) {
-        const user = await this.client.users.fetch(req.params.id);
+        const user = await this.client.users.fetch(req.params.id).catch(() => 0);
         if (!user) return res.status(404).json({ error: 'User not found' });
         
         return res.json({
