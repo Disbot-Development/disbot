@@ -58,7 +58,7 @@ module.exports = class HelpCommand extends Command {
             .addComponents(
                 new StringSelectMenuBuilder()
                 .setCustomId('help')
-                .setPlaceholder('S\'il-vous-plaît, sélectionnez une catégorie.')
+                .setPlaceholder('Sélectionnez une catégorie.')
                 .addOptions(
                     {
                         emoji: this.client.config.emojis.help,

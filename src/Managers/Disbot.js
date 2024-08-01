@@ -344,7 +344,7 @@ module.exports = class Disbot extends Client {
 
     /**
      * 
-     * @returns {Promise<true>}
+     * @returns {Promise<string>}
      */
 
     async init() {
@@ -359,6 +359,6 @@ module.exports = class Disbot extends Client {
         this.loadSelectMenus();
         this.loadEvents();
 
-        return await this.loadClient();
+        return this.loadClient();
     };
 };

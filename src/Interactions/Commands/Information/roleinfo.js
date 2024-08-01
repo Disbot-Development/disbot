@@ -26,7 +26,6 @@ module.exports = class RoleInfoCommand extends Command {
 
     run (interaction) {
         const role = interaction.options.getRole('role');
-
         const creationDate = parseInt(role.createdTimestamp / 1000);
 
         interaction.reply({

@@ -27,7 +27,7 @@ module.exports = class AntiRaidDetectedEvent extends Event {
                     .setTitle('Anti-raid')
                     .setDescription(
                         `Les invitations ont été mises en pause car un raid a été détecté.\n` +
-                        `> **Limite de comptes en ${this.client.config.antiraid.timeout} seconde${this.client.config.antiraid.timeout > 1 ? 's' : ''}:** ${limit} compte${limit > 1 ? 's' : ''}`
+                        `> **Limite de comptes en ${this.client.config.antiraid.cooldown} seconde${this.client.config.antiraid.cooldown > 1 ? 's' : ''}:** ${limit} compte${limit > 1 ? 's' : ''}`
                     )
                 ]
             })

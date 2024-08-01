@@ -2,6 +2,11 @@ const { Colors, ActivityType, PresenceUpdateStatus, AutoModerationRuleEventType,
 
 module.exports = class Config {
 
+    /**
+     * 
+     * @constructor
+     */
+
     constructor() {
         this.baseURL = 'dis-bot.xyz';
         this.username = 'Disbot';
@@ -11,7 +16,7 @@ module.exports = class Config {
             token: process.env.TOKEN,
             invite: `https://discord.com/oauth2/authorize?client_id=1233606057507422268`,
             devs: ['1218940758061617153'],
-            version: '1.5.9',
+            version: '1.6.0',
             presence: {
                 name: `${this.baseURL}・{users} utilisateur{plural}`,
                 type: ActivityType.Custom,

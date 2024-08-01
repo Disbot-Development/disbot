@@ -34,7 +34,7 @@ module.exports = class CaptchaModal extends Modal {
         await this.client.database.delete(`${interaction.guild.id}.users.${interaction.user.id}.captcha`);
 
         const captchaBeforeRole = interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`));
-        const captchaAfterRole = interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`));
+        const captchaAfterRole = (await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`) || []).map((role) => interaction.guild.roles.resolve(role));
 
         await interaction.member.roles.remove(captchaBeforeRole)
         .catch(() => 0);

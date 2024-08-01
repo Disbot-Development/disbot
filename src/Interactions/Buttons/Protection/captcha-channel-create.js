@@ -1,13 +1,13 @@
 const Button = require('../../../Managers/Structures/Button');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
-const { ButtonInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, Colors } = require('discord.js');
+const { ButtonInteraction, PermissionFlagsBits, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, RoleSelectMenuBuilder } = require('discord.js');
 
-module.exports = class CaptchaToggleButton extends Button {
+module.exports = class CaptchaChannelCreateButton extends Button {
     constructor(client) {
         super(client, {
-            name: 'captcha-toggle',
+            name: 'captcha-channel-create',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageRoles]
+            meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
         });
     };
 
@@ -17,52 +17,12 @@ module.exports = class CaptchaToggleButton extends Button {
      */
 
     async run (interaction) {
-        const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
-
-        this.client.emit('systemToggle', interaction, 'Captcha');
-
-        if (modules.includes('captcha')) {
-            await this.client.database.pull(`${interaction.guild.id}.modules`, 'captcha');
-
-            interaction.update({
-                embeds: [
-                    new MessageEmbed()
-                    .setTitle('Captcha')
-                    .setDescription(
-                        `${this.client.config.emojis.help} Le but du système de captcha est de faire remplir un formulaire avec un code à déchiffrer à tous les nouveaux membres qui rejoindront le serveur.\n` +
-                        `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
-                        
-                        `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
-                        `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système de captcha.`
-                    )
-                    .setColor(Colors.Red)
-                ],
-                components: [
-                    new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                        .setCustomId('captcha-toggle')
-                        .setStyle(ButtonStyle.Primary)
-                        .setEmoji(this.client.config.emojis.yes)
-                        .setLabel('Activer'),
-                        new ButtonBuilder()
-                        .setCustomId('captcha-configure')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer')
-                        .setDisabled(true),
-                        new ButtonBuilder()
-                        .setCustomId('captcha-configure-after-roles')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer les rôles après vérification')
-                        .setDisabled(true)
-                    )
-                ]
-            });
-        } else {
-            await this.client.database.push(`${interaction.guild.id}.modules`, 'captcha');
+        await interaction.guild.channels.create({
+            name: 'vérification',
+            type: ChannelType.GuildText
+        })
+        .then(async (channel) => {
+            await this.client.database.set(`${interaction.guild.id}.captcha.channel`, channel.id);
 
             interaction.update({
                 embeds: [
@@ -99,9 +59,33 @@ module.exports = class CaptchaToggleButton extends Button {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer les rôles après vérification')
+                    ),
+                    new ActionRowBuilder()
+                    .addComponents(
+                        new RoleSelectMenuBuilder()
+                        .setCustomId('captcha-role')
+                        .setPlaceholder('Sélectionnez un rôle pendant la vérification.')
+                    ),
+                    new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                        .setCustomId('captcha-role-create')
+                        .setStyle(ButtonStyle.Success)
+                        .setEmoji(this.client.config.emojis.pen)
+                        .setLabel('Créer'),
+                        new ButtonBuilder()
+                        .setCustomId('captcha-cancel')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(this.client.config.emojis.no)
+                        .setLabel('Annuler'),
+                        new ButtonBuilder()
+                        .setCustomId('captcha-reset')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(this.client.config.emojis.wrench)
+                        .setLabel('Réinitialiser')
                     )
                 ]
             });
-        };
+        });
     };
 };

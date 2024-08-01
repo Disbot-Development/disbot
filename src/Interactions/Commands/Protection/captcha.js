@@ -34,7 +34,7 @@ module.exports = class CaptchaCommand extends Command {
                         `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> - **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
-                        `> - **Rôle après vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
+                        `> - **Rôle après vérification:** ${await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`) ? (await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)).map((role) => interaction.guild.roles.resolve(role)) : `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> - **Information supplémentaire:** Si vous ne configurez pas le salon et le rôle de vérification (minimum), le système de captcha ne pourra pas fonctionner.`
                     )
                     .setColor(Colors.Green)
@@ -51,7 +51,12 @@ module.exports = class CaptchaCommand extends Command {
                         .setCustomId('captcha-configure')
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer')
+                        .setLabel('Configurer'),
+                        new ButtonBuilder()
+                        .setCustomId('captcha-configure-after-roles')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(this.client.config.emojis.settings)
+                        .setLabel('Configurer les rôles après vérification')
                     )
                 ]
             });
@@ -83,6 +88,12 @@ module.exports = class CaptchaCommand extends Command {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji(this.client.config.emojis.settings)
                         .setLabel('Configurer')
+                        .setDisabled(true),
+                        new ButtonBuilder()
+                        .setCustomId('captcha-configure-after-roles')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji(this.client.config.emojis.settings)
+                        .setLabel('Configurer les rôles après vérification')
                         .setDisabled(true)
                     )
                 ]

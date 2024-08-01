@@ -41,7 +41,7 @@ module.exports = class AutoModCommand extends Command {
                 .addComponents(
                     new StringSelectMenuBuilder()
                     .setCustomId('automod-type')
-                    .setPlaceholder('S\'il-vous-plaît, sélectionnez un type.')
+                    .setPlaceholder('Sélectionnez un type.')
                     .setOptions(
                         Object.entries(this.client.config.automod.type).map((type) => {
                             return {

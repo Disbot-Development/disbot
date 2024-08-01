@@ -26,7 +26,6 @@ module.exports = class UserInfoCommand extends Command {
     async run(interaction) {
         const member = interaction.options.getMember('user') || interaction.member;
         const fetchedUser = await this.client.users.fetch(member.user.id, { force: true });
-
         const createdTimestamp = parseInt(member.user.createdTimestamp / 1000);
         const joinedTimestamp = parseInt(member.joinedTimestamp / 1000);
 

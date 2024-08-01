@@ -22,7 +22,7 @@ module.exports = class BotInfoCommand extends Command {
         const creationTimestamp = parseInt(this.client.user.createdTimestamp / 1000);
         const uptimeTimestamp = parseInt((Date.now() - this.client.uptime) / 1000);
         const linesOfCode = this.client.utils.countLinesInDir('./', ['.js'], ['node_modules']);
-
+        
         const banner = new AttachmentBuilder('./src/Images/Blurple White Banner.png')
         .setName('banner.png');
 

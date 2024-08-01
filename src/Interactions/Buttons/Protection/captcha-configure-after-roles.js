@@ -1,10 +1,10 @@
 const Button = require('../../../Managers/Structures/Button');
-const { ButtonInteraction, PermissionFlagsBits, ChannelSelectMenuBuilder, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ButtonInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, RoleSelectMenuBuilder } = require('discord.js');
 
-module.exports = class CaptchaConfigureButton extends Button {
+module.exports = class CaptchaConfigureAfterRolesButton extends Button {
     constructor(client) {
         super(client, {
-            name: 'captcha-configure',
+            name: 'captcha-configure-after-roles',
             perms: [PermissionFlagsBits.Administrator],
             meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
         });
@@ -37,21 +37,17 @@ module.exports = class CaptchaConfigureButton extends Button {
                     .setStyle(ButtonStyle.Secondary)
                     .setEmoji(this.client.config.emojis.settings)
                     .setLabel('Configurer les rôles après vérification')
+                    .setDisabled(true)
                 ),
                 new ActionRowBuilder()
                 .addComponents(
-                    new ChannelSelectMenuBuilder()
-                    .setCustomId('captcha-channel')
-                    .setChannelTypes(ChannelType.GuildText)
-                    .setPlaceholder('Sélectionnez un salon.')
+                    new RoleSelectMenuBuilder()
+                    .setCustomId('captcha-after-roles')
+                    .setPlaceholder('Sélectionnez des rôles après vérification.')
+                    .setMaxValues(10)
                 ),
                 new ActionRowBuilder()
                 .addComponents(
-                    new ButtonBuilder()
-                    .setCustomId('captcha-channel-create')
-                    .setStyle(ButtonStyle.Success)
-                    .setEmoji(this.client.config.emojis.pen)
-                    .setLabel('Créer'),
                     new ButtonBuilder()
                     .setCustomId('captcha-cancel')
                     .setStyle(ButtonStyle.Secondary)

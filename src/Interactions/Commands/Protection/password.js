@@ -21,14 +21,14 @@ module.exports = class PasswordCommand extends Command {
             embeds: [
                 new MessageEmbed()
                 .setStyle('LOADING')
-                .setDescription('S\'il-vous-plaît, sélectionnez un type de mot-de-passe.')
+                .setDescription('Sélectionnez un type de mot-de-passe.')
             ],
             components: [
                 new ActionRowBuilder()
                 .addComponents(
                     new StringSelectMenuBuilder()
                     .setCustomId('password')
-                    .setPlaceholder('S\'il-vous-plaît, sélectionnez un type de mot-de-passe.')
+                    .setPlaceholder('Sélectionnez un type de mot-de-passe.')
                     .addOptions(
                         [
                             {

@@ -24,7 +24,7 @@ module.exports = class AntiLinkConfigureButton extends Button {
                     .addComponents(
                         new StringSelectMenuBuilder()
                         .setCustomId('antilink-type')
-                        .setPlaceholder('S\'il-vous-plaît, sélectionnez un type.')
+                        .setPlaceholder('Sélectionnez un type.')
                         .setOptions(
                             Object.entries(this.client.config.antilink.type).map((type) => {
                                 return {
@@ -75,7 +75,7 @@ module.exports = class AntiLinkConfigureButton extends Button {
                     .addComponents(
                         new StringSelectMenuBuilder()
                         .setCustomId('antilink-type')
-                        .setPlaceholder('S\'il-vous-plaît, sélectionnez un type.')
+                        .setPlaceholder('Sélectionnez un type.')
                         .setOptions(
                             Object.entries(this.client.config.antilink.type).map((type) => {
                                 return {

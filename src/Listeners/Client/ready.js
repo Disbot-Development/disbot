@@ -8,10 +8,9 @@ module.exports = class ReadyEvent extends Event {
     };
     
     async run () {
-        this.client.connection.success({ text: `Disbot has been connected to the Discord API.` });
+        this.client.connection.success({ text: 'Disbot has been connected to the Discord API.' });
         
         const status = () => this.client.utils.setPresence();
-
         setInterval(status, 60000);
 
         setInterval(() => {

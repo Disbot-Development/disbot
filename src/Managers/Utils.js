@@ -1,5 +1,5 @@
 const { readdirSync, statSync, readFileSync } = require('fs');
-const { join, relative, sep } = require('path');
+const { relative, sep } = require('path');
 const client = require('../../index');
 const { ClientPresence } = require('discord.js');
 
