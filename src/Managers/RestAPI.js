@@ -14,6 +14,7 @@ module.exports = class RestAPI {
         this.app = express();
         this.client = client;
         this.port = this.client.config.port || 8000;
+        this.routes = [];
 
         this.app.use(express.json());
 
@@ -44,12 +45,26 @@ module.exports = class RestAPI {
      */
 
     defineRoutes() {
-        this.app.get('/api/guilds', this.getGuilds.bind(this));
-        this.app.get('/api/users', this.getUsers.bind(this));
-        this.app.get('/api/commands', this.getCommands.bind(this));
-        this.app.get('/api/version', this.getVersion.bind(this));
-        this.app.get('/api/uptime', this.getUptime.bind(this));
-
+        const routes = [
+            { method: 'get', path: '/guilds', handler: this.getGuilds.bind(this) },
+            { method: 'get', path: '/guilds/:id', handler: this.getGuild.bind(this) },
+            { method: 'get', path: '/guilds/:id/roles', handler: this.getRoles.bind(this) },
+            { method: 'get', path: '/guilds/:guildid/roles/:roleid', handler: this.getRole.bind(this) },
+            { method: 'get', path: '/users', handler: this.getUsers.bind(this) },
+            { method: 'get', path: '/users/:id', handler: this.getUser.bind(this) },
+            { method: 'get', path: '/commands', handler: this.getCommands.bind(this) },
+            { method: 'get', path: '/commands/:name', handler: this.getCommand.bind(this) },
+            { method: 'get', path: '/version', handler: this.getVersion.bind(this) },
+            { method: 'get', path: '/uptime', handler: this.getUptime.bind(this) },
+            { method: 'get', path: '/health', handler: this.getHealth.bind(this) },
+            { method: 'get', path: '/routes', handler: this.getRoutes.bind(this) }
+        ];
+    
+        for (const route of routes) {
+            this.app[route.method](route.path, route.handler);
+            this.routes.push(route);
+        };
+    
         return true;
     };
 
@@ -70,9 +85,74 @@ module.exports = class RestAPI {
      */
 
     getGuilds(req, res) {
-        const guildCount = this.client.guilds.cache.size;
+        const guilds = this.client.guilds.cache.map((guild) => ({
+            id: guild.id,
+            name: guild.name,
+            avatarURL: guild.iconURL(),
+            memberCount: guild.memberCount
+        }));
         
-        return res.json({ guilds: guildCount });
+        return res.json({ guilds });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getGuild(req, res) {
+        const guild = this.client.guilds.resolve(req.params.id);
+        
+        return res.json({ 
+            id: guild.id,
+            name: guild.name,
+            avatarURL: guild.iconURL(),
+            memberCount: guild.memberCount
+        });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    async getRoles(req, res) {
+        const guild = this.client.guilds.resolve(req.params.id);
+        if (!guild) return res.status(404).json({ error: 'Guild not found' });
+        
+        const roles = (await guild.roles.fetch()).map((role) => ({
+            id: role.id,
+            name: role.name,
+            members: role.members.size,
+            color: role.hexColor,
+        }));
+        
+        return res.json({ roles });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    async getRole(req, res) {
+        const guild = this.client.guilds.resolve(req.params.guildid);
+        if (!guild) return res.status(404).json({ error: 'Guild not found' });
+        const role = (await guild.roles.fetch()).find((role) => role.id === req.params.roleid);
+        if (!role) return res.status(404).json({ error: 'Role not found' });
+        
+        return res.json({ 
+            id: role.id,
+            name: role.name,
+            members: role.members.size,
+            color: role.hexColor
+        });
     };
 
     /**
@@ -83,9 +163,29 @@ module.exports = class RestAPI {
      */
 
     getUsers(req, res) {
-        const userCount = this.client.utils.allUsers;
+        const users = this.client.utils.allUsers;
         
-        return res.json({ users: userCount });
+        return res.json({ users });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    async getUser(req, res) {
+        const user = await this.client.users.fetch(req.params.id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        
+        return res.json({
+            id: user.id,
+            name: user.globalName,
+            tag: user.tag,
+            avatarURL: user.avatarURL(),
+            bot: user.bot
+        });
     };
 
     /**
@@ -96,9 +196,23 @@ module.exports = class RestAPI {
      */
 
     getCommands(req, res) {
-        const commands = this.client.interactions.map((command) => ({name: command.name, type: command.type ? 'contextmenu' : 'command'}));
+        const commands = this.client.interactions.map((command) => ({ name: command.name, type: command.type ? 'contextmenu' : 'command' }));
         
         return res.json({ commands });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getCommand(req, res) {
+        const command = this.client.interactions.map((command) => ({ name: command.name, type: command.type ? 'contextmenu' : 'command' })).filter((command) => command.name === req.params.name);
+        if (!command) return res.status(404).json({ error: 'Command not found' });
+        
+        return res.json({ command });
     };
 
     /**
@@ -124,7 +238,34 @@ module.exports = class RestAPI {
     getUptime(req, res) {
         const uptime = this.client.uptime;
         
-        return res.json({ uptime, 'message': `This number represents the Discord timestamp from which ${this.client.config.username} is connected.` });
+        return res.json({ uptime });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getHealth(req, res) {
+        return res.json({ status: 'ok', uptime: this.client.uptime });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getRoutes(req, res) {
+        const routes = this.routes.map(route => ({
+            method: route.method.toUpperCase(),
+            path: route.path
+        }));
+
+        return res.json({ routes });
     };
 
     /**
