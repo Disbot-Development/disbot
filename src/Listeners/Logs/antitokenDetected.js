@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
 const { Guild, GuildMember } = require('discord.js');
+
 const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class AntiTokenDetectedEvent extends Event {
     constructor(client) {

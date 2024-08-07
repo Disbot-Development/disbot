@@ -1,6 +1,7 @@
-const Button = require('../../../Managers/Structures/Button');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
+
+const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class LogsResetButton extends Button {
     constructor(client) {

@@ -1,5 +1,6 @@
-const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType } = require('discord.js');
+
+const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class ClearCommand extends Command {

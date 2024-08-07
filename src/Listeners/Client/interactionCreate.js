@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
-const MessageEmbed = require('../../Managers/MessageEmbed');
 const { Interaction, PermissionFlagsBits } = require('discord.js');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class InteractionCreateEvent extends Event {
     constructor(client) {
@@ -25,11 +26,11 @@ module.exports = class InteractionCreateEvent extends Event {
         });
 
         let int;
-        if (interaction.isButton()) int = this.client.buttons.get(interaction.customId);
         if (interaction.isCommand()) int = this.client.commands.get(interaction.commandName);
         if (interaction.isContextMenuCommand()) int = this.client.contextmenus.get(interaction.commandName);
-        if (interaction.isModalSubmit()) int = this.client.modals.get(interaction.customId);
+        if (interaction.isButton()) int = this.client.buttons.get(interaction.customId);
         if (interaction.isAnySelectMenu()) int = this.client.selectmenus.get(interaction.customId);
+        if (interaction.isModalSubmit()) int = this.client.modals.get(interaction.customId);
         if (interaction.isAutocomplete()) int = this.client.commands.get(interaction.commandName);
 
         if (!interaction.isAutocomplete()) {
@@ -80,10 +81,10 @@ module.exports = class InteractionCreateEvent extends Event {
         };
 
         if (interaction.isCommand() && !interaction.isContextMenuCommand()) this.client.emit('commandCreate', interaction, int);
-        if (interaction.isButton()) this.client.emit('buttonCreate', interaction, int);
         if (interaction.isContextMenuCommand()) this.client.emit('contextMenuCreate', interaction, int);
-        if (interaction.isModalSubmit()) this.client.emit('modalCreate', interaction, int);
+        if (interaction.isButton()) this.client.emit('buttonCreate', interaction, int);
         if (interaction.isAnySelectMenu()) this.client.emit('selectMenuCreate', interaction, int);
+        if (interaction.isModalSubmit()) this.client.emit('modalCreate', interaction, int);
         if (interaction.isAutocomplete()) this.client.emit('autocompleteCreate', interaction, int);
     };
 };

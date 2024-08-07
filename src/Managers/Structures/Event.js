@@ -1,18 +1,18 @@
+const Bot = require('../../Managers/Bot');
 const Base = require('./Base');
-const client = require('../../../index');
 
 module.exports = class Event extends Base {
 
     /**
-     * The Event config
+     * 
      * @typedef {Object} EventConfig
-     * @property {String} name The name
+     * @property {String} name
      */
 
     /**
-     * The Event constructor.
-     * @param {client} client The client
-     * @param {EventConfig} config The config
+     * 
+     * @param {Bot} client
+     * @param {EventConfig} config
      * @constructor
      */
 

@@ -1,13 +1,14 @@
-const Button = require('../../../Managers/Structures/Button');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, Colors, StringSelectMenuBuilder } = require('discord.js');
+
+const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class AntiLinkToggleButton extends Button {
     constructor(client) {
         super(client, {
             name: 'antilink-toggle',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageMessages]
+            meperms: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ManageWebhooks]
         });
     };
 

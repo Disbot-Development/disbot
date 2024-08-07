@@ -13,6 +13,6 @@ module.exports = class ProcessUncaughtException extends Event {
      */
 
     run (error) {
-        this.client.logger.error(`${error}\n`);
+        this.client.logger.error(`Uncaught Exception: ${`${error}`.red}\n`);
     };
 };

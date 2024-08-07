@@ -1,7 +1,8 @@
+const { ModalSubmitInteraction } = require('discord.js');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
 const Event = require('../../Managers/Structures/Event');
 const Modal = require('../../Managers/Structures/Modal');
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const { ModalSubmitInteraction } = require('discord.js');
 
 module.exports = class ModalCreateEvent extends Event {
     constructor(client) {

@@ -1,7 +1,8 @@
-const Event = require('../../Managers/Structures/Event');
+const { SelectMenuInteraction } = require('discord.js');
+
 const SelectMenu = require('../../Managers/Structures/SelectMenu');
 const MessageEmbed = require('../../Managers/MessageEmbed');
-const { SelectMenuInteraction } = require('discord.js');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class SelectMenuCreateEvent extends Event {
     constructor(client) {

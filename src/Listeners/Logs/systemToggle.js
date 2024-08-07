@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
 const { ButtonInteraction } = require('discord.js');
+
 const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class systemToggleEvent extends Event {
     constructor(client) {

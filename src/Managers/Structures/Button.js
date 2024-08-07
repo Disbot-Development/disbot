@@ -1,21 +1,22 @@
-const Base = require('./Base');
-const client = require('../../../index');
 const { PermissionFlagsBits } = require('discord.js');
+
+const Bot = require('../../Managers/Bot');
+const Base = require('./Base');
 
 module.exports = class Button extends Base {
 
     /**
-     * The button config.
+     * 
      * @typedef {Object} ButtonConfig
-     * @property {String} name The name
-     * @property {PermissionFlagsBits[]} perms The permissions
-     * @property {PermissionFlagsBits[]} meperms The client permissions
+     * @property {String} name
+     * @property {PermissionFlagsBits[]} perms
+     * @property {PermissionFlagsBits[]} meperms
      */
 
     /**
-     * The Button constructor.
-     * @param {client} client The client
-     * @param {ButtonConfig} config The config
+     * 
+     * @param {Bot} client
+     * @param {ButtonConfig} config
      * @constructor
      */
     

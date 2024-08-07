@@ -1,23 +1,21 @@
-const Discord = require('discord.js');
-const client = require('../../index');
+const { GuildMember, Role, PermissionFlagsBits } = require('discord.js');
 
 module.exports = class Prototypes {
 
     /**
      * 
-     * @param {client} client
      * @constructor
      */
 
-    constructor(client) {
+    constructor() {
 
         /**
          * 
          * @returns {Boolean}
          */
         
-        Discord.GuildMember.prototype.isAdmin = function isAdmin() {
-            return this.permissions.has(Discord.PermissionFlagsBits.Administrator);
+        GuildMember.prototype.isAdmin = function isAdmin() {
+            return this.permissions.has(PermissionFlagsBits.Administrator);
         };
 
         /**
@@ -25,8 +23,8 @@ module.exports = class Prototypes {
          * @returns {Boolean}
          */
         
-        Discord.Role.prototype.isAdmin = function isAdmin() {
-            return this.permissions.has(Discord.PermissionFlagsBits.Administrator);
+        Role.prototype.isAdmin = function isAdmin() {
+            return this.permissions.has(PermissionFlagsBits.Administrator);
         };
 
         /**

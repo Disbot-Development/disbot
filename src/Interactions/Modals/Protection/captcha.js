@@ -1,6 +1,7 @@
-const Modal = require('../../../Managers/Structures/Modal');
 const { ModalSubmitInteraction, PermissionFlagsBits } = require('discord.js');
+
 const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Modal = require('../../../Managers/Structures/Modal');
 
 module.exports = class CaptchaModal extends Modal {
     constructor(client) {
@@ -30,8 +31,6 @@ module.exports = class CaptchaModal extends Modal {
 
             return await this.client.database.add('count.captcha.failed', 1);
         };
-
-        await this.client.database.delete(`${interaction.guild.id}.users.${interaction.user.id}.captcha`);
 
         const captchaBeforeRole = interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`));
         const captchaAfterRole = (await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`) || []).map((role) => interaction.guild.roles.resolve(role));

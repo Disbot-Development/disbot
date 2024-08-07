@@ -1,15 +1,14 @@
-const express = require('express');
 const rateLimit = require('express-rate-limit');
-const apicache = require('apicache').middleware;
 const compression = require('compression');
-const client = require('../../index');
+const Bot = require('../Managers/Bot');
+const express = require('express');
 const helmet = require('helmet');
 
 module.exports = class RestAPI {
 
     /**
      * 
-     * @param {client} client
+     * @param {Bot} client
      * @constructor
      */
 
@@ -20,7 +19,6 @@ module.exports = class RestAPI {
         this.routes = [];
 
         this.app.use(express.json());
-        this.app.use(apicache('5 minutes'));
         this.app.use(helmet());
         this.app.use(compression());
 
@@ -52,17 +50,23 @@ module.exports = class RestAPI {
 
     defineRoutes() {
         const routes = [
+            { method: 'get', path: '/stats', handler: this.getStats.bind(this) },
             { method: 'get', path: '/guilds', handler: this.getGuilds.bind(this) },
             { method: 'get', path: '/guilds/:id', handler: this.getGuild.bind(this) },
+            { method: 'get', path: '/guilds/:id/channels', handler: this.getChannels.bind(this) },
+            { method: 'get', path: '/guilds/:guildid/channels/:channelid', handler: this.getChannel.bind(this) },
             { method: 'get', path: '/guilds/:id/roles', handler: this.getRoles.bind(this) },
             { method: 'get', path: '/guilds/:guildid/roles/:roleid', handler: this.getRole.bind(this) },
             { method: 'get', path: '/users', handler: this.getUsers.bind(this) },
             { method: 'get', path: '/users/:id', handler: this.getUser.bind(this) },
             { method: 'get', path: '/commands', handler: this.getCommands.bind(this) },
             { method: 'get', path: '/commands/:name', handler: this.getCommand.bind(this) },
+            { method: 'get', path: '/events', handler: this.getEvents.bind(this) },
+            { method: 'get', path: '/events/:name', handler: this.getEvent.bind(this) },
             { method: 'get', path: '/version', handler: this.getVersion.bind(this) },
             { method: 'get', path: '/uptime', handler: this.getUptime.bind(this) },
-            { method: 'get', path: '/health', handler: this.getHealth.bind(this) },
+            { method: 'get', path: '/ping', handler: this.getPing.bind(this) },
+            { method: 'get', path: '/status', handler: this.getStatus.bind(this) },
             { method: 'get', path: '/routes', handler: this.getRoutes.bind(this) }
         ];
     
@@ -90,8 +94,40 @@ module.exports = class RestAPI {
      * @returns {express.Response}
      */
 
+    async getStats(req, res) {
+        const antibot = await this.client.database.get('count.antibot') || 0;
+        const antialt = await this.client.database.get('count.antialt') || 0;
+        const antiraid = await this.client.database.get('count.antiraid') || 0;
+        const antilink = await this.client.database.get('count.antilink') || 0;
+        const antitoken = await this.client.database.get('count.antitoken') || 0;
+        const antispam = await this.client.database.get('count.antispam') || 0;
+        const captchaResolved = await this.client.database.get('count.captcha.resolved') || 0;
+        const captchaFailed = await this.client.database.get('count.captcha.failed') || 0;
+        
+        return res.json({
+            antibot,
+            antialt,
+            antiraid,
+            antilink,
+            antitoken,
+            antispam,
+            captcha: {
+                resolved: captchaResolved,
+                failed: captchaFailed
+            }
+        });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
     getGuilds(req, res) {
-        const guilds = this.client.guilds.cache.map((guild) => ({
+        const sortedGuilds = this.client.guilds.cache.sort((a, b) => a.joinedTimestamp - b.joinedTimestamp);
+        const guilds = sortedGuilds.map((guild) => ({
             id: guild.id,
             name: guild.name,
             avatarURL: guild.iconURL(),
@@ -117,6 +153,48 @@ module.exports = class RestAPI {
             name: guild.name,
             avatarURL: guild.iconURL(),
             memberCount: guild.memberCount
+        });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    async getChannels(req, res) {
+        const guild = this.client.guilds.resolve(req.params.id);
+        if (!guild) return res.status(404).json({ error: 'Guild not found' });
+        
+        const channels = (await guild.channels.fetch()).map((channel) => ({
+            id: channel.id,
+            name: channel.name,
+            type: channel.type,
+            position: channel.position
+        }));
+        
+        return res.json({ channels });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    async getChannel(req, res) {
+        const guild = this.client.guilds.resolve(req.params.guildid);
+        if (!guild) return res.status(404).json({ error: 'Guild not found' });
+        const channel = (await guild.channels.fetch()).find((channel) => channel.id === req.params.channelid);
+        if (!channel) return res.status(404).json({ error: 'Channel not found' });
+        
+        return res.json({ 
+            id: channel.id,
+            name: channel.name,
+            type: channel.type,
+            position: channel.position
         });
     };
 
@@ -170,7 +248,7 @@ module.exports = class RestAPI {
      */
 
     getUsers(req, res) {
-        const users = this.client.utils.allUsers;
+        const users = this.client.allUsers;
         
         return res.json({ users });
     };
@@ -203,7 +281,13 @@ module.exports = class RestAPI {
      */
 
     getCommands(req, res) {
-        const commands = this.client.interactions.map((command) => ({ name: command.name, type: command.type ? 'contextmenu' : 'command' }));
+        const commandsMap = this.client.commands.map((command) => command.config);
+        const commands = commandsMap.map((command) => ({
+            name: command.name,
+            description: command.description,
+            category: command.category,
+            options: command.options
+        }))
         
         return res.json({ commands });
     };
@@ -216,10 +300,44 @@ module.exports = class RestAPI {
      */
 
     getCommand(req, res) {
-        const command = this.client.interactions.map((command) => ({ name: command.name, type: command.type ? 'contextmenu' : 'command' })).filter((command) => command.name === req.params.name);
+        const commands = this.client.commands.map((command) => command.config);
+        const command = commands.find((command) => command.name === req.params.name);
         if (!command) return res.status(404).json({ error: 'Command not found' });
         
-        return res.json({ command });
+        return res.json({
+            name: command.name,
+            description: command.description,
+            category: command.category,
+            options: command.options
+        });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getEvents(req, res) {
+        const events = this.client.events.map((event) => event.config);
+        
+        return res.json({ events });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getEvent(req, res) {
+        const events = this.client.events.map((event) => event.config);
+        const event = events.find((event) => event.name === req.params.name);
+        if (!event) return res.status(404).json({ error: 'Event not found' });
+        
+        return res.json({ event });
     };
 
     /**
@@ -255,8 +373,24 @@ module.exports = class RestAPI {
      * @returns {express.Response}
      */
 
-    getHealth(req, res) {
-        return res.json({ status: 'ok', uptime: this.client.uptime });
+    getPing(req, res) {
+        const ping = this.client.ws.ping;
+        
+        return res.json({ ping });
+    };
+
+    /**
+     * 
+     * @param {express.Request} req 
+     * @param {express.Response} res
+     * @returns {express.Response}
+     */
+
+    getStatus(req, res) {
+        const uptime = this.client.uptime;
+        const ping = this.client.ws.ping;
+
+        return res.json({ status: 'ok', uptime, ping });
     };
 
     /**

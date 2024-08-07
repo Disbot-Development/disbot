@@ -13,6 +13,6 @@ module.exports = class ProcessWarningEvent extends Event {
      */
 
     run (error) {
-        this.client.logger.error(`${error}\n`);
+        this.client.logger.error(`Warning: ${`${error}`.red}\n`);
     };
 };

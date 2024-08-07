@@ -1,6 +1,7 @@
-const Button = require('../../../Managers/Structures/Button');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+
+const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class CaptchaResolveButton extends Button {
     constructor(client) {

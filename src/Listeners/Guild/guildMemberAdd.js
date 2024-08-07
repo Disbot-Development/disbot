@@ -1,7 +1,8 @@
-const Event = require('../../Managers/Structures/Event');
 const { GuildMember, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle, GuildFeature, AllowedMentionsTypes } = require('discord.js');
-const MessageEmbed = require('../../Managers/MessageEmbed');
 const { CaptchaGenerator } = require('captcha-canvas');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class GuildMemberAddEvent extends Event {
     constructor(client) {
@@ -50,11 +51,11 @@ module.exports = class GuildMemberAddEvent extends Event {
                 member.guild.disableInvites(true)
                 .then((guild) => this.client.emit('antiraidDetected', guild, limit));
 
-                newMembers.forEach((mem) => {
+                for (const mem of newMembers) {
                     const kickedMember = member.guild.members.resolve(mem.id);
 
                     if (kickedMember) kickedMember.kick('A été détecté par le système d\'anti-raid.');
-                });
+                };
 
                 await this.client.database.add('count.antiraid', 1);
             } else {
@@ -112,7 +113,7 @@ module.exports = class GuildMemberAddEvent extends Event {
                         .setStyle(ButtonStyle.Secondary)
                     )
                 ],
-                files: [ image ],
+                files: [image],
                 allowedMentions: { parse: [AllowedMentionsTypes.User] }
             })
             .then(async (message) => await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id));

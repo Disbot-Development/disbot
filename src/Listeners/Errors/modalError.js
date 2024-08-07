@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
-const MessageEmbed = require('../../Managers/MessageEmbed');
 const { ModalSubmitInteraction } = require('discord.js');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class ModalErrorEvent extends Event {
     constructor(client) {

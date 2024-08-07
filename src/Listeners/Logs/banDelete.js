@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
 const { User, Guild } = require('discord.js');
+
 const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class BanDeleteEvent extends Event {
     constructor(client) {

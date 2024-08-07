@@ -1,6 +1,7 @@
+const { CommandInteraction, ChannelType } = require('discord.js');
+
 const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
-const { CommandInteraction, ChannelType } = require('discord.js');
 
 module.exports = class ServerInfoCommand extends Command {
     constructor(client) {
@@ -40,8 +41,8 @@ module.exports = class ServerInfoCommand extends Command {
                     `> **Dans un salon vocal:** ${inVocal} membre${inVocal > 1 ? 's' : ''}\n` +
                     `> **Administrateur${admins > 1 ? 's' : ''}:** ${admins} membre${admins ? 's' : ''}\n` +
                     `> **Robot${bots > 1 ? 's' : ''}:** ${bots} robot${bots > 1 ? 's' : ''}\n` +
-                    `> **Boost${interaction.guild.premiumSubscriptionCount > 1 ? 's' : ''}:** ${(interaction.guild.premiumSubscriptionCount || 0)} boost${interaction.guild.premiumSubscriptionCount > 1 ? 's' : ''}\n` +
-                    `> **Partenaire:** ${interaction.guild.partnered ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Boost${interaction.guild.premiumSubscriptionCount > 1 ? 's' : ''}:** ${(interaction.guild.premiumSubscriptionCount || 0)} boost${interaction.guild.premiumSubscriptionCount > 1 ? 's' : ''}\n\n` +
+                    
                     `> **Date de création:** <t:${creationTimestamp}:D> à <t:${creationTimestamp}:T> (<t:${creationTimestamp}:R>)\n\n` +
 
                     `> **Salon${channels.size > 1 ? 's' : ''} (${channels.size}):** ${channels.map((channel) => channel).slice(0, 10).join(', ')} ${channels.size > 10 ? 'et plus...' : ''}\n\n` +

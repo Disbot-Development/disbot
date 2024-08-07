@@ -1,5 +1,6 @@
+const { ContextMenuCommandInteraction, ApplicationCommandType } = require('discord.js');
+
 const ContextMenu = require('../../../Managers/Structures/ContextMenu');
-const { ContextMenuCommandInteraction, ApplicationCommandType, ActivityType } = require('discord.js');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class UserInfoContextMenu extends ContextMenu {
@@ -31,13 +32,24 @@ module.exports = class UserInfoContextMenu extends ContextMenu {
                     `> **Nom d'utilisateur:** ${member.user.tag}\n` +
                     `> **Identifiant:** ${member.user.id}\n\n` +
 
+                    `${member.voice.channel ?
+                    `> **Salon vocal:** ${member.voice.channel}\n` +
+                    `> **Muet vocal:** ${member.voice.selfMute ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Sourdine vocal:** ${member.voice.selfDeaf ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Caméra:** ${member.voice.selfVideo ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Live:** ${member.voice.streaming ? this.client.config.emojis.yes : this.client.config.emojis.no}\n\n`
+                    : `> **Salon vocal:** ${this.client.config.emojis.no}\n\n`
+                    }` +
+
                     `> **Robot:** ${member.user.bot ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
                     `> **Administrateur:** ${member.isAdmin() ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Muet:** ${member.communicationDisabledUntil ? this.client.config.emojis.yes : this.client.config.emojis.no}\n\n` +
+
                     `> **Date de création:** <t:${createdTimestamp}:D> à <t:${createdTimestamp}:T> (<t:${createdTimestamp}:R>)\n` +
                     `> **A rejoint le serveur:** <t:${joinedTimestamp}:D> à <t:${joinedTimestamp}:T> (<t:${joinedTimestamp}:R>)`
                 )
                 .setThumbnail(member.user.displayAvatarURL({ size: 4096 }))
-                .setImage(fetchedUser ? fetchedUser.bannerURL({ size: 4096 }) : null)
+                .setImage(fetchedUser.bannerURL({ size: 4096 }))
             ],
             ephemeral: true
         });

@@ -1,5 +1,6 @@
-const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+
+const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class PasswordCommand extends Command {

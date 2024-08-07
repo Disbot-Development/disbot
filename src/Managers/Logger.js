@@ -1,17 +1,26 @@
-const Config = require('./Config');
+const Config = require('../Managers/Config');
 
 module.exports = class Logger {
-    
-    config = new Config();
-    name = this.config.username;
-
-    date = new Date(Date.now()).toLocaleTimeString('fr-FR');
-    stringDate = `[${this.date}]`;
-    stringName = `[${this.name}]`;
 
     /**
      * 
-     * @param {string} message
+     * @param {Config} config
+     * @constructor
+     */
+
+    constructor(config) {
+        this.config = config;
+
+        this.date = new Date(Date.now()).toLocaleTimeString('fr-FR');
+        this.stringDate = `[${this.date}]`;
+
+        this.name = this.config.username;
+        this.stringName = `[${this.name}]`;
+    };
+
+    /**
+     * 
+     * @param {String} message
      * @returns {true}
      */
 
@@ -23,12 +32,17 @@ module.exports = class Logger {
 
     /**
      * 
-     * @param {string} message
-     * @returns {true}
+     * @param {String} message
+     * @param {Object} [timeOptions]
+     * @param {Number} [timeOptions.start]
+     * @param {Number} [timeOptions.end]
+     * @param {Boolean} [timeOptions.inline]
      */
 
-    success(message) {
-        console.log(`${this.stringDate.grey} ${this.stringName.green} ${message}`);
+    success(message, timeOptions) {
+        const duration = timeOptions ? (timeOptions.end - timeOptions.start).toFixed(2) : undefined;
+        const durationString = `(${duration}ms)`;
+        console.log(`${this.stringDate.grey} ${this.stringName.green} ${message} ${timeOptions ? durationString.grey : ''} ${timeOptions && timeOptions.inline ? '\n' : ''}`);
 
         return true;
     };
@@ -46,7 +60,7 @@ module.exports = class Logger {
 
         return true;
     };
-    
+
     /**
      * 
      * @param {String|Error|EvalError|RangeError|ReferenceError|SyntaxError|TypeError} message

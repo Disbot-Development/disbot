@@ -1,13 +1,14 @@
-const Button = require('../../../Managers/Structures/Button');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, PermissionFlagsBits, MessageCollector, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, StringSelectMenuBuilder } = require('discord.js');
+
+const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class AntiLinkConfigureButton extends Button {
     constructor(client) {
         super(client, {
             name: 'antilink-configure',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageMessages]
+            meperms: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ManageWebhooks]
         });
     };
 
@@ -41,7 +42,8 @@ module.exports = class AntiLinkConfigureButton extends Button {
                         .setCustomId('antilink-toggle')
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji(this.client.config.emojis.no)
-                        .setLabel('Activer'),
+                        .setLabel('Désactiver')
+                        .setDisabled(true),
                         new ButtonBuilder()
                         .setCustomId('antilink-configure')
                         .setStyle(ButtonStyle.Secondary)

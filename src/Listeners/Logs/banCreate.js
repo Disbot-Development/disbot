@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
 const { GuildMember, User } = require('discord.js');
+
 const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class BanCreateEvent extends Event {
     constructor(client) {

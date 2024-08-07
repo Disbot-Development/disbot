@@ -1,5 +1,6 @@
-const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class KickCommand extends Command {

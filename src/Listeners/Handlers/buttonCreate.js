@@ -1,7 +1,8 @@
-const Event = require('../../Managers/Structures/Event');
-const Button = require('../../Managers/Structures/Button');
-const MessageEmbed = require('../../Managers/MessageEmbed');
 const { ButtonInteraction } = require('discord.js');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const Button = require('../../Managers/Structures/Button');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class ButtonCreateEvent extends Event {
     constructor(client) {

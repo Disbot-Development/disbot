@@ -1,5 +1,6 @@
-const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, StringSelectMenuBuilder } = require('discord.js');
+
+const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class AntiLinkCommand extends Command {
@@ -9,7 +10,7 @@ module.exports = class AntiLinkCommand extends Command {
             description: 'Configurer le système d\'anti-link.',
             category: 'protection',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageMessages]
+            meperms: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ManageWebhooks]
         });
     };
 

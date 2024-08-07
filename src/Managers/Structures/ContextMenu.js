@@ -1,22 +1,23 @@
-const Base = require('./Base');
-const client = require('../../../index');
 const { PermissionFlagsBits } = require('discord.js');
+
+const Bot = require('../../Managers/Bot');
+const Base = require('./Base');
 
 module.exports = class ContextMenu extends Base {
 
     /**
-     * The ContextMenu config.
+     * 
      * @typedef {Object} ContextMenuConfig
-     * @property {String} name The name
-     * @property {Number} type The type
-     * @property {PermissionFlagsBits[]} perms The permissions
-     * @property {PermissionFlagsBits[]} meperms The client permissions
+     * @property {String} name
+     * @property {Number} type
+     * @property {PermissionFlagsBits[]} perms
+     * @property {PermissionFlagsBits[]} meperms
      */
 
     /**
-     * The ContextMenu constructor.
-     * @param {client} client The client
-     * @param {ContextMenuConfig} config The config
+     * 
+     * @param {Bot} client
+     * @param {ContextMenuConfig} config
      * @constructor
      */
 

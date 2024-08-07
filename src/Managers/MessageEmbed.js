@@ -1,27 +1,29 @@
 const { EmbedBuilder, Colors } = require('discord.js');
-const client = require('../../index');
-const config = new (require('./Config'))(client);
+
+const Config = require('../Managers/Config');
 
 module.exports = class MessageEmbed extends EmbedBuilder {
 
     /**
      * 
-     * @param {any} data
-     * @param {Boolean} skipValidation
+     * @param {any} [data]
+     * @param {Boolean} [skipValidation]
      * @constructor
      */
 
     constructor(data, skipValidation) {
         super(data, skipValidation);
 
+        this.config = new Config();
+
         this.data.style = 'DEFAULT';
-        this.data.color = config.embeds.color;
-        this.data.footer = { text: config.embeds.footer, icon_url: config.images.logo };
+        this.data.color = this.config.embeds.color;
+        this.data.footer = { text: this.config.embeds.footer, icon_url: this.config.images.logo };
     };
 
     /**
      * 
-     * @param {'DEFAULT'|'SUCCESS'|'ERROR'|'LOADING'} style
+     * @param {'SUCCESS'|'ERROR'|'LOADING'} style
      * @returns {MessageEmbed}
      */
 
@@ -55,17 +57,17 @@ module.exports = class MessageEmbed extends EmbedBuilder {
     setDescription(description) {
         switch(this.data.style) {
             case 'SUCCESS':
-                this.data.description = `${config.emojis.yes} ${description}`;
+                this.data.description = `${this.config.emojis.yes} ${description}`;
                 this.data.color = Colors.Green;
                 
                 break;
             case 'ERROR':
-                this.data.description = `${config.emojis.no} ${description}`;
+                this.data.description = `${this.config.emojis.no} ${description}`;
                 this.data.color = Colors.Red;
                 
                 break;
             case 'LOADING':
-                this.data.description = `${config.emojis.loading} ${description}`;
+                this.data.description = `${this.config.emojis.loading} ${description}`;
                 this.data.color = Colors.DarkerGrey;
                 
                 break;

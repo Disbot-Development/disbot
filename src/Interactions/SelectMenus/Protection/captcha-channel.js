@@ -1,6 +1,7 @@
+const { ChannelSelectMenuInteraction, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle, RoleSelectMenuBuilder } = require('discord.js');
+
 const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
-const { ChannelSelectMenuInteraction, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle, RoleSelectMenuBuilder } = require('discord.js');
 
 module.exports = class CaptchaChannelSelectMenu extends SelectMenu {
     constructor(client) {
@@ -42,17 +43,20 @@ module.exports = class CaptchaChannelSelectMenu extends SelectMenu {
                     .setCustomId('captcha-toggle')
                     .setStyle(ButtonStyle.Primary)
                     .setEmoji(this.client.config.emojis.no)
-                    .setLabel('Désactiver'),
+                    .setLabel('Désactiver')
+                    .setDisabled(true),
                     new ButtonBuilder()
                     .setCustomId('captcha-configure')
                     .setStyle(ButtonStyle.Secondary)
                     .setEmoji(this.client.config.emojis.settings)
-                    .setLabel('Configurer'),
+                    .setLabel('Configurer')
+                    .setDisabled(true),
                     new ButtonBuilder()
                     .setCustomId('captcha-configure-after-roles')
                     .setStyle(ButtonStyle.Secondary)
                     .setEmoji(this.client.config.emojis.settings)
                     .setLabel('Configurer les rôles après vérification')
+                    .setDisabled(true)
                 ),
                 new ActionRowBuilder()
                 .addComponents(

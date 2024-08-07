@@ -1,5 +1,6 @@
-const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, ApplicationCommandOptionType } = require('discord.js');
+
+const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class RoleInfoCommand extends Command {
@@ -38,12 +39,13 @@ module.exports = class RoleInfoCommand extends Command {
                     `> **Identifiant:** ${role.id}\n\n` +
 
                     `> **Administrateur:** ${role.isAdmin() ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Affiché séparément :** ${role.hoist ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
+                    `> **Mentionnable:** ${role.mentionable ? this.client.config.emojis.yes : this.client.config.emojis.no}\n\n` +
 
                     `> **Membre${role.members.size > 1 ? 's' : ''}:** ${role.members.size} membre${role.members.size > 1 ? 's' : ''}\n` +
-                    `> **Couleur:** \`${role.hexColor}\`\n` +
-                    `> **Date de création:** <t:${creationDate}:D> à <t:${creationDate}:T> (<t:${creationDate}:R>)\n` +
-                    `> **Affiché séparément :** ${role.hoist ? this.client.config.emojis.yes : this.client.config.emojis.no}\n` +
-                    `> **Mentionnable:** ${role.mentionable ? this.client.config.emojis.yes : this.client.config.emojis.no}`
+                    `> **Couleur:** \`${role.hexColor}\`\n\n` +
+                    
+                    `> **Date de création:** <t:${creationDate}:D> à <t:${creationDate}:T> (<t:${creationDate}:R>)`
                 )
                 .setThumbnail(role.iconURL({ size: 4096 }))
             ]

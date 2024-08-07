@@ -1,5 +1,6 @@
-const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const { StringSelectMenuInteraction } = require('discord.js');
+
+const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class PasswordSelectMenu extends SelectMenu {

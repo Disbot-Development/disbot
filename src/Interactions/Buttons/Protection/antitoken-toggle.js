@@ -1,6 +1,7 @@
-const Button = require('../../../Managers/Structures/Button');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, Colors } = require('discord.js');
+
+const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class AntiTokenToggleButton extends Button {
     constructor(client) {

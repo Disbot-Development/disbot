@@ -1,22 +1,23 @@
-const { ButtonInteraction, GuildMember } = require('discord.js');
+const { CommandInteraction, TextChannel } = require('discord.js');
 
 const MessageEmbed = require('../../Managers/MessageEmbed');
 const Event = require('../../Managers/Structures/Event');
 
-module.exports = class WhiteListAddEvent extends Event {
+module.exports = class ChannelLockedEvent extends Event {
     constructor(client) {
         super(client, {
-            name: 'whitelistAdd'
+            name: 'channelLocked'
         });
     };
 
     /**
      * 
-     * @param {ButtonInteraction} interaction
-     * @param {GuildMember} member 
+     * @param {CommandInteraction} interaction
+     * @param {TextChannel} channel
+     * @param {Boolean} isLocked
      */
     
-    async run (interaction, member) {
+   async run (interaction, channel, isLocked) {
         const modules = await this.client.database.get(`${interaction.guild.id}.modules`) || [];
         const logsId = await this.client.database.get(`${interaction.guild.id}.logs.channel`);
         const logs = logsId ? await interaction.guild.channels.fetch(logsId).catch(() => undefined) : undefined;
@@ -25,11 +26,11 @@ module.exports = class WhiteListAddEvent extends Event {
             logs.send({
                 embeds: [
                     new MessageEmbed()
-                    .setTitle('Liste blanche')
+                    .setTitle(`Salon ${isLocked ? 'déverrouillé' : 'verrouillé'}`)
                     .setDescription(
-                        `Un membre a été ajouté à la liste blanche.\n` +
+                        `Un salon vient d'être ${isLocked ? 'déverrouillé' : 'verrouillé'}.\n` +
                         `> **Auteur:** ${interaction.user} - \`${interaction.user.tag}\` - ${interaction.user.id}\n` +
-                        `> **Membre:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}`
+                        `> **Salon:** ${channel} - \`${channel.name}\` - ${channel.id}`
                     )
                 ]
             })

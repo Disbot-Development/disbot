@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
-const Command = require('../../Managers/Structures/Command');
 const { AutocompleteInteraction } = require('discord.js');
+
+const Command = require('../../Managers/Structures/Command');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class AutoCompleteCreateEvent extends Event {
     constructor(client) {

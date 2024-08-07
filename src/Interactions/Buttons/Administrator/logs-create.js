@@ -1,6 +1,7 @@
-const Button = require('../../../Managers/Structures/Button');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
 const { ButtonInteraction, PermissionFlagsBits, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
+
+const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class LogsCreateButton extends Button {
     constructor(client) {
@@ -18,7 +19,7 @@ module.exports = class LogsCreateButton extends Button {
 
     async run (interaction) {
         await interaction.guild.channels.create({
-            name: 'disbot-logs',
+            name: `${this.client.config.username}-logs`,
             type: ChannelType.GuildText
         })
         .then(async (ch) => {

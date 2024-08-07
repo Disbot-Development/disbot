@@ -1,24 +1,25 @@
-const Base = require('./Base');
-const client = require('../../../index');
 const { ApplicationCommandOption, PermissionFlagsBits } = require('discord.js');
+
+const Bot = require('../../Managers/Bot');
+const Base = require('./Base');
 
 module.exports = class Command extends Base {
 
     /**
-     * The Command config.
+     * 
      * @typedef {Object} CommandConfig
-     * @property {String} name The name
-     * @property {String} description The description
-     * @property {'administrator'|'developer'|'information'|'moderation'} category The category
-     * @property {PermissionFlagsBits[]} perms The permissions
-     * @property {PermissionFlagsBits[]} meperms The client permissions
-     * @property {ApplicationCommandOption[]} options The options
+     * @property {String} name
+     * @property {String} description
+     * @property {'administrator'|'information'|'moderation'|'protection'} category
+     * @property {PermissionFlagsBits[]} perms
+     * @property {PermissionFlagsBits[]} meperms
+     * @property {ApplicationCommandOption[]} options
      */
 
     /**
-     * The Command constructor.
-     * @param {client} client The client
-     * @param {CommandConfig} config The config
+     * 
+     * @param {Bot} client
+     * @param {CommandConfig} config
      * @constructor
      */
     

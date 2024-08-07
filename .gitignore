@@ -1,5 +1,4 @@
 node_modules/
-backups/
+Images/
 package-lock.json
-*.sqlite
 *.env

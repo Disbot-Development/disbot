@@ -1,7 +1,8 @@
-const Event = require('../../Managers/Structures/Event');
+const { CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
 const Command = require('../../Managers/Structures/Command');
 const MessageEmbed = require('../../Managers/MessageEmbed');
-const { CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class CommandCreateEvent extends Event {
     constructor(client) {

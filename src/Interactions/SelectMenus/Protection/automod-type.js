@@ -1,5 +1,6 @@
-const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const { StringSelectMenuInteraction, PermissionFlagsBits } = require('discord.js');
+
+const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class AutoModTypeSelectMenu extends SelectMenu {
@@ -17,8 +18,8 @@ module.exports = class AutoModTypeSelectMenu extends SelectMenu {
      */
 
     async run (interaction) {
-        const profanityRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType['profanity']);
-        const floodRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType['flood']);
+        const profanityRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType.profanity);
+        const floodRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType.flood);
 
         const edit = () => {
             interaction.update({

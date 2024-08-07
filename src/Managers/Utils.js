@@ -1,13 +1,14 @@
 const { readdirSync, statSync, readFileSync } = require('fs');
-const { relative, sep } = require('path');
-const client = require('../../index');
 const { ClientPresence } = require('discord.js');
+const { relative, sep } = require('path');
+
+const Bot = require('../Managers/Bot');
 
 module.exports = class Utils {
 
     /**
      * 
-     * @param {client} client
+     * @param {Bot} client
      * @constructor
      */
 
@@ -40,7 +41,7 @@ module.exports = class Utils {
     /**
      * 
      * @param {String} path
-     * @param {String[]} extensions
+     * @param {String[]} [extensions]
      * @returns {String[]}
      */
 
@@ -73,16 +74,16 @@ module.exports = class Utils {
     /**
      * 
      * @param {String} dirPath 
-     * @param {String[]} extensions
-     * @param {String[]} excludeDirs
+     * @param {String[]} [extensions]
+     * @param {String[]} [excludeDirs]
      * @returns {Number}
      */
 
     countLinesInDir(dirPath, extensions = [], excludeDirs = []) {
-        const allFiles = this.getFiles(dirPath, extensions);
+        const files = this.getFiles(dirPath, extensions);
         let totalLines = 0;
 
-        for (const file of allFiles) {
+        for (const file of files) {
             const relativePath = relative(dirPath, file);
             const parts = relativePath.split(sep);
 
@@ -122,8 +123,8 @@ module.exports = class Utils {
     /**
      * 
      * @param {String[]} arr 
-     * @param {String} conjunction 
-     * @param {String} lastConjunction 
+     * @param {String} [conjunction] 
+     * @param {String} [lastConjunction] 
      * @returns {String}
      */
 
@@ -140,10 +141,9 @@ module.exports = class Utils {
 
     /**
      * 
-     * @function generateRandomChars
      * @param {Number} length
      * @param {Number} charSetOptions
-     * @param {String} [additionalChars='']
+     * @param {String} [additionalChars]
      * @returns {String}
      */
 
@@ -173,22 +173,13 @@ module.exports = class Utils {
 
     /**
      * 
-     * @returns {Number}
-     */
-
-    get allUsers() {
-        return this.client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
-    };
-
-    /**
-     * 
      * @returns {ClientPresence}
      */
 
     setPresence() {
+        const users = this.client.allUsers;
+        
         let plural = 0;
-        const users = this.allUsers;
-
         const presenceName = this.client.config.utils.presence.name.replace(/{\w+}/g, (match) => {
             switch (match) {
                 case '{users}':

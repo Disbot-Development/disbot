@@ -1,5 +1,6 @@
-const Button = require('../../../Managers/Structures/Button');
 const { ButtonInteraction, PermissionFlagsBits, ChannelSelectMenuBuilder, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class CaptchaConfigureButton extends Button {
     constructor(client) {
@@ -43,7 +44,7 @@ module.exports = class CaptchaConfigureButton extends Button {
                     new ChannelSelectMenuBuilder()
                     .setCustomId('captcha-channel')
                     .setChannelTypes(ChannelType.GuildText)
-                    .setPlaceholder('Sélectionnez un salon.')
+                    .setPlaceholder('Sélectionnez un salon de vérification.')
                 ),
                 new ActionRowBuilder()
                 .addComponents(

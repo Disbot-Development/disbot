@@ -1,62 +1,78 @@
-require('colors');
 require('dotenv').config();
+require('colors');
 
 const { createSpinner } = require('nanospinner');
-const Disbot = require('./src/Managers/Disbot');
 const { GatewayIntentBits } = require('discord.js');
 
-async function main() {
-    const client = new Disbot({
-        intents: [
+const Bot = require('./src/Managers/Bot');
+
+/**
+ *
+ * @param {Bot} client
+ * @param {'deploy'|'remove'} action
+ * @returns {Promise<never>}
+ */
+
+async function executeActions(client, action) {
+	let spinner;
+
+	spinner = createSpinner(`Connecting ${client.config.username} to the Discord API...`).start();
+	await client.loadClient(true);
+	spinner.success({ text: `${client.config.username} has been connected to the Discord API.` });
+
+	switch (action) {
+		case 'deploy':
+			await client.loadInteractions();
+
+			spinner = createSpinner(`Deploying ${client.config.username} commands...`).start();
+			await client.deployClientCommands();
+			spinner.success({ text: 'All commands have been deployed.' });
+
+			break;
+		case 'remove':
+			spinner = createSpinner(`Removing ${client.config.username} commands...`).start();
+			await client.removeClientCommands();
+			spinner.success({ text: 'All commands have been removed.' });
+
+			break;
+	};
+
+	return process.exit();
+};
+
+/**
+ *
+ * @returns {Promise<Bot>}
+ */
+
+async function main(action) {
+	const client = new Bot({
+		intents: [
 			GatewayIntentBits.Guilds,
 			GatewayIntentBits.GuildMembers,
 			GatewayIntentBits.GuildModeration,
 			GatewayIntentBits.GuildWebhooks,
 			GatewayIntentBits.GuildMessages,
-			GatewayIntentBits.MessageContent
+			GatewayIntentBits.MessageContent,
+			GatewayIntentBits.GuildVoiceStates
 		],
-        allowedMentions: {
-            repliedUser: false
-        }
-    });
+		allowedMentions: {
+			repliedUser: false
+		}
+	});
 
-    client.options.allowedMentions.roles = Object.values(client.config.roles).map((id) => id);
-    client.options.allowedMentions.users = client.config.utils.devs;
-	
-	let spinner;
-	switch(process.argv[2]) {
-		case 'deploy':
-			spinner = createSpinner('Connecting Disbot to the Discord API...').start();
-			await client.loadClient(true);
-			spinner.success({ text: `Disbot has been connected to the Discord API.\n` });
+	client.options.allowedMentions.roles = Object.values(client.config.roles);
+	client.options.allowedMentions.users = client.config.utils.devs;
 
-			client.loadCommands();
-			client.loadContextMenus();
-
-			console.log();
-
-			spinner = createSpinner('Deploying Disbot commands...').start();
-			await client.deployClientCommands();
-			spinner.success({ text: `All commands has been deployed.` });
-
-			process.exit();
-		case 'remove':
-			spinner = createSpinner('Connecting Disbot to the Discord API...').start();
-			await client.loadClient(true);
-			spinner.success({ text: `Disbot has been connected to the Discord API.` });
-			
-			spinner = createSpinner('Removing Disbot commands...').start();
-			await client.removeClientCommands();
-			spinner.success({ text: `All commands has been removed.` });
-			
-			process.exit();
-		default:
-			await client.init();
-			
-			break;
+	if (action && action !== 'dev') {
+		executeActions(client, action);
+	} else {
+		if (action === 'dev') client.devMode = true;
+		await client.loadAll();
+		await client.loadClient();
 	};
 
-    module.exports = client;
+	module.exports = client;
 };
 
-main();
+main(process.argv[2]);

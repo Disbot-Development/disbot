@@ -1,5 +1,6 @@
-const Event = require('../../Managers/Structures/Event');
 const { Guild } = require('discord.js');
+
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class GuildDeleteEvent extends Event {
     constructor(client) {

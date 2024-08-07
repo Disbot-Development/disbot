@@ -1,6 +1,7 @@
+const { ChannelSelectMenuInteraction, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
 const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
-const { ChannelSelectMenuInteraction, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = class LogsChannelSelectMenu extends SelectMenu {
     constructor(client) {

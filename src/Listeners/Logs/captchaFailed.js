@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
-const MessageEmbed = require('../../Managers/MessageEmbed');
 const { Guild } = require('discord.js');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class CaptchaFailedEvent extends Event {
     constructor(client) {

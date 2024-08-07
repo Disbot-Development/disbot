@@ -1,5 +1,6 @@
-const Command = require('../../../Managers/Structures/Command');
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+
+const Command = require('../../../Managers/Structures/Command');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class AutoModCommand extends Command {
@@ -19,8 +20,8 @@ module.exports = class AutoModCommand extends Command {
      */
 
     async run (interaction) {
-        const profanityRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType['profanity']);
-        const floodRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType['flood']);
+        const profanityRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType.profanity);
+        const floodRule = (await interaction.guild.autoModerationRules.fetch()).find((rule) => rule.triggerType === this.client.config.automod.triggerType.flood);
 
         interaction.reply({
             embeds: [

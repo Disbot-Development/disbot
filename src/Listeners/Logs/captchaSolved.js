@@ -1,6 +1,7 @@
-const Event = require('../../Managers/Structures/Event');
-const MessageEmbed = require('../../Managers/MessageEmbed');
 const { ModalSubmitInteraction } = require('discord.js');
+
+const MessageEmbed = require('../../Managers/MessageEmbed');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class CaptchaSolvedEvent extends Event {
     constructor(client) {
@@ -34,5 +35,7 @@ module.exports = class CaptchaSolvedEvent extends Event {
             })
             .catch(() => 0);
         };
+
+        await this.client.database.delete(`${interaction.guild.id}.users.${interaction.user.id}.captcha`);
     };
 };

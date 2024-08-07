@@ -1,5 +1,6 @@
-const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const { StringSelectMenuInteraction, PermissionFlagsBits, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
+
+const SelectMenu = require('../../../Managers/Structures/SelectMenu');
 const MessageEmbed = require('../../../Managers/MessageEmbed');
 
 module.exports = class AntiLinkTypeSelectMenu extends SelectMenu {
@@ -7,7 +8,7 @@ module.exports = class AntiLinkTypeSelectMenu extends SelectMenu {
         super(client, {
             name: 'antilink-type',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageMessages]
+            meperms: [PermissionFlagsBits.ManageMessages, PermissionFlagsBits.ManageWebhooks]
         });
     };
     

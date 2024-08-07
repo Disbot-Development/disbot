@@ -1,5 +1,6 @@
-const Button = require('../../Managers/Structures/Button');
 const { ButtonInteraction } = require('discord.js');
+
+const Button = require('../../Managers/Structures/Button');
 
 module.exports = class RoleIgnoreButton extends Button {
     constructor(client) {

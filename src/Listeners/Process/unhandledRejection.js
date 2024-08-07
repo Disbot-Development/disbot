@@ -13,6 +13,6 @@ module.exports = class ProcessUnhandledRejection extends Event {
      */
 
     run (error) {
-        this.client.logger.error(`${error}\n`);
+        this.client.logger.error(`Unhandled Rejection: ${`${error}`.red}\n`);
     };
 };

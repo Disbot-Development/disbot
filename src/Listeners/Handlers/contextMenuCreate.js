@@ -1,7 +1,8 @@
-const Event = require('../../Managers/Structures/Event');
+const { ContextMenuInteraction } = require('discord.js');
+
 const ContextMenu = require('../../Managers/Structures/ContextMenu');
 const MessageEmbed = require('../../Managers/MessageEmbed');
-const { ContextMenuInteraction } = require('discord.js');
+const Event = require('../../Managers/Structures/Event');
 
 module.exports = class ContextMenuCreateEvent extends Event {
     constructor(client) {

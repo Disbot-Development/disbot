@@ -1,5 +1,6 @@
-const Button = require('../../../Managers/Structures/Button');
 const { ButtonInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+
+const Button = require('../../../Managers/Structures/Button');
 
 module.exports = class LogsCancelButton extends Button {
     constructor(client) {
