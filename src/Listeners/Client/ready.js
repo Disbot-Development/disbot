@@ -39,6 +39,6 @@ module.exports = class ReadyEvent extends Event {
                     if (!members.get(user)) await this.client.database.delete(`${guild.id}.users.${user}`);
                 };
             });
-        }, 10000);
+        }, 30000);
     };
 };

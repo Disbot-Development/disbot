@@ -18,6 +18,8 @@ module.exports = class RestAPI {
         this.port = this.client.config.port || 8000;
         this.routes = [];
 
+        this.app.enable('trust proxy');
+
         this.app.use(express.json());
         this.app.use(helmet());
         this.app.use(compression());
