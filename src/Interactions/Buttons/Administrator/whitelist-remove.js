@@ -1,7 +1,7 @@
 const { ButtonInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageCollector } = require('discord.js');
 
-const MessageEmbed = require('../../../Managers/MessageEmbed');
-const Button = require('../../../Managers/Structures/Button');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Button = require('../../../Core/Structures/Button');
 
 module.exports = class WhitelistRemoveButton extends Button {
     constructor(client) {

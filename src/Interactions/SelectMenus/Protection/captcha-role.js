@@ -1,7 +1,7 @@
 const { RoleSelectMenuInteraction, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
-const SelectMenu = require('../../../Managers/Structures/SelectMenu');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const SelectMenu = require('../../../Core/Structures/SelectMenu');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class CaptchaRoleSelectMenu extends SelectMenu {
     constructor(client) {

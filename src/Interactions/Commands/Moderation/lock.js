@@ -1,7 +1,7 @@
 const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType } = require('discord.js');
 
-const Command = require('../../../Managers/Structures/Command');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class LockCommand extends Command {
     constructor(client) {

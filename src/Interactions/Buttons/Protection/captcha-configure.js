@@ -1,6 +1,6 @@
 const { ButtonInteraction, PermissionFlagsBits, ChannelSelectMenuBuilder, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
-const Button = require('../../../Managers/Structures/Button');
+const Button = require('../../../Core/Structures/Button');
 
 module.exports = class CaptchaConfigureButton extends Button {
     constructor(client) {

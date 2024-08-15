@@ -1,6 +1,6 @@
 const { GuildMember } = require('discord.js');
 
-const Event = require('../../Managers/Structures/Event');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class GuildMemberRemoveEvent extends Event {
     constructor(client) {
@@ -21,10 +21,9 @@ module.exports = class GuildMemberRemoveEvent extends Event {
         const captchaChannel = member.guild.channels.resolve(await this.client.database.get(`${member.guild.id}.captcha.channel`));
 
         if (modules.includes('captcha') && captchaChannel) {
-            const message = (await captchaChannel.messages.fetch(await this.client.database.get(`${member.guild.id}.users.${member.user.id}.captcha.message`)).catch(() => undefined));
+            await captchaChannel.messages.delete(await this.client.database.get(`${member.guild.id}.users.${member.user.id}.captcha.message`).catch(() => 0));
 
-            message.delete()
-            .catch(() => 0);
+            await this.client.database.delete(`${member.guild.id}.users.${member.user.id}`);
         };
     };
 };

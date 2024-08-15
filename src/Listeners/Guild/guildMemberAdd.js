@@ -1,8 +1,8 @@
 const { GuildMember, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle, GuildFeature, AllowedMentionsTypes } = require('discord.js');
 const { CaptchaGenerator } = require('captcha-canvas');
 
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class GuildMemberAddEvent extends Event {
     constructor(client) {
@@ -89,7 +89,7 @@ module.exports = class GuildMemberAddEvent extends Event {
             const image = new AttachmentBuilder(buffer)
             .setName('captcha.png');
 
-            captchaChannel.send({
+            const message = await captchaChannel.send({
                 content: member.toString(),
                 embeds: [
                     new MessageEmbed()
@@ -115,8 +115,9 @@ module.exports = class GuildMemberAddEvent extends Event {
                 ],
                 files: [image],
                 allowedMentions: { parse: [AllowedMentionsTypes.User] }
-            })
-            .then(async (message) => await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id));
+            });
+
+            await this.client.database.set(`${member.guild.id}.users.${member.user.id}.captcha.message`, message.id)
         };
     };
 };

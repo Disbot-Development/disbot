@@ -1,7 +1,7 @@
 const { ContextMenuCommandInteraction, ApplicationCommandType } = require('discord.js');
 
-const ContextMenu = require('../../../Managers/Structures/ContextMenu');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const ContextMenu = require('../../../Core/Structures/ContextMenu');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class UserInfoContextMenu extends ContextMenu {
     constructor(client) {

@@ -1,7 +1,7 @@
 const { CommandInteraction, ApplicationCommandOptionType } = require('discord.js');
 
-const Command = require('../../../Managers/Structures/Command');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class RoleInfoCommand extends Command {
     constructor(client) {

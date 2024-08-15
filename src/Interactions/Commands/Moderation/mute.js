@@ -1,7 +1,7 @@
 const { CommandInteraction, PermissionFlagsBits, ApplicationCommandOptionType, ButtonStyle, ButtonBuilder, ActionRowBuilder } = require('discord.js');
 
-const Command = require('../../../Managers/Structures/Command');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class MuteCommand extends Command {
     constructor(client) {

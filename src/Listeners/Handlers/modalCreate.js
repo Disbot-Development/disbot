@@ -1,8 +1,8 @@
 const { ModalSubmitInteraction } = require('discord.js');
 
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
-const Modal = require('../../Managers/Structures/Modal');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
+const Modal = require('../../Core/Structures/Modal');
 
 module.exports = class ModalCreateEvent extends Event {
     constructor(client) {
@@ -17,9 +17,9 @@ module.exports = class ModalCreateEvent extends Event {
      * @param {Modal} modal
      */
 
-    run (interaction, modal) {
+    async run (interaction, modal) {
         try {
-            modal.run(interaction);
+            await modal.run(interaction);
         } catch(error) {
             interaction.reply({
                 embeds: [
@@ -30,7 +30,7 @@ module.exports = class ModalCreateEvent extends Event {
                 ephemeral: true
             });
 
-            this.client.emit('modalError', interaction, error);
+            this.client.emit('interactionError', error);
         };
     };
 };

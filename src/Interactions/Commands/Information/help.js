@@ -1,8 +1,8 @@
 const { CommandInteraction, ApplicationCommandOptionType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction, PermissionFlagsBits } = require('discord.js');
 const { readdirSync } = require('fs');
 
-const Command = require('../../../Managers/Structures/Command');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class HelpCommand extends Command {
     constructor(client) {
@@ -35,7 +35,7 @@ module.exports = class HelpCommand extends Command {
             .filter((perm) => (command.config.perms || []).includes(PermissionFlagsBits[perm]))
             .map((perm) => this.client.config.permissions[perm]);
 
-            const mepermissions = Object.keys(this.client.config.permissions)
+            const botPermissions = Object.keys(this.client.config.permissions)
             .filter((perm) => (command.config.meperms || []).includes(PermissionFlagsBits[perm]))
             .map((perm) => this.client.config.permissions[perm]);
 
@@ -48,7 +48,7 @@ module.exports = class HelpCommand extends Command {
                         `> **Description:** ${command.config.description}\n` +
                         `> **Catégorie:** ${this.client.config.categories.emojis[command.config.category]} ${this.client.config.categories.labels[command.config.category]}\n` +
                         `> **Permission${permissions.length > 1 ? 's' : ''} requise${permissions.length > 1 ? 's' : ''}:** ${permissions.length ? this.client.utils.joinCustomLastWord(permissions.map((perm) => `\`${perm}\``)) : `Aucune ${this.client.config.emojis.no}`}\n` +
-                        `> **Permission${mepermissions.length > 1 ? 's' : ''} requise${mepermissions.length > 1 ? 's' : ''} pour ${this.client.config.username}:** ${mepermissions.length ? this.client.utils.joinCustomLastWord(mepermissions.map((meperm) => `\`${meperm}\``)) : `Aucune ${this.client.config.emojis.no}`}`
+                        `> **Permission${botPermissions.length > 1 ? 's' : ''} requise${botPermissions.length > 1 ? 's' : ''} pour ${this.client.config.username}:** ${botPermissions.length ? this.client.utils.joinCustomLastWord(botPermissions.map((meperm) => `\`${meperm}\``)) : `Aucune ${this.client.config.emojis.no}`}`
                     )
                 ]
             });

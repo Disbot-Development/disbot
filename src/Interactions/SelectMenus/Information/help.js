@@ -1,8 +1,8 @@
 const { StringSelectMenuInteraction, ApplicationCommandOptionType } = require('discord.js');
 const { readdirSync } = require('fs');
 
-const SelectMenu = require('../../../Managers/Structures/SelectMenu');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const SelectMenu = require('../../../Core/Structures/SelectMenu');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class HelpSelectMenu extends SelectMenu {
     constructor(client) {
@@ -47,10 +47,18 @@ module.exports = class HelpSelectMenu extends SelectMenu {
                 for (let dir of commandsDir) {
                     dir = dir.toLowerCase();
 
+                    const categoryEmoji = this.client.config.categories.emojis[dir];
+                    const categoryName = this.client.config.categories.labels[dir];
+                    const categoryCommands = this.client.commands.filter((command) => command.config.category.toLowerCase() === dir);
+
+                    const categoryCommandsSize = categoryCommands.size;
+                    const categorySubCommandsSize = categoryCommands.filter((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name).length).size;
+                    const allCommandsSize = categorySubCommandsSize + categoryCommands.size;
+
                     embed.addFields(
                         {
-                            name: `${this.client.config.categories.emojis[dir]} ${this.client.config.categories.labels[dir]} (${this.client.commands.filter((command) => command.config.category.toLowerCase() === dir).filter((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name).length).size ? this.client.commands.filter((command) => command.config.category.toLowerCase() === dir).filter((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name).length).size + this.client.commands.filter((command) => command.config.category.toLowerCase() === dir).size : this.client.commands.filter((command) => command.config.category.toLowerCase() === dir).size})`,
-                            value: `> ${this.client.commands.filter((command) => command.config.category.toLowerCase() === dir).map((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name)?.length ? this.client.getApplicationSubCommands(applicationCommands, command.config.name).map((c) => this.client.getApplicationSubCommandString(applicationCommands, command.config.name, c.name)) : this.client.getApplicationCommandString(applicationCommands, command.config.name)).join(', ')}`
+                            name: `${categoryEmoji} ${categoryName} (${categorySubCommandsSize ? allCommandsSize : categoryCommandsSize})`,
+                            value: `> ${categoryCommands.map((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name)?.length ? this.client.getApplicationSubCommands(applicationCommands, command.config.name).map((c) => this.client.getApplicationSubCommandString(applicationCommands, command.config.name, c.name)) : this.client.getApplicationCommandString(applicationCommands, command.config.name)).join(', ')}`
                         }
                     );
                 };
@@ -61,13 +69,21 @@ module.exports = class HelpSelectMenu extends SelectMenu {
                 
                 break;
             default:
+                const categoryEmoji = this.client.config.categories.emojis[interaction.values[0].toLowerCase()];
+                const categoryName = this.client.config.categories.labels[interaction.values[0].toLowerCase()];
+                const categoryCommands = this.client.commands.filter((command) => command.config.category.toLowerCase() === interaction.values[0].toLowerCase());
+
+                const categoryCommandsSize = categoryCommands.size;
+                const categorySubCommandsSize = categoryCommands.filter((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name).length).size;
+                const allCommandsSize = categoryCommandsSize + categorySubCommandsSize;
+
                 interaction.update({
                     embeds: [
                         new MessageEmbed()
-                        .setTitle(`${this.client.config.categories.emojis[interaction.values[0].toLowerCase()]} ${this.client.config.categories.labels[interaction.values[0].toLowerCase()]} (${this.client.commands.filter((command) => command.config.category.toLowerCase() === interaction.values[0].toLowerCase()).filter((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name).length).size ? this.client.commands.filter((command) => command.config.category.toLowerCase() === interaction.values[0].toLowerCase()).filter((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name).length).size + this.client.commands.filter((command) => command.config.category.toLowerCase() === interaction.values[0].toLowerCase()).size : this.client.commands.filter((command) => command.config.category.toLowerCase() === interaction.values[0].toLowerCase()).size})`)
+                        .setTitle(`${categoryEmoji} ${categoryName} (${categorySubCommandsSize ? allCommandsSize : categoryCommandsSize})`)
                         .setDescription(
-                            `${this.client.config.emojis.help} Voici l'intégralité des commandes de la catégorie ${this.client.config.categories.labels[interaction.values[0]].toLowerCase()}:\n` +
-                            `> ${this.client.commands.filter((command) => command.config.category.toLowerCase() === interaction.values[0].toLowerCase()).map((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name)?.length ? this.client.getApplicationSubCommands(applicationCommands, command.config.name).map((c) => this.client.getApplicationSubCommandString(applicationCommands, command.config.name, c.name)) : this.client.getApplicationCommandString(applicationCommands, command.config.name)).join(', ')}`
+                            `${this.client.config.emojis.help} Voici l'intégralité des commandes de la catégorie ${categoryName.toLowerCase()}:\n` +
+                            `> ${categoryCommands.map((command) => this.client.getApplicationSubCommands(applicationCommands, command.config.name)?.length ? this.client.getApplicationSubCommands(applicationCommands, command.config.name).map((c) => this.client.getApplicationSubCommandString(applicationCommands, command.config.name, c.name)) : this.client.getApplicationCommandString(applicationCommands, command.config.name)).join(', ')}`
                         )
                     ]
                 });

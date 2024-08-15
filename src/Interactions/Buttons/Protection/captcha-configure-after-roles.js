@@ -1,6 +1,6 @@
 const { ButtonInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, RoleSelectMenuBuilder } = require('discord.js');
 
-const Button = require('../../../Managers/Structures/Button');
+const Button = require('../../../Core/Structures/Button');
 
 module.exports = class CaptchaConfigureAfterRolesButton extends Button {
     constructor(client) {
@@ -55,7 +55,7 @@ module.exports = class CaptchaConfigureAfterRolesButton extends Button {
                     .setEmoji(this.client.config.emojis.no)
                     .setLabel('Annuler'),
                     new ButtonBuilder()
-                    .setCustomId('captcha-reset')
+                    .setCustomId('captcha-reset-after-roles')
                     .setStyle(ButtonStyle.Secondary)
                     .setEmoji(this.client.config.emojis.wrench)
                     .setLabel('Réinitialiser')

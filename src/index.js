@@ -4,7 +4,7 @@ require('colors');
 const { createSpinner } = require('nanospinner');
 const { GatewayIntentBits } = require('discord.js');
 
-const Bot = require('./src/Managers/Bot');
+const Bot = require('./Core/Bot');
 
 /**
  *
@@ -42,6 +42,7 @@ async function executeActions(client, action) {
 
 /**
  *
+ * @param {'deploy'|'remove'} action
  * @returns {Promise<Bot>}
  */
 

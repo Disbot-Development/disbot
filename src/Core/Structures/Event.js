@@ -1,4 +1,4 @@
-const Bot = require('../../Managers/Bot');
+const Bot = require('../Bot');
 const Base = require('./Base');
 
 module.exports = class Event extends Base {
@@ -7,6 +7,8 @@ module.exports = class Event extends Base {
      * 
      * @typedef {Object} EventConfig
      * @property {String} name
+     * @property {Boolean} process
+     * @property {Boolean} rest
      */
 
     /**
@@ -18,11 +20,15 @@ module.exports = class Event extends Base {
 
     constructor(client, {
         name = null,
+        process = false,
+        rest = false
     }) {
         super(client);
 
         this.config = {
-            name
+            name,
+            process,
+            rest
         };
     };
 };

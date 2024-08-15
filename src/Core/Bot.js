@@ -1,12 +1,12 @@
-const { Client, ClientOptions, Collection, PermissionFlagsBits, ApplicationCommandOption, ApplicationCommandType, ApplicationCommandManager, ApplicationCommand, ApplicationCommandSubCommand, ApplicationCommandOptionType } = require('discord.js');
+const { Client, ClientOptions, Collection, PermissionFlagsBits, ApplicationCommandOption, ApplicationCommandType, ApplicationCommandManager, ApplicationCommand, ApplicationCommandSubCommand, ApplicationCommandOptionType, ClientPresence, ActivityType, PresenceUpdateStatus } = require('discord.js');
 const { QuickDB, MongoDriver } = require('quick.db');
 const { createSpinner, Spinner } = require('nanospinner');
 
-const Prototypes = require('./Prototypes');
+const Prototypes = require('../Commons/Prototypes');
 const RestAPI = require('./RestAPI');
 const Config = require('./Config');
-const Logger = require('./Logger');
-const Utils = require('./Utils');
+const Logger = require('../Commons/Logger');
+const Utils = require('../Commons/Utils');
 
 module.exports = class Bot extends Client {
 
@@ -217,6 +217,35 @@ module.exports = class Bot extends Client {
 
     /**
      * 
+     * @param {Object} options
+     * @param {String} options.name
+     * @param {ActivityType} options.type
+     * @param {PresenceUpdateStatus} options.status
+     * @returns {ClientPresence}
+     */
+
+    loadPresence(options) {
+        const users = this.allUsers;
+        
+        let plural = 0;
+        const presenceName = options.name.replace(/{\w+}/g, (match) => {
+            switch (match) {
+                case '{users}':
+                    if (users > 1) ++plural;
+                    return users.toLocaleString();
+                case '{plural}':
+                    return plural ? 's' : '';
+            };
+        });
+
+        return this.user.setPresence({
+            activities: [{ name: presenceName, type: options.type }],
+            status: options.status
+        });
+    };
+
+    /**
+     * 
      * @returns {Promise<QuickDB<any>>}
      */
 
@@ -377,11 +406,8 @@ module.exports = class Bot extends Client {
 
             this.events.set(event.config.name, event);
 
-            const parentFolder = path.match(/\w{0,255}\/(\w{0,252}\.js)$/g)[0].split('/')[0];
-
-            if (event.config.name === 'rateLimited') this.rest.on(event.config.name, (...args) => event.run(...args));
-            else if (parentFolder === 'Process') process.on(event.config.name, (...args) => event.run(...args));
-            else this.on(event.config.name, (...args) => event.run(...args));
+            const target = event.config.rest ? this.rest : event.config.process ? process : this;
+            target.on(event.config.name, (...args) => event.run(...args));
         };
 
         this.performance.end = performance.now();

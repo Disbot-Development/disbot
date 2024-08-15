@@ -2,7 +2,7 @@ const { readdirSync, statSync, readFileSync } = require('fs');
 const { ClientPresence } = require('discord.js');
 const { relative, sep } = require('path');
 
-const Bot = require('../Managers/Bot');
+const Bot = require('../Core/Bot');
 
 module.exports = class Utils {
 
@@ -169,30 +169,5 @@ module.exports = class Utils {
         };
 
         return result;
-    };
-
-    /**
-     * 
-     * @returns {ClientPresence}
-     */
-
-    setPresence() {
-        const users = this.client.allUsers;
-        
-        let plural = 0;
-        const presenceName = this.client.config.utils.presence.name.replace(/{\w+}/g, (match) => {
-            switch (match) {
-                case '{users}':
-                    if (users > 1) ++plural;
-                    return users.toLocaleString();
-                case '{plural}':
-                    return plural ? 's' : '';
-            };
-        });
-
-        return this.client.user.setPresence({
-            activities: [{ name: presenceName, type: this.client.config.utils.presence.type }],
-            status: this.client.config.utils.presence.status
-        });
     };
 };

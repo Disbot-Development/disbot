@@ -1,7 +1,7 @@
 const { StringSelectMenuInteraction } = require('discord.js');
 
-const SelectMenu = require('../../../Managers/Structures/SelectMenu');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const SelectMenu = require('../../../Core/Structures/SelectMenu');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class PasswordSelectMenu extends SelectMenu {
     constructor(client) {

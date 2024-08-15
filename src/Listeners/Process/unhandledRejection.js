@@ -1,9 +1,10 @@
-const Event = require('../../Managers/Structures/Event');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class ProcessUnhandledRejection extends Event {
     constructor(client) {
         super(client, {
-            name: 'unhandledRejection'
+            name: 'unhandledRejection',
+            process: true
         });
     };
 
@@ -13,6 +14,6 @@ module.exports = class ProcessUnhandledRejection extends Event {
      */
 
     run (error) {
-        this.client.logger.error(`Unhandled Rejection: ${`${error}`.red}\n`);
+        this.client.logger.error(`Unhandled Rejection: ${`${error.stack ? error.stack : error.message}`.red}\n`);
     };
 };

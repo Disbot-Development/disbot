@@ -1,7 +1,7 @@
 const { ModalSubmitInteraction, PermissionFlagsBits } = require('discord.js');
 
-const MessageEmbed = require('../../../Managers/MessageEmbed');
-const Modal = require('../../../Managers/Structures/Modal');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Modal = require('../../../Core/Structures/Modal');
 
 module.exports = class CaptchaModal extends Modal {
     constructor(client) {

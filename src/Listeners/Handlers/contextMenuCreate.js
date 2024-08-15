@@ -1,8 +1,8 @@
 const { ContextMenuInteraction } = require('discord.js');
 
-const ContextMenu = require('../../Managers/Structures/ContextMenu');
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
+const ContextMenu = require('../../Core/Structures/ContextMenu');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class ContextMenuCreateEvent extends Event {
     constructor(client) {
@@ -17,9 +17,9 @@ module.exports = class ContextMenuCreateEvent extends Event {
      * @param {ContextMenu} contextmenu
      */
     
-    run (interaction, contextmenu) {
+    async run (interaction, contextmenu) {
         try {
-            contextmenu.run(interaction);
+            await contextmenu.run(interaction);
         } catch(error) {
             interaction.reply({
                 embeds: [
@@ -30,7 +30,7 @@ module.exports = class ContextMenuCreateEvent extends Event {
                 ephemeral: true
             });
 
-            this.client.emit('contextMenuError', interaction, error);
+            this.client.emit('interactionError', error);
         };
     };
 };

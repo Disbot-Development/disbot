@@ -1,5 +1,4 @@
 node_modules/
-Images/
 package-lock.json
 *.png
 *.env

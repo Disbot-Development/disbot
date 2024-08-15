@@ -3,10 +3,10 @@ const { ButtonInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder,
 const MessageEmbed = require('../../../Commons/MessageEmbed');
 const Button = require('../../../Core/Structures/Button');
 
-module.exports = class CaptchaResetButton extends Button {
+module.exports = class CaptchaResetAfterRolesButton extends Button {
     constructor(client) {
         super(client, {
-            name: 'captcha-reset',
+            name: 'captcha-reset-after-roles',
             perms: [PermissionFlagsBits.Administrator],
             meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
         });
@@ -18,8 +18,7 @@ module.exports = class CaptchaResetButton extends Button {
      */
 
     async run (interaction) {
-        await this.client.database.delete(`${interaction.guild.id}.captcha.channel`);
-        await this.client.database.delete(`${interaction.guild.id}.captcha.roles.before`);
+        await this.client.database.delete(`${interaction.guild.id}.captcha.roles.after`);
 
         interaction.update({
             embeds: [

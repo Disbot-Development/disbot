@@ -1,7 +1,7 @@
 const { ButtonInteraction, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
 
-const MessageEmbed = require('../../../Managers/MessageEmbed');
-const Button = require('../../../Managers/Structures/Button');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Button = require('../../../Core/Structures/Button');
 const { CaptchaGenerator } = require('captcha-canvas');
 
 module.exports = class CaptchaRegenerateButton extends Button {

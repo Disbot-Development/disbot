@@ -1,4 +1,4 @@
-const Config = require('../Managers/Config');
+const Config = require('../Core/Config');
 
 module.exports = class Logger {
 
@@ -42,6 +42,7 @@ module.exports = class Logger {
     success(message, timeOptions) {
         const duration = timeOptions ? (timeOptions.end - timeOptions.start).toFixed(2) : undefined;
         const durationString = `(${duration}ms)`;
+        
         console.log(`${this.stringDate.grey} ${this.stringName.green} ${message} ${timeOptions ? durationString.grey : ''} ${timeOptions && timeOptions.inline ? '\n' : ''}`);
 
         return true;
@@ -54,9 +55,7 @@ module.exports = class Logger {
      */
 
     error(message) {
-        if (typeof message !== 'string') message = require('util').inspect(message, { depth: 0 });
-
-        console.log(`${this.stringDate.grey} ${this.stringName.red} ${message}`);
+        console.error(`${this.stringDate.grey} ${this.stringName.red} ${message}`);
 
         return true;
     };
@@ -64,12 +63,10 @@ module.exports = class Logger {
     /**
      * 
      * @param {String|Error|EvalError|RangeError|ReferenceError|SyntaxError|TypeError} message
-     * @throws
+     * @throws {Error}
      */
 
     throw(message) {
-        if (typeof message !== 'string') message = require('util').inspect(message, { depth: 0 });
-
         throw new Error(`${this.stringDate.grey} ${this.stringName.red} ${message}`);
     };
 };

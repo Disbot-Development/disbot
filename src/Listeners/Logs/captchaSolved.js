@@ -1,7 +1,7 @@
 const { ModalSubmitInteraction } = require('discord.js');
 
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class CaptchaSolvedEvent extends Event {
     constructor(client) {

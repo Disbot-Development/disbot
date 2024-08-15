@@ -1,7 +1,7 @@
 const { ButtonInteraction, PermissionFlagsBits, MessageCollector, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
-const MessageEmbed = require('../../../Managers/MessageEmbed');
-const Button = require('../../../Managers/Structures/Button');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Button = require('../../../Core/Structures/Button');
 
 module.exports = class AntiAltConfigureButton extends Button {
     constructor(client) {

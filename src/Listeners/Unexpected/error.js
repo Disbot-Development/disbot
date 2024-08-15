@@ -1,4 +1,4 @@
-const Event = require('../../Managers/Structures/Event');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class ErrorEvent extends Event {
     constructor(client) {

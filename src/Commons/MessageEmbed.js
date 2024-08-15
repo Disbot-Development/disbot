@@ -1,6 +1,6 @@
 const { EmbedBuilder, Colors } = require('discord.js');
 
-const Config = require('../Managers/Config');
+const Config = require('../Core/Config');
 
 module.exports = class MessageEmbed extends EmbedBuilder {
 

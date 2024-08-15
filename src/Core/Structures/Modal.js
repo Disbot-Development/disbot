@@ -1,13 +1,13 @@
 const { PermissionFlagsBits } = require('discord.js');
 
-const Bot = require('../../Managers/Bot');
+const Bot = require('../Bot');
 const Base = require('./Base');
 
-module.exports = class Button extends Base {
+module.exports = class Modal extends Base {
 
     /**
      * 
-     * @typedef {Object} ButtonConfig
+     * @typedef {Object} ModalConfig
      * @property {String} name
      * @property {PermissionFlagsBits[]} perms
      * @property {PermissionFlagsBits[]} meperms
@@ -16,10 +16,10 @@ module.exports = class Button extends Base {
     /**
      * 
      * @param {Bot} client
-     * @param {ButtonConfig} config
+     * @param {ModalConfig} config
      * @constructor
      */
-    
+
     constructor(client, {
         name = null,
         perms = null,

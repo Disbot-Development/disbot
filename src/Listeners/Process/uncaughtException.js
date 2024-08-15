@@ -1,9 +1,10 @@
-const Event = require('../../Managers/Structures/Event');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class ProcessUncaughtException extends Event {
     constructor(client) {
         super(client, {
-            name: 'uncaughtException'
+            name: 'uncaughtException',
+            process: true
         });
     };
 
@@ -13,6 +14,6 @@ module.exports = class ProcessUncaughtException extends Event {
      */
 
     run (error) {
-        this.client.logger.error(`Uncaught Exception: ${`${error}`.red}\n`);
+        this.client.logger.error(`Uncaught Exception: ${`${error.stack ? error.stack : error.message}`.red}\n`);
     };
 };

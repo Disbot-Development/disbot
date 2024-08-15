@@ -1,7 +1,7 @@
 const { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder, WebhookClient } = require('discord.js');
 
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class MessageCreateEvent extends Event {
     constructor(client) {
@@ -19,7 +19,7 @@ module.exports = class MessageCreateEvent extends Event {
     async run (message) {
         if (!message.guild || message.author.bot) return;
 
-        const strip = new AttachmentBuilder('./src/Images/Little Banner.png')
+        const strip = new AttachmentBuilder('./assets/imgs/Little Banner.png')
         .setName('strip.png');
 
         if (message.mentions.has(this.client.user, { ignoreEveryone: true, ignoreRepliedUser: true, ignoreRoles: true })) message.reply({

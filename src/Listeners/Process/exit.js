@@ -1,15 +1,16 @@
-const Event = require('../../Managers/Structures/Event');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class ProcessExitEvent extends Event {
     constructor(client) {
         super(client, {
-            name: 'exit'
+            name: 'exit',
+            process: true
         });
     };
 
     /**
      * 
-     * @param {number} code 
+     * @param {Number} code 
      */
 
     run (code) {

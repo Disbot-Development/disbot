@@ -7,7 +7,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/disbot-development/disbot">
-    <img src="src/Images/Blurple White.png" alt="Logo" width="128" height="128">
+    <img src="assets/imgs/Blurple White.png" alt="Logo" width="128" height="128">
   </a>
 
   <h3 align="center">Disbot</h3>
@@ -89,4 +89,4 @@ Voici la liste des étapes à suivre afin d'exécuter le projet.
 [forks-url]: https://github.com/disbot-development/disbot/network/members
 [stars-shield]: https://img.shields.io/github/stars/disbot-development/disbot.svg?style=for-the-badge
 [stars-url]: https://github.com/disbot-development/disbot/stargazers
-[product-screenshot]: src/Images/Blurple_White_Banner.png
+[product-screenshot]: assets/imgs/Disbot_Banner.png

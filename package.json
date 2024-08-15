@@ -1,8 +1,8 @@
 {
   "name": "disbot",
-  "version": "1.6.5",
+  "version": "1.6.7",
   "description": "Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs.",
-  "main": "index.js",
+  "main": "src/index.js",
   "dependencies": {
     "captcha-canvas": "^3.2.1",
     "colors": "^1.4.0",

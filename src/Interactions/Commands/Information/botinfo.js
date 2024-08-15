@@ -1,8 +1,8 @@
 const { CommandInteraction, version, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { cpus, totalmem, freemem, type, release} = require('os');
+const { cpus, totalmem, freemem, type, release } = require('os');
 
-const Command = require('../../../Managers/Structures/Command');
-const MessageEmbed = require('../../../Managers/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
+const MessageEmbed = require('../../../Commons/MessageEmbed');
 
 module.exports = class BotInfoCommand extends Command {
     constructor(client) {

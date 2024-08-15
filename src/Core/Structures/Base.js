@@ -1,4 +1,4 @@
-const Bot = require('../../Managers/Bot');
+const Bot = require('../Bot');
 
 module.exports = class Base {
 

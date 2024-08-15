@@ -1,8 +1,8 @@
 const { SelectMenuInteraction } = require('discord.js');
 
-const SelectMenu = require('../../Managers/Structures/SelectMenu');
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
+const SelectMenu = require('../../Core/Structures/SelectMenu');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class SelectMenuCreateEvent extends Event {
     constructor(client) {
@@ -17,12 +17,12 @@ module.exports = class SelectMenuCreateEvent extends Event {
      * @param {SelectMenu} selectmenu
      */
 
-    run (interaction, selectmenu) {
+    async run (interaction, selectmenu) {
         if ((interaction.message.interaction?.user?.id || interaction.user.id) !== interaction.user.id) return;
 
         try {
-            selectmenu.run(interaction);
-        } catch(err) {
+            await selectmenu.run(interaction);
+        } catch(error) {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
@@ -32,7 +32,7 @@ module.exports = class SelectMenuCreateEvent extends Event {
                 ephemeral: true
             });
 
-            this.client.emit('selectMenuError', interaction, err);
+            this.client.emit('interactionError', error);
         };
     };
 };

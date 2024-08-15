@@ -1,6 +1,6 @@
 const { ButtonInteraction, PermissionFlagsBits, ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelSelectMenuBuilder } = require('discord.js');
 
-const Button = require('../../../Managers/Structures/Button');
+const Button = require('../../../Core/Structures/Button');
 
 module.exports = class LogsConfigureButton extends Button {
     constructor(client) {

@@ -1,6 +1,6 @@
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
-const Bot = require('../Managers/Bot');
+const Bot = require('../Core/Bot');
 const express = require('express');
 const helmet = require('helmet');
 
@@ -17,8 +17,6 @@ module.exports = class RestAPI {
         this.client = client;
         this.port = this.client.config.port || 8000;
         this.routes = [];
-
-        this.app.enable('trust proxy');
 
         this.app.use(express.json());
         this.app.use(helmet());
@@ -129,14 +127,18 @@ module.exports = class RestAPI {
 
     getGuilds(req, res) {
         const sortedGuilds = this.client.guilds.cache.sort((a, b) => a.joinedTimestamp - b.joinedTimestamp);
-        const guilds = sortedGuilds.map((guild) => ({
-            id: guild.id,
-            name: guild.name,
-            avatarURL: guild.iconURL(),
-            memberCount: guild.memberCount
-        }));
+        const guilds = sortedGuilds.reduce((acc, guild) => {
+            acc[guild.id] = {
+                id: guild.id,
+                name: guild.name,
+                avatarURL: guild.iconURL(),
+                memberCount: guild.memberCount
+            };
+
+            return acc;
+        }, {});
         
-        return res.json({ guilds });
+        return res.json(guilds);
     };
 
     /**
@@ -169,14 +171,18 @@ module.exports = class RestAPI {
         const guild = this.client.guilds.resolve(req.params.id);
         if (!guild) return res.status(404).json({ error: 'Guild not found' });
         
-        const channels = (await guild.channels.fetch()).map((channel) => ({
-            id: channel.id,
-            name: channel.name,
-            type: channel.type,
-            position: channel.position
-        }));
+        const channels = (await guild.channels.fetch()).reduce((acc, channel) => {
+            acc[channel.id] = {
+                id: channel.id,
+                name: channel.name,
+                type: channel.type,
+                position: channel.position
+            };
+
+            return acc;
+        }, {});
         
-        return res.json({ channels });
+        return res.json(channels);
     };
 
     /**
@@ -211,14 +217,18 @@ module.exports = class RestAPI {
         const guild = this.client.guilds.resolve(req.params.id);
         if (!guild) return res.status(404).json({ error: 'Guild not found' });
         
-        const roles = (await guild.roles.fetch()).map((role) => ({
-            id: role.id,
-            name: role.name,
-            members: role.members.size,
-            color: role.hexColor,
-        }));
+        const roles = (await guild.roles.fetch()).reduce((acc, role) => {
+            acc[role.id] = {
+                id: role.id,
+                name: role.name,
+                members: role.members.size,
+                color: role.hexColor
+            };
+
+            return acc;
+        }, {});
         
-        return res.json({ roles });
+        return res.json(roles);
     };
 
     /**
@@ -252,7 +262,7 @@ module.exports = class RestAPI {
     getUsers(req, res) {
         const users = this.client.allUsers;
         
-        return res.json({ users });
+        return res.json(users);
     };
 
     /**
@@ -284,14 +294,18 @@ module.exports = class RestAPI {
 
     getCommands(req, res) {
         const commandsMap = this.client.commands.map((command) => command.config);
-        const commands = commandsMap.map((command) => ({
-            name: command.name,
-            description: command.description,
-            category: command.category,
-            options: command.options
-        }))
-        
-        return res.json({ commands });
+        const commands = commandsMap.reduce((acc, command) => {
+            acc[command.name] = {
+                name: command.name,
+                description: command.description,
+                category: command.category,
+                options: command.options
+            };
+
+            return acc;
+        }, {});
+    
+        return res.json(commands);
     };
 
     /**
@@ -322,9 +336,17 @@ module.exports = class RestAPI {
      */
 
     getEvents(req, res) {
-        const events = this.client.events.map((event) => event.config);
+        const eventsMap = this.client.events.map((event) => event.config);
+
+        const events = eventsMap.reduce((acc, event) => {
+            acc[event.name] = {
+                name: event.name
+            };
+
+            return acc;
+        }, {});
         
-        return res.json({ events });
+        return res.json(events);
     };
 
     /**
@@ -339,7 +361,7 @@ module.exports = class RestAPI {
         const event = events.find((event) => event.name === req.params.name);
         if (!event) return res.status(404).json({ error: 'Event not found' });
         
-        return res.json({ event });
+        return res.json(event);
     };
 
     /**
@@ -352,7 +374,7 @@ module.exports = class RestAPI {
     getVersion(req, res) {
         const version = this.client.config.utils.version;
         
-        return res.json({ version });
+        return res.json(version);
     };
 
     /**
@@ -365,7 +387,7 @@ module.exports = class RestAPI {
     getUptime(req, res) {
         const uptime = this.client.uptime;
         
-        return res.json({ uptime });
+        return res.json(uptime);
     };
 
     /**
@@ -378,7 +400,7 @@ module.exports = class RestAPI {
     getPing(req, res) {
         const ping = this.client.ws.ping;
         
-        return res.json({ ping });
+        return res.json(ping);
     };
 
     /**
@@ -403,12 +425,16 @@ module.exports = class RestAPI {
      */
 
     getRoutes(req, res) {
-        const routes = this.routes.map(route => ({
-            method: route.method.toUpperCase(),
-            path: route.path
-        }));
+        const routes = this.routes.reduce((acc, route) => {
+            acc[routes.path] = {
+                path: route.path,
+                method
+            };
 
-        return res.json({ routes });
+            return acc;
+        }, {});
+
+        return res.json(routes);
     };
 
     /**

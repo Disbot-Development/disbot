@@ -1,6 +1,6 @@
 const { ApplicationCommandOption, PermissionFlagsBits } = require('discord.js');
 
-const Bot = require('../../Managers/Bot');
+const Bot = require('../Bot');
 const Base = require('./Base');
 
 module.exports = class Command extends Base {

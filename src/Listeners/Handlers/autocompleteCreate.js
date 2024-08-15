@@ -1,7 +1,7 @@
 const { AutocompleteInteraction } = require('discord.js');
 
-const Command = require('../../Managers/Structures/Command');
-const Event = require('../../Managers/Structures/Event');
+const Command = require('../../Core/Structures/Command');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class AutoCompleteCreateEvent extends Event {
     constructor(client) {
@@ -16,11 +16,11 @@ module.exports = class AutoCompleteCreateEvent extends Event {
      * @param {Command} command
      */
 
-    run (interaction, command) {
+    async run (interaction, command) {
         try {
-            command.autocomplete(interaction);
+            await command.autocomplete(interaction);
         } catch(error) {
-            this.client.emit('autocompleteError', interaction, error);
+            this.client.emit('interactionError', error);
         };
     };
 };

@@ -1,8 +1,8 @@
 const { CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
-const Command = require('../../Managers/Structures/Command');
-const MessageEmbed = require('../../Managers/MessageEmbed');
-const Event = require('../../Managers/Structures/Event');
+const Command = require('../../Core/Structures/Command');
+const MessageEmbed = require('../../Commons/MessageEmbed');
+const Event = require('../../Core/Structures/Event');
 
 module.exports = class CommandCreateEvent extends Event {
     constructor(client) {
@@ -19,7 +19,7 @@ module.exports = class CommandCreateEvent extends Event {
     
     async run (interaction, command) {
         try {
-            command.run(interaction);
+            await command.run(interaction);
             
             if (interaction.guild.members.me.roles.highest !== interaction.guild.roles.highest && interaction.user.id === interaction.guild.ownerId && !(await this.client.database.get(`${interaction.guild.id}.ignored`))?.includes('role')) interaction.channel.send({
                 embeds: [
@@ -48,7 +48,7 @@ module.exports = class CommandCreateEvent extends Event {
                 ephemeral: true
             });
 
-            this.client.emit('commandError', interaction, error);
+            this.client.emit('interactionError', error);
         };
     };
 };
