@@ -1,4 +1,4 @@
-const { GuildMember, User } = require('discord.js');
+const { User, Guild } = require('discord.js');
 
 const MessageEmbed = require('../../Commons/MessageEmbed');
 const Event = require('../../Core/Structures/Event');
@@ -12,15 +12,16 @@ module.exports = class BanCreateEvent extends Event {
 
     /**
      * 
+     * @param {Guild} guild
      * @param {User} author
-     * @param {GuildMember} member
+     * @param {User} user
      * @param {String} reason
      */
     
-    async run (author, member, reason) {
-        const modules = await this.client.database.get(`${member.guild.id}.modules`) || [];
-        const logsId = await this.client.database.get(`${member.guild.id}.logs.channel`);
-        const logs = logsId ? await member.guild.channels.fetch(logsId).catch(() => undefined) : undefined;
+    async run (guild, author, user, reason) {
+        const modules = await this.client.database.get(`${guild.id}.modules`) || [];
+        const logsId = await this.client.database.get(`${guild.id}.logs.channel`);
+        const logs = logsId ? await guild.channels.fetch(logsId).catch(() => undefined) : undefined;
 
         if (modules.includes('logs') && logs) {
             logs.send({
@@ -30,7 +31,7 @@ module.exports = class BanCreateEvent extends Event {
                     .setDescription(
                         `Un membre vient d\'être banni.\n` +
                         `> **Auteur:** ${author} - \`${author.tag}\` - ${author.id}\n` +
-                        `> **Membre:** ${member.user} - \`${member.user.tag}\` - ${member.user.id}\n` +
+                        `> **Membre:** ${user} - \`${user.tag}\` - ${user.id}\n` +
                         `> **Raison:** ${reason}`
                     )
                 ]

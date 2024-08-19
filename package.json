@@ -1,6 +1,6 @@
 {
   "name": "disbot",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "description": "Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs.",
   "main": "src/index.js",
   "dependencies": {
@@ -30,8 +30,10 @@
   },
   "keywords": [
     "protection",
+    "protect",
     "moderation",
-    "antiraid"
+    "antiraid",
+    "raid"
   ],
   "author": "sey.ioo",
   "license": "GPL 3.0",

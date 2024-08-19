@@ -32,11 +32,12 @@ module.exports = class BanCommand extends Command {
      * @param {CommandInteraction} interaction 
      */
 
-    run (interaction) {
-        const member = interaction.options.getMember('member');
+    async run (interaction) {
+        const user = interaction.options.getUser('member');
+        const member = await interaction.guild.members.fetch(user.id).catch(() => null);
         const reason = interaction.options.getString('reason') || 'Aucun raison spécifiée.';
 
-        if (!interaction.member.isAdmin() && member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
+        if (!interaction.member.isAdmin() && member && member.roles.highest.position >= interaction.member.roles.highest.position) return interaction.reply({
             embeds: [
                 new MessageEmbed()
                 .setStyle('ERROR')
@@ -45,20 +46,20 @@ module.exports = class BanCommand extends Command {
             ephemeral: true
         });
 
-        member.ban({ reason })
+        interaction.guild.bans.create(user.id, { reason })
         .then(() => {
             interaction.reply({
                 embeds: [
                     new MessageEmbed()
                     .setStyle('SUCCESS')
                     .setDescription(
-                        `\`${member.user.tag}\` vient d'être banni du serveur.\n` +
+                        `\`${user.tag}\` vient d'être banni du serveur.\n` +
                         `> **Raison:** ${reason}`
                     )
                 ]
             });
 
-            member.send({
+            user.send({
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Bannissement')
@@ -80,7 +81,7 @@ module.exports = class BanCommand extends Command {
             })
             .catch(() => 0);
 
-            this.client.emit('banCreate', interaction.user, member, reason);
+            this.client.emit('banCreate', interaction.guild, interaction.user, user, reason);
         })
         .catch(() => {
             interaction.reply({

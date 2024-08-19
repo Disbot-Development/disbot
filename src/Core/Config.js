@@ -17,7 +17,7 @@ module.exports = class Config {
             betaToken: process.env.BETA_TOKEN,
             invite: `https://discord.com/oauth2/authorize?client_id=1233606057507422268`,
             devs: ['1218940758061617153'],
-            version: '1.6.7',
+            version: '1.6.8',
             presence: {
                 name: `${this.baseURL}・{users} utilisateur{plural}`,
                 type: ActivityType.Custom,

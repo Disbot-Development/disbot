@@ -426,9 +426,9 @@ module.exports = class RestAPI {
 
     getRoutes(req, res) {
         const routes = this.routes.reduce((acc, route) => {
-            acc[routes.path] = {
+            acc[route.path] = {
                 path: route.path,
-                method
+                method: route.method.toUpperCase()
             };
 
             return acc;
