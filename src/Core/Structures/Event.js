@@ -1,5 +1,5 @@
-const Bot = require('../Bot');
 const Base = require('./Base');
+const Bot = require('../Bot');
 
 module.exports = class Event extends Base {
 

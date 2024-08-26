@@ -1,7 +1,7 @@
-const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, StringSelectMenuBuilder } = require('discord.js');
+const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, Colors } = require('discord.js');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class AntiLinkCommand extends Command {
     constructor(client) {
@@ -32,7 +32,7 @@ module.exports = class AntiLinkCommand extends Command {
                         `Cela permet d'anticiper la promotion de liens suspects (ou non).\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Liens interdits:** ${this.client.config.antilink.type[await this.client.database.get(`${interaction.guild.id}.antilink.type`)] || 'Aucun'}\n` +
                         `> - **Durée rendu muet:** ${await this.client.database.get(`${interaction.guild.id}.antilink.duration`) ? `${await this.client.database.get(`${interaction.guild.id}.antilink.duration`)} minute${await this.client.database.get(`${interaction.guild.id}.antilink.duration`) > 1 ? 's' : ''}` : `${this.client.config.antilink.duration} minute${this.client.config.antilink.duration > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> - **Information supplémentaire:** Tous les utilisateurs et bots Discord n'étant pas inscris dans la liste blanche se verront affectés par l'anti-link.`
@@ -79,7 +79,7 @@ module.exports = class AntiLinkCommand extends Command {
                         `Cela permet d'anticiper la promotion de liens suspects (ou non).\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Statut:** Désactivé ${this.client.config.emojis.no}\n` +
                         `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-link.`
                     )
                     .setColor(Colors.Red)

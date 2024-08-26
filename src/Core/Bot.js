@@ -1,12 +1,12 @@
 const { Client, ClientOptions, Collection, PermissionFlagsBits, ApplicationCommandOption, ApplicationCommandType, ApplicationCommandManager, ApplicationCommand, ApplicationCommandSubCommand, ApplicationCommandOptionType, ClientPresence, ActivityType, PresenceUpdateStatus } = require('discord.js');
-const { QuickDB, MongoDriver } = require('quick.db');
 const { createSpinner, Spinner } = require('nanospinner');
+const { QuickDB, MongoDriver } = require('quick.db');
 
 const Prototypes = require('../Commons/Prototypes');
-const RestAPI = require('./RestAPI');
-const Config = require('./Config');
 const Logger = require('../Commons/Logger');
 const Utils = require('../Commons/Utils');
+const RestAPI = require('./RestAPI');
+const Config = require('./Config');
 
 module.exports = class Bot extends Client {
 
@@ -252,7 +252,7 @@ module.exports = class Bot extends Client {
     async loadDatabase() {
         this.performance.start = performance.now();
 
-        const driver = new MongoDriver(process.env.DATABASE_URI);
+        const driver = new MongoDriver(this.config.utils.database.uri);
         await driver.connect();
 
         this.database = new QuickDB({ driver });
@@ -433,7 +433,7 @@ module.exports = class Bot extends Client {
      * @returns {Promise<false|any>}
      */
 
-    deployClientCommands() {
+    async deployClientCommands() {
         return this.application.commands.set(this.interactions).catch(() => false);
     };
     
@@ -442,7 +442,7 @@ module.exports = class Bot extends Client {
      * @returns {Promise<false|any>}
      */
 
-    removeClientCommands() {
+    async removeClientCommands() {
         return this.application.commands.set([]).catch(() => false);
     };
 
@@ -472,7 +472,7 @@ module.exports = class Bot extends Client {
      */
 
     async loadClient(spinner) {
-        this.connection = spinner ? undefined : createSpinner(`Connecting ${this.config.username} to the Discord API...`).start();
+        if (spinner) this.connection = createSpinner(`Connecting ${this.config.username} to the Discord API...`).start();
 
         return this.login(this.devMode ? this.config.utils.betaToken : this.config.utils.token).catch(() => this.connection.error({ text: `${this.config.username} was unable to connect to the Discord API.` }));
     };

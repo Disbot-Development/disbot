@@ -1,4 +1,4 @@
-const { Guild, ActionRowBuilder, ButtonBuilder, ButtonStyle, AuditLogEvent, PermissionFlagsBits } = require('discord.js');
+const { PermissionFlagsBits, Guild, ActionRowBuilder, ButtonBuilder, ButtonStyle, AuditLogEvent } = require('discord.js');
 
 const MessageEmbed = require('../../Commons/MessageEmbed');
 const Event = require('../../Core/Structures/Event');
@@ -27,7 +27,7 @@ module.exports = class GuildCreateEvent extends Event {
                     new MessageEmbed()
                     .setTitle(`${this.client.config.emojis.heart} Merci de m\'avoir ajouté à votre serveur !`)
                     .setDescription(
-                        `${this.client.config.emojis.help} ${this.client.config.username} est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande </${applicationCommands.filter((cmd) => cmd.name === 'help').first().name}:${applicationCommands.filter((cmd) => cmd.name === 'help').first().id}> afin de voir la liste de mes commandes !\n\n` +
+                        `${this.client.config.emojis.help} ${this.client.config.username} est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs. Je fonctionne en commandes slash ! Utilise la commande ${this.client.getApplicationCommandString(applicationCommands, 'help')} afin de voir la liste de mes commandes !\n\n` +
     
                         `${this.client.config.emojis.mod} Voici la liste des commandes utiles à la protection de votre serveur:\n` +
                         `> - ${this.client.getApplicationCommandString(applicationCommands, 'logs')}: Répertorier les actions importantes que j'ai réalisé sur le serveur.\n` +

@@ -1,7 +1,7 @@
 const { CommandInteraction, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class PasswordCommand extends Command {
     constructor(client) {

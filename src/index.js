@@ -1,8 +1,8 @@
 require('dotenv').config();
 require('colors');
 
-const { createSpinner } = require('nanospinner');
 const { GatewayIntentBits } = require('discord.js');
+const { createSpinner } = require('nanospinner');
 
 const Bot = require('./Core/Bot');
 
@@ -17,7 +17,7 @@ async function executeActions(client, action) {
 	let spinner;
 
 	spinner = createSpinner(`Connecting ${client.config.username} to the Discord API...`).start();
-	await client.loadClient(true);
+	await client.loadClient();
 	spinner.success({ text: `${client.config.username} has been connected to the Discord API.` });
 
 	switch (action) {
@@ -43,10 +43,11 @@ async function executeActions(client, action) {
 /**
  *
  * @param {'deploy'|'remove'} action
- * @returns {Promise<Bot>}
+ * @param {'deploy'|'remove'} [secondAction]
+ * @returns {Promise<undefined>}
  */
 
-async function main(action) {
+async function main(action, secondAction) {
 	const client = new Bot({
 		intents: [
 			GatewayIntentBits.Guilds,
@@ -62,18 +63,22 @@ async function main(action) {
 		}
 	});
 
-	client.options.allowedMentions.roles = Object.values(client.config.roles);
 	client.options.allowedMentions.users = client.config.utils.devs;
 
 	if (action && action !== 'dev') {
 		executeActions(client, action);
 	} else {
-		if (action === 'dev') client.devMode = true;
+		if (action === 'dev') {
+			client.devMode = true;
+
+			if (secondAction) return executeActions(client, secondAction);
+		};
+		
 		await client.loadAll();
-		await client.loadClient();
+		await client.loadClient(true);
 	};
 
 	module.exports = client;
 };
 
-main(process.argv[2]);
+main(process.argv[2], process.argv[3]);

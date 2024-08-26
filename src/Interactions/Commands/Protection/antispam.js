@@ -1,7 +1,7 @@
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class AntiSpamCommand extends Command {
     constructor(client) {
@@ -32,7 +32,7 @@ module.exports = class AntiSpamCommand extends Command {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque d'utilisateurs Discord malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Limite de messages en ${this.client.config.antispam.cooldown} seconde${this.client.config.antispam.cooldown > 1 ? 's' : ''}:** ${await this.client.database.get(`${interaction.guild.id}.antispam.limit`) ? `${await this.client.database.get(`${interaction.guild.id}.antispam.limit`)} message${await this.client.database.get(`${interaction.guild.id}.antispam.limit`) > 1 ? 's' : ''}` : `${this.client.config.antispam.limit} message${this.client.config.antispam.limit > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> - **Durée rendu muet:** ${await this.client.database.get(`${interaction.guild.id}.antispam.duration`) ? `${await this.client.database.get(`${interaction.guild.id}.antispam.duration`)} minute${await this.client.database.get(`${interaction.guild.id}.antispam.duration`) > 1 ? 's' : ''}` : `${this.client.config.antispam.duration} minute${this.client.config.antispam.duration > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> - **Information supplémentaire:** Tous les utilisateurs n'étant pas inscris dans la liste blanche se verront affectés par l'anti-spam.`
@@ -65,7 +65,7 @@ module.exports = class AntiSpamCommand extends Command {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque d'utilisateurs Discord malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Statut:** Désactivé ${this.client.config.emojis.no}\n` +
                         `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-spam.`
                     )
                     .setColor(Colors.Red)

@@ -1,5 +1,3 @@
-const { AutocompleteInteraction } = require('discord.js');
-
 const MessageEmbed = require('../../Commons/MessageEmbed');
 const Event = require('../../Core/Structures/Event');
 

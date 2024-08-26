@@ -13,6 +13,6 @@ module.exports = class ErrorEvent extends Event {
      */
 
     run (error) {
-        this.client.logger.error(`Client error: ${`${error}`.red}\n`);
+        this.client.logger.error(`Client Error: ${`${error.stack ? error.stack : error.message}`.red}\n`);
     };
 };

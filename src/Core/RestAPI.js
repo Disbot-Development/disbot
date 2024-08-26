@@ -15,7 +15,7 @@ module.exports = class RestAPI {
     constructor(client) {
         this.app = express();
         this.client = client;
-        this.port = this.client.config.port || 8000;
+        this.port = this.client.config.restapi.port || 8000;
         this.routes = [];
 
         this.app.use(express.json());

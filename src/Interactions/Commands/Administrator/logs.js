@@ -1,7 +1,7 @@
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class LogsCommand extends Command {
     constructor(client) {
@@ -10,7 +10,7 @@ module.exports = class LogsCommand extends Command {
             description: 'Configurer le système de logs.',
             category: 'administrator',
             perms: [PermissionFlagsBits.Administrator],
-            meperms: [PermissionFlagsBits.ManageChannels]
+            meperms: [PermissionFlagsBits.ManageChannels, PermissionFlagsBits.ManageRoles]
         });
     };
 
@@ -32,7 +32,7 @@ module.exports = class LogsCommand extends Command {
                         `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Salon de logs:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.logs.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> - **Information supplémentaire:** Veillez à ce que je garde l'accès au salon. Faites attention à qui vous donnez l'accès aux logs.`
                     )
@@ -64,7 +64,7 @@ module.exports = class LogsCommand extends Command {
                         `Cela permet de suivre mes actions et les raisons de mes actions.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Statut:** Désactivé ${this.client.config.emojis.no}\n` +
                         `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système de logs.`
                     )
                     .setColor(Colors.Red)

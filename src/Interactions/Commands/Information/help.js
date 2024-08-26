@@ -1,8 +1,8 @@
 const { CommandInteraction, ApplicationCommandOptionType, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, AutocompleteInteraction, PermissionFlagsBits } = require('discord.js');
 const { readdirSync } = require('fs');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class HelpCommand extends Command {
     constructor(client) {
@@ -13,7 +13,7 @@ module.exports = class HelpCommand extends Command {
             options: [
                 {
                     name: 'command',
-                    description: 'Obtenir les informations d\'une commande.',
+                    description: 'La commande dont vous souhaitez obtenir les informations.',
                     type: ApplicationCommandOptionType.String,
                     autocomplete: true
                 }
@@ -54,6 +54,12 @@ module.exports = class HelpCommand extends Command {
             });
         } else {
             const commandsDir = readdirSync('./src/Interactions/Commands');
+            commandsDir.sort((a, b) => {
+                a = this.client.config.categories.level[a.toLowerCase()];
+                b = this.client.config.categories.level[b.toLowerCase()];
+
+                return a - b;
+            });
     
             const row = new ActionRowBuilder()
             .addComponents(

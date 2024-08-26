@@ -19,7 +19,7 @@ module.exports = class MessageCreateEvent extends Event {
     async run (message) {
         if (!message.guild || message.author.bot) return;
 
-        const strip = new AttachmentBuilder('./assets/imgs/Little Banner.png')
+        const strip = new AttachmentBuilder('./assets/imgs/banner2.png')
         .setName('strip.png');
 
         if (message.mentions.has(this.client.user, { ignoreEveryone: true, ignoreRepliedUser: true, ignoreRoles: true })) message.reply({

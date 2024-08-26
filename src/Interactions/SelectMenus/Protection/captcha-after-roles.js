@@ -1,4 +1,4 @@
-const { RoleSelectMenuInteraction, Colors, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { RoleSelectMenuInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
 const SelectMenu = require('../../../Core/Structures/SelectMenu');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
@@ -28,7 +28,7 @@ module.exports = class CaptchaAfterRolesSelectMenu extends SelectMenu {
                     `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                     
                     `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                    `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                    `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                     `> - **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                     `> - **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                     `> - **Rôle après vérification:** ${await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`) ? (await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)).map((role) => interaction.guild.roles.resolve(role)) : `Non configuré ${this.client.config.emojis.no}`}\n` +

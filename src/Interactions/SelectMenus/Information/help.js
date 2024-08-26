@@ -1,4 +1,4 @@
-const { StringSelectMenuInteraction, ApplicationCommandOptionType } = require('discord.js');
+const { StringSelectMenuInteraction } = require('discord.js');
 const { readdirSync } = require('fs');
 
 const SelectMenu = require('../../../Core/Structures/SelectMenu');
@@ -43,6 +43,12 @@ module.exports = class HelpSelectMenu extends SelectMenu {
                 .setDescription(`${this.client.config.emojis.help} Voici l'intégralité de mes commandes:`)
 
                 const commandsDir = readdirSync('./src/Interactions/Commands');
+                commandsDir.sort((a, b) => {
+                    a = this.client.config.categories.level[a.toLowerCase()];
+                    b = this.client.config.categories.level[b.toLowerCase()];
+
+                    return a - b;
+                });
 
                 for (let dir of commandsDir) {
                     dir = dir.toLowerCase();

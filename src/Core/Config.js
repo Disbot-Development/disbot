@@ -1,4 +1,4 @@
-const { Colors, ActivityType, PresenceUpdateStatus, AutoModerationRuleEventType, AutoModerationRuleTriggerType, AutoModerationRuleKeywordPresetType, AutoModerationActionType } = require('discord.js');
+const { ActivityType, PresenceUpdateStatus, AutoModerationRuleEventType, AutoModerationRuleTriggerType, AutoModerationRuleKeywordPresetType, AutoModerationActionType, Colors } = require('discord.js');
 
 module.exports = class Config {
 
@@ -10,14 +10,16 @@ module.exports = class Config {
     constructor() {
         this.baseURL = 'dis-bot.xyz';
         this.username = 'Disbot';
-        this.dev = 'sey.ioo';
 
         this.utils = {
             token: process.env.TOKEN,
             betaToken: process.env.BETA_TOKEN,
-            invite: `https://discord.com/oauth2/authorize?client_id=1233606057507422268`,
+            database: {
+                uri: process.env.DATABASE_URI
+            },
+            invite: 'https://discord.com/oauth2/authorize?client_id=1233606057507422268',
             devs: ['1218940758061617153'],
-            version: '1.6.8',
+            version: '1.6.9',
             presence: {
                 name: `${this.baseURL}・{users} utilisateur{plural}`,
                 type: ActivityType.Custom,
@@ -36,20 +38,14 @@ module.exports = class Config {
         this.guild = '1238444132704194692';
         this.logs = '1238444203877597237';
 
-        this.roles = {
-            news: '1254877996041506992',
-            partners: '1260630871506157675',
-            ad_exchange: '1264754123287302195'
-        };
-
         this.links = {
             invite: this.utils.invite,
-            support: `https://discord.gg/YPW3ZNuKW5`,
+            support: 'https://discord.gg/YPW3ZNuKW5',
             website: `https://${this.baseURL}`
         };
 
         this.embeds = {
-            footer: `${this.username} ©️ ${new Date().getFullYear()}・Fait avec ❤️ par ${this.dev}`,
+            footer: `${this.username} ©️ ${new Date().getFullYear()}・Propulsé par Disbot Development`,
             color: Colors.Blurple
         };
 
@@ -123,52 +119,16 @@ module.exports = class Config {
         };
 
         this.permissions = {
-            CreateInstantInvite: 'Créer une invitation instantanée',
             KickMembers: 'Expulser des membres',
             BanMembers: 'Bannir des membres',
             Administrator: 'Administrateur',
             ManageChannels: 'Gérer les salons',
             ManageGuild: 'Gérer le serveur',
-            AddReactions: 'Ajouter des réactions',
-            ViewAuditLog: 'Voir les logs',
-            PrioritySpeaker: 'Voix prioritaire',
-            Stream: 'Vidéo',
-            ViewChannel: 'Voir le salon',
-            SendMessages: 'Envoyer des messages',
-            SendTTSMessages: 'Envoyer des messages TTS',
+            ViewAuditLog: 'Voir les logs du serveur',
             ManageMessages: 'Gérer les messages',
-            EmbedLinks: 'Intégrer des liens',
-            AttachFiles: 'Joindre des fichiers',
-            ReadMessageHistory: 'Lire l\'historique des messages',
-            MentionEveryone: 'Mentionner @everyone',
-            UseExternalEmojis: 'Utiliser des emojis externes',
-            ViewGuildInsights: 'Voir les analyses du serveur',
-            Connect: 'Se connecter',
-            Speak: 'Parler',
-            MuteMembers: 'Mettre en sourdine des membres',
-            DeafenMembers: 'Rendre des membres sourds',
-            MoveMembers: 'Déplacer des membres',
-            UseVAD: 'Utiliser la détection de voix',
-            ChangeNickname: 'Changer de pseudo',
-            ManageNicknames: 'Gérer les pseudos',
             ManageRoles: 'Gérer les rôles',
             ManageWebhooks: 'Gérer les webhooks',
-            ManageEmojisAndStickers: 'Gérer les emojis et les stickers',
-            ManageGuildExpressions: 'Gérer les expressions du serveur',
-            UseApplicationCommands: 'Utiliser des commandes d\'application',
-            RequestToSpeak: 'Demander à parler',
-            ManageEvents: 'Gérer les événements',
-            ManageThreads: 'Gérer les fils de discussion',
-            CreatePublicThreads: 'Créer des fils publics',
-            CreatePrivateThreads: 'Créer des fils privés',
-            UseExternalStickers: 'Utiliser des stickers externes',
-            SendMessagesInThreads: 'Envoyer des messages dans les fils',
-            UseEmbeddedActivities: 'Utiliser des activités intégrées',
-            ModerateMembers: 'Modérer des membres',
-            ViewCreatorMonetizationAnalytics: 'Voir les analyses de monétisation du créateur',
-            UseSoundboard: 'Utiliser Soundboard',
-            UseExternalSounds: 'Utiliser des sons externes',
-            SendVoiceMessages: 'Envoyer des messages vocaux'
+            ModerateMembers: 'Exclure temporairement des membres'
         };
 
         this.emojis = {
@@ -220,6 +180,12 @@ module.exports = class Config {
                 protection: this.emojis.mod,
                 moderation: this.emojis.support,
                 information: this.emojis.search
+            },
+            level: {
+                administrator: 1,
+                protection: 2,
+                moderation: 3,
+                information: 4
             }
         };
     };

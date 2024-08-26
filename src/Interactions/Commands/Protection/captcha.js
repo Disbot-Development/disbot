@@ -1,7 +1,7 @@
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class CaptchaCommand extends Command {
     constructor(client) {
@@ -32,7 +32,7 @@ module.exports = class CaptchaCommand extends Command {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Salon de vérification:** ${interaction.guild.channels.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.channel`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> - **Rôle de vérification:** ${interaction.guild.roles.resolve(await this.client.database.get(`${interaction.guild.id}.captcha.roles.before`)) || `Non configuré ${this.client.config.emojis.no}`}\n` +
                         `> - **Rôle après vérification:** ${await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`) ? (await this.client.database.get(`${interaction.guild.id}.captcha.roles.after`)).map((role) => interaction.guild.roles.resolve(role)) : `Non configuré ${this.client.config.emojis.no}`}\n` +
@@ -71,7 +71,7 @@ module.exports = class CaptchaCommand extends Command {
                         `Cela permet de sécuriser votre serveur en évitant l'attaque de comptes Discord robotisés malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Statut:** Désactivé ${this.client.config.emojis.no}\n` +
                         `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système de captcha.`
                     )
                     .setColor(Colors.Red)

@@ -20,27 +20,25 @@ module.exports = class WhitelistAddButton extends Button {
     async run (interaction) {
         await this.client.database.set(`${interaction.guild.id}.whitelist`, (await this.client.database.get(`${interaction.guild.id}.whitelist`) || []).filter((id) => interaction.guild.members.resolve(id)));
         
-        const disable = () => {
-            interaction.message.edit({
-                components: [
-                    new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                        .setCustomId('whitelist-add')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji(this.client.config.emojis.yes)
-                        .setLabel('Ajouter')
-                        .setDisabled(true),
-                        new ButtonBuilder()
-                        .setCustomId('whitelist-remove')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji(this.client.config.emojis.no)
-                        .setLabel('Retirer')
-                        .setDisabled(true)
-                    )
-                ]
-            });
-        };
+        interaction.message.edit({
+            components: [
+                new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                    .setCustomId('whitelist-add')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setEmoji(this.client.config.emojis.yes)
+                    .setLabel('Ajouter')
+                    .setDisabled(true),
+                    new ButtonBuilder()
+                    .setCustomId('whitelist-remove')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setEmoji(this.client.config.emojis.no)
+                    .setLabel('Retirer')
+                    .setDisabled(true)
+                )
+            ]
+        });
 
         const enable = async () => {
             interaction.message.edit({
@@ -71,8 +69,6 @@ module.exports = class WhitelistAddButton extends Button {
                 ]
             });
         };
-
-        disable();
 
         const userReply = await interaction.reply({
             embeds: [

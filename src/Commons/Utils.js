@@ -1,5 +1,4 @@
 const { readdirSync, statSync, readFileSync } = require('fs');
-const { ClientPresence } = require('discord.js');
 const { relative, sep } = require('path');
 
 const Bot = require('../Core/Bot');

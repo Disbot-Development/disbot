@@ -31,7 +31,7 @@ module.exports = class systemToggleEvent extends Event {
                     .setDescription(
                         `Le système d'${name.toLowerCase()} vient d'être ${state ? 'désactivé' : 'activé'}.\n` +
                         `> **Auteur:** ${interaction.user} - \`${interaction.user.tag}\` - ${interaction.user.id}\n` +
-                        `> **Status:** ${state ? `Désactivé ${this.client.config.emojis.no}` : `Activé ${this.client.config.emojis.yes}`}`
+                        `> **Statut:** ${state ? `Désactivé ${this.client.config.emojis.no}` : `Activé ${this.client.config.emojis.yes}`}`
                     )
                 ]
             })

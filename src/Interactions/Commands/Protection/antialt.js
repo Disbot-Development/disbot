@@ -1,7 +1,7 @@
 const { CommandInteraction, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
 
-const Command = require('../../../Core/Structures/Command');
 const MessageEmbed = require('../../../Commons/MessageEmbed');
+const Command = require('../../../Core/Structures/Command');
 
 module.exports = class AntiAltCommand extends Command {
     constructor(client) {
@@ -32,7 +32,7 @@ module.exports = class AntiAltCommand extends Command {
                         `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Date minimale:** ${await this.client.database.get(`${interaction.guild.id}.antialt.age`) ? `${await this.client.database.get(`${interaction.guild.id}.antialt.age`)} heure${await this.client.database.get(`${interaction.guild.id}.antialt.age`) > 1 ? 's' : ''}` : `${this.client.config.antialt.age} heure${this.client.config.antialt.age > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> - **Information supplémentaire:** Ce système n'affectera pas les bots Discord.`
                     )
@@ -64,7 +64,7 @@ module.exports = class AntiAltCommand extends Command {
                         `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Désactivé ${this.client.config.emojis.no}\n` +
+                        `> - **Statut:** Désactivé ${this.client.config.emojis.no}\n` +
                         `> - **Information supplémentaire:** Il est vivement conseillé d'activer le système d'anti-alt.`
                     )
                     .setColor(Colors.Red)

@@ -1,7 +1,7 @@
 const { PermissionFlagsBits } = require('discord.js');
 
-const Bot = require('../Bot');
 const Base = require('./Base');
+const Bot = require('../Bot');
 
 module.exports = class SelectMenu extends Base {
 

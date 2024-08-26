@@ -1,7 +1,7 @@
 const { CommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
-const Command = require('../../Core/Structures/Command');
 const MessageEmbed = require('../../Commons/MessageEmbed');
+const Command = require('../../Core/Structures/Command');
 const Event = require('../../Core/Structures/Event');
 
 module.exports = class CommandCreateEvent extends Event {
@@ -25,7 +25,7 @@ module.exports = class CommandCreateEvent extends Event {
                 embeds: [
                     new MessageEmbed()
                     .setTitle('Rôle')
-                    .setDescription('Mon rôle n\'est pas le plus haut, souhaitez-vous remédier ceci ?')
+                    .setDescription('Mon rôle n\'est pas le plus haut, souhaitez-vous y remédier ?')
                 ],
                 components: [
                     new ActionRowBuilder()

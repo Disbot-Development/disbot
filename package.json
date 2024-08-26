@@ -1,6 +1,6 @@
 {
   "name": "disbot",
-  "version": "1.6.8",
+  "version": "1.6.9",
   "description": "Disbot est un projet de bot Discord dirigé par une équipe francophone dédié à la sécurité des serveurs.",
   "main": "src/index.js",
   "dependencies": {
@@ -22,7 +22,9 @@
     "start": "node .",
     "dev": "node . dev",
     "deploy": "node . deploy",
-    "remove": "node . remove"
+    "remove": "node . remove",
+    "dev deploy": "node . dev deploy",
+    "dev remove": "node . dev remove"
   },
   "repository": {
     "type": "git",

@@ -38,7 +38,7 @@ module.exports = class AntiLinkTypeSelectMenu extends SelectMenu {
                     `Cela permet d'anticiper la promotion de liens suspects (ou non).\n\n` +
                     
                     `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                    `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                    `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                     `> - **Liens interdits:** ${this.client.config.antilink.type[await this.client.database.get(`${interaction.guild.id}.antilink.type`)] || 'Aucun'}\n` +
                     `> - **Durée rendu muet:** ${await this.client.database.get(`${interaction.guild.id}.antilink.duration`) ? `${await this.client.database.get(`${interaction.guild.id}.antilink.duration`)} minute${await this.client.database.get(`${interaction.guild.id}.antilink.duration`) > 1 ? 's' : ''}` : `${this.client.config.antilink.duration} minute${this.client.config.antilink.duration > 1 ? 's' : ''} (par défaut)`}\n` +
                     `> - **Information supplémentaire:** Ce système n'affectera pas les bots Discord.`

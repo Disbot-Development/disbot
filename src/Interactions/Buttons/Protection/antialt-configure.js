@@ -18,27 +18,25 @@ module.exports = class AntiAltConfigureButton extends Button {
      */
 
     async run (interaction) {
-        const disable = () => {
-            interaction.message.edit({
-                components: [
-                    new ActionRowBuilder()
-                    .addComponents(
-                        new ButtonBuilder()
-                        .setCustomId('antialt-toggle')
-                        .setStyle(ButtonStyle.Primary)
-                        .setEmoji(this.client.config.emojis.no)
-                        .setLabel('Désactiver')
-                        .setDisabled(true),
-                        new ButtonBuilder()
-                        .setCustomId('antialt-configure')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji(this.client.config.emojis.settings)
-                        .setLabel('Configurer')
-                        .setDisabled(true)
-                    )
-                ]
-            });
-        };
+        interaction.message.edit({
+            components: [
+                new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                    .setCustomId('antialt-toggle')
+                    .setStyle(ButtonStyle.Primary)
+                    .setEmoji(this.client.config.emojis.no)
+                    .setLabel('Désactiver')
+                    .setDisabled(true),
+                    new ButtonBuilder()
+                    .setCustomId('antialt-configure')
+                    .setStyle(ButtonStyle.Secondary)
+                    .setEmoji(this.client.config.emojis.settings)
+                    .setLabel('Configurer')
+                    .setDisabled(true)
+                )
+            ]
+        });
 
         const enable = async () => {
             interaction.message.edit({
@@ -50,7 +48,7 @@ module.exports = class AntiAltConfigureButton extends Button {
                         `Cela permet d'anticiper les potentielles attaques de robots malveillants.\n\n` +
                         
                         `${this.client.config.emojis.settings}・**Configuration:**\n` +
-                        `> - **Status:** Activé ${this.client.config.emojis.yes}\n` +
+                        `> - **Statut:** Activé ${this.client.config.emojis.yes}\n` +
                         `> - **Date minimale:** ${await this.client.database.get(`${interaction.guild.id}.antialt.age`) ? `${await this.client.database.get(`${interaction.guild.id}.antialt.age`)} heure${await this.client.database.get(`${interaction.guild.id}.antialt.age`) > 1 ? 's' : ''}` : `${this.client.config.antialt.age} heure${this.client.config.antialt.age > 1 ? 's' : ''} (par défaut)`}\n` +
                         `> - **Information supplémentaire:** Ce système n'affectera pas les bots Discord.`
                     )
@@ -73,8 +71,6 @@ module.exports = class AntiAltConfigureButton extends Button {
                 ]
             });
         };
-
-        disable();
 
         const ageReply = await interaction.reply({
             embeds: [
