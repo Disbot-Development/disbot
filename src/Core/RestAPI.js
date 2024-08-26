@@ -3,6 +3,7 @@ const compression = require('compression');
 const Bot = require('../Core/Bot');
 const express = require('express');
 const helmet = require('helmet');
+const cors = require('cors');
 
 module.exports = class RestAPI {
 
@@ -21,6 +22,7 @@ module.exports = class RestAPI {
         this.app.use(express.json());
         this.app.use(helmet());
         this.app.use(compression());
+        this.app.use(cors());
 
         this.defineRateLimit();
         this.defineRoutes();
